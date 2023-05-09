@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Go Modules 配置 &amp; 命令 | bing随遇而安</title>
+    <meta name="generator" content="VuePress 1.9.9">
+    <link rel="icon" href="/logo.png">
+    <meta name="description" content="
+初始化行为
+
+创建项目目录
+$ mkdir go-gin-example &amp;&amp; cd go-gin-example
+打开go modules开关(目前在1.18中默认值为 auto)
+$ go env -w GO111MODULE=on
+设置goproxy代理，解决国内外网访问不了导致的包下载不了的问题  该配置有两个参数，
+第一个是 https: ...">
+    
+    <link rel="preload" href="/assets/css/0.styles.a9cdb8c8.css" as="style"><link rel="preload" href="/assets/js/app.ed63a4e2.js" as="script"><link rel="preload" href="/assets/js/6.38d57c41.js" as="script"><link rel="preload" href="/assets/js/3.122d5fd9.js" as="script"><link rel="preload" href="/assets/js/19.68950198.js" as="script"><link rel="prefetch" href="/assets/js/10.61452bfc.js"><link rel="prefetch" href="/assets/js/11.059f07af.js"><link rel="prefetch" href="/assets/js/12.d23da198.js"><link rel="prefetch" href="/assets/js/13.cb896045.js"><link rel="prefetch" href="/assets/js/14.f7014cd5.js"><link rel="prefetch" href="/assets/js/15.38ff99fb.js"><link rel="prefetch" href="/assets/js/16.dc5bdee6.js"><link rel="prefetch" href="/assets/js/17.dc7e2fb9.js"><link rel="prefetch" href="/assets/js/18.ef545b08.js"><link rel="prefetch" href="/assets/js/20.f1270bba.js"><link rel="prefetch" href="/assets/js/21.04d56666.js"><link rel="prefetch" href="/assets/js/22.5e896baf.js"><link rel="prefetch" href="/assets/js/23.debc6822.js"><link rel="prefetch" href="/assets/js/24.d8fb30f0.js"><link rel="prefetch" href="/assets/js/25.458d330e.js"><link rel="prefetch" href="/assets/js/26.738ddbfb.js"><link rel="prefetch" href="/assets/js/27.e3340bba.js"><link rel="prefetch" href="/assets/js/28.e9eeb2dc.js"><link rel="prefetch" href="/assets/js/29.4085281b.js"><link rel="prefetch" href="/assets/js/30.22ecda06.js"><link rel="prefetch" href="/assets/js/31.db5c98f9.js"><link rel="prefetch" href="/assets/js/32.18af8f06.js"><link rel="prefetch" href="/assets/js/33.a3fcdc90.js"><link rel="prefetch" href="/assets/js/34.39b878f9.js"><link rel="prefetch" href="/assets/js/4.380f1af6.js"><link rel="prefetch" href="/assets/js/5.084c9b71.js"><link rel="prefetch" href="/assets/js/7.4fbbea13.js"><link rel="prefetch" href="/assets/js/8.9cc7e0c8.js"><link rel="prefetch" href="/assets/js/9.bf0c8df5.js"><link rel="prefetch" href="/assets/js/vuejs-paginate.ac365ac7.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.a9cdb8c8.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/" class="nav-link home-link">bing随遇而安 </a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/" class="nav-link mobile-home-link">bing随遇而安 </a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/tag/" class="nav-link">Tags</a></li> <li class="mobile-nav-item"><!----></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title">
+        
+      </h1> <div class="post-meta"><div itemprop="publisher author" itemtype="http://schema.org/Person" itemscope="itemscope" class="post-meta-author"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-navigation"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg> <span itemprop="name">BING随遇而安</span> <span itemprop="address">   in Shanghai</span></div> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2022-04-23T00:00:00.000Z">
+      Sat Apr 23 2022
+    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-42ccfcd5><a href="/tag/golang" data-v-42ccfcd5><span data-v-42ccfcd5>golang</span></a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><h1 id="go-modules-配置-命令"><a href="#go-modules-配置-命令" class="header-anchor">#</a> Go Modules 配置 &amp; 命令</h1> <h3 id="初始化行为"><a href="#初始化行为" class="header-anchor">#</a> 初始化行为</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 创建项目目录</span>
+$ <span class="token function">mkdir</span> go-gin-example <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> go-gin-example
+<span class="token comment"># 打开go modules开关(目前在1.18中默认值为 auto)</span>
+$ go <span class="token function">env</span> <span class="token parameter variable">-w</span> <span class="token assign-left variable">GO111MODULE</span><span class="token operator">=</span>on
+<span class="token comment"># 设置goproxy代理，解决国内外网访问不了导致的包下载不了的问题  该配置有两个参数，</span>
+<span class="token comment"># 第一个是 https://goproxy.cn，它是由七牛云背书的一个强大稳定的 Go 模块代理，可以有效地解决你的外网问题；</span>
+<span class="token comment"># 第二个是 direct，它是一个特殊的 fallback 选项，它的作用是用于指示 Go 在拉取模块时遇到错误会回源到模块版本的源地址去抓取（比如 GitHub 等）。</span>
+$ go <span class="token function">env</span> <span class="token parameter variable">-w</span> <span class="token assign-left variable">GOPROXY</span><span class="token operator">=</span>https://goproxy.cn,direct
+<span class="token comment"># 初始化Modules 它将会生成 go.mod 文件，需要注意的是 MODULE_PATH 填写的是模块引入路径，你可以根据自己的情况修改路径。</span>
+$ go mod init github.com/fbbyqsyea/go-gin-example
+</code></pre></div><h3 id="基础使用"><a href="#基础使用" class="header-anchor">#</a> 基础使用</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># go get 拉去最新的依赖</span>
+<span class="token comment"># 拉取最新的版本(优先选取的tag)</span>
+$ go get golang.org/x/text@latest
+<span class="token comment"># 拉取master分支的最新commit</span>
+$ go get golang.org/x/text@master
+<span class="token comment"># 拉取tag指定版本的commit</span>
+$ go get golang.org/x/text@v0.1.2.3
+<span class="token comment"># 拉取 hash 为 342b231 的 commit</span>
+$ go get golang.org/x/text@342b231
+<span class="token comment"># 更新现有的依赖</span>
+$ go get <span class="token parameter variable">-u</span>
+
+<span class="token comment"># 下载go.mod文件中指明的所有依赖</span>
+$ go mod download
+<span class="token comment"># 整理现有的依赖</span>
+$ go mod tidy
+<span class="token comment"># 查看现有的依赖结构</span>
+$ go mod graph
+<span class="token comment"># 初始化go.mod文件</span>
+$ go mod init moduleName
+<span class="token comment"># 编辑go.mod文件</span>
+$ go mod edit
+<span class="token comment"># 导出现有的所有依赖 (事实上 Go modules 正在淡化 Vendor 的概念)</span>
+$ go mod vendor
+<span class="token comment"># 校验一个模块是否被篡改过</span>
+<span class="token variable">$go</span> mod verify
+</code></pre></div><h3 id="go-sum"><a href="#go-sum" class="header-anchor">#</a> go.sum</h3> <div class="language-text extra-class"><pre class="language-text"><code>go.sum 文件详细罗列了当前项目直接或间接依赖的所有模块版本，并写明了那些模块版本的 SHA-256 哈希值以备 Go 在今后的操作中保证项目所依赖的那些模块版本不会被篡改。
+</code></pre></div><h3 id="go-mod"><a href="#go-mod" class="header-anchor">#</a> go.mod</h3> <div class="language- extra-class"><pre class="language-text"><code>go.mod文件是启用go modules的项目所必需的最重要的文件，他描述了当前模块的元信息，每一行以一个动词开头，目前有以下5个动词。
+
+module：用于定义当前项目的模块路径
+go:用于设置预期的go版本
+require：用于设置一个特定的模块版本
+exclude：用于从使用中排除一个特定的模块版本
+replace：用于将一个模块版本替换为另一个模块版本
+</code></pre></div></div> <footer><!----> <hr> <!----></footer></article> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h3 active"><a href="#初始化行为" title="初始化行为">初始化行为</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#基础使用" title="基础使用">基础使用</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#go-sum" title="go.sum">go.sum</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#go-mod" title="go.mod">go.mod</a></div></div></div></div> <footer class="footer" data-v-3d9deeb8><div class="footer-left-wrap" data-v-3d9deeb8><ul class="contact" data-v-3d9deeb8></ul></div> <div class="footer-right-wrap" data-v-3d9deeb8><ul class="copyright" data-v-3d9deeb8></ul></div></footer></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.ed63a4e2.js" defer></script><script src="/assets/js/6.38d57c41.js" defer></script><script src="/assets/js/3.122d5fd9.js" defer></script><script src="/assets/js/19.68950198.js" defer></script>
+  </body>
+</html>
