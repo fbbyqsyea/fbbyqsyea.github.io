@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>git on bing随遇而安</title>
+    <link>/tags/git/</link>
+    <description>Recent content in git on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 25 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决 Git 文件大小写不跟踪的问题</title>
+      <link>/post/2023-06-25-git-core-ignorecase/</link>
+      <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-06-25-git-core-ignorecase/</guid>
+      <description>解决 Git 文件大小写不跟踪的问题</description>
+    </item>
+    
+    <item>
+      <title>golang获取指定git分支的模块</title>
+      <link>/post/2023-06-14-go-get-install-git-branch/</link>
+      <pubDate>Wed, 14 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-06-14-go-get-install-git-branch/</guid>
+      <description>本文解答了如何在Golang中获取指定Git仓库分支的模块。作者描述了一个场景，使用开放式AI接口的Go SDK时，最新的功能更新已经在master分支中处理，但尚未生成新的标签。因此，如果需要获取主线分支（master）的代码，而不是最新标签的代码，可以通过在go get和go install命令中指定仓库分支来实现。</description>
+    </item>
+    
+    <item>
+      <title>git如何初始化master分支</title>
+      <link>/post/2023-06-06-git-branch-rename/</link>
+      <pubDate>Tue, 06 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-06-06-git-branch-rename/</guid>
+      <description>本文介绍了在Git中如何初始化master分支。由于Git命令行版本从2.28开始将默认主分支名称从&amp;quot;master&amp;quot;改为&amp;quot;main&amp;quot;，但一些公司的Git服务仍将master作为主线分支，因此创建新项目分支时出现了不一致情况。</description>
+    </item>
+    
+    <item>
+      <title>GIT ssh config</title>
+      <link>/post/2022-12-10-git-ssh-config/</link>
+      <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-12-10-git-ssh-config/</guid>
+      <description>Host * HostkeyAlgorithms +ssh-rsa PubkeyAcceptedKeyTypes +ssh-rsa # [github.com] Host github.com HostName github.com Port 22 User git IdentityFile ~/.ssh/id_rsa </description>
+    </item>
+    
+    <item>
+      <title>GIT Init</title>
+      <link>/post/2022-10-23-git-init/</link>
+      <pubDate>Sun, 23 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-10-23-git-init/</guid>
+      <description>从命令行创建一个新的仓库 touch README.md git init git add README.md git commit -m &amp;#34;first commit&amp;#34; git remote add origin git@github.com:fbbyqsyea/fbbyqsyea.github.io.git git push -u origin master 从命令行推送已经创建的仓库 git remote add origin git@github.com:fbbyqsyea/fbbyqsyea.github.io.git git push -u origin master </description>
+    </item>
+    
+  </channel>
+</rss>

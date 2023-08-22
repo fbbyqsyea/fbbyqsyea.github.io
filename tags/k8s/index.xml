@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>k8s on bing随遇而安</title>
+    <link>/tags/k8s/</link>
+    <description>Recent content in k8s on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 17 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>启动k8s服务</title>
+      <link>/post/2022-03-17-start-k8s/</link>
+      <pubDate>Thu, 17 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-03-17-start-k8s/</guid>
+      <description>kubeadm、kubelet、kubectl简介 参照前一篇的文章，在k8s-master和k8s-node节点上都安装了kubeadm、kubelet、kubectl服务。
+Kubeadm是一个提供了 kubeadm init 和 kubeadm join 的工具，作为创建 Kubernetes 集群的 “快捷途径” 的最佳实践。kubeadm 通过执行必要的操作来启动和运行最小可用集群。 按照设计，它只关注启动引导，而非配置机器。同样的， 安装各种 “锦上添花” 的扩展，例如 Kubernetes Dashboard、 监控方案、以及特定云平台的扩展，都不在讨论范围内。相反，我们希望在 kubeadm 之上构建更高级别以及更加合规的工具， 理想情况下，使用 kubeadm 作为所有部署工作的基准将会更加易于创建一致性集群。
+kubelet 是在每个 Node 节点上运行的主要 “节点代理”。它可以使用以下之一向 apiserver 注册： 主机名（hostname）；覆盖主机名的参数；某云驱动的特定逻辑。kubelet 是基于 PodSpec 来工作的。每个 PodSpec 是一个描述 Pod 的 YAML 或 JSON 对象。 kubelet 接受通过各种机制（主要是通过 apiserver）提供的一组 PodSpec，并确保这些 PodSpec 中描述的容器处于运行状态且运行状况良好。 kubelet 不管理不是由 Kubernetes 创建的容器。
+你可以使用 Kubectl 命令行工具管理 Kubernetes 集群。 kubectl 在 $HOME/.kube 目录中查找一个名为 config 的配置文件。 你可以通过设置 KUBECONFIG 环境变量或设置 &amp;ndash;kubeconfig 参数来指定其它 kubeconfig 文件。</description>
+    </item>
+    
+    <item>
+      <title>Centos安装k8s</title>
+      <link>/post/2022-03-15-centos-install-k8s/</link>
+      <pubDate>Tue, 15 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-03-15-centos-install-k8s/</guid>
+      <description>准备开始 一台兼容的 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版以及一些不提供包管理器的发行版提供通用的指令 每台机器 2 GB 或更多的 RAM （如果少于这个数字将会影响你应用的运行内存)2 CPU 核或更多 集群中的所有机器的网络彼此均能相互连接(公网和内网都可以) 节点之中不可以有重复的主机名、MAC 地址或 product_uuid。请参见这里了解更多详细信息。 开启机器上的某些端口。请参见这里 了解更多详细信息。 禁用交换分区。为了保证 kubelet 正常工作，你 必须 禁用交换分区。 确保每个节点上MAC地址和product_uuid的唯一性 你可以使用命令 ip link 或 ifconfig -a 来获取网络接口的 MAC 地址 可以使用 sudo cat /sys/class/dmi/id/product_uuid 命令对 product_uuid 校验 检测网络适配器 如果你有一个以上的网络适配器，同时你的 Kubernetes 组件通过默认路由不可达，我们建议你预先添加 IP 路由规则， 这样 Kubernetes 集群就可以通过对应的适配器完成连接
+允许 iptables 检查桥接流量 确保 br_netfilter 模块被加载。这一操作可以通过运行 lsmod | grep br_netfilter 来完成。 若要显式加载该模块，可执行 sudo modprobe br_netfilter。</description>
+    </item>
+    
+  </channel>
+</rss>

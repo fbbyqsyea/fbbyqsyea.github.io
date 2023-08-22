@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>404 Page not found &middot; bing随遇而安</title>
+  <title>GIT ssh config &middot; bing随遇而安</title>
   <meta name="description" content="" />
 
   
@@ -51,8 +51,23 @@
 </aside>
 
     <main class="content container">
-    <h1>404: Page not found</h1>
-<p class="lead">Sorry, we've misplaced that URL or it's pointing to something that doesn't exist. <a href="/">Head back home</a> to try finding it again.</p>
+    <div class="post">
+  <h1>GIT ssh config</h1>
+  <time datetime=2022-12-10T00:00:00Z class="post-date">Sat, Dec 10, 2022</time>
+  <pre tabindex="0"><code>Host *
+HostkeyAlgorithms +ssh-rsa
+PubkeyAcceptedKeyTypes +ssh-rsa
+
+# [github.com]
+Host github.com
+HostName github.com
+Port 22
+User git
+IdentityFile ~/.ssh/id_rsa
+</code></pre>
+</div>
+
+
     </main>
 
     

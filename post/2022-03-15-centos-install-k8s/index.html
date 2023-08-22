@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Centos安装k8s &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Centos安装k8s</h1>
+  <time datetime=2022-03-15T00:00:00Z class="post-date">Tue, Mar 15, 2022</time>
+  <h3 id="准备开始">准备开始</h3>
+<ol>
+<li>一台兼容的 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版以及一些不提供包管理器的发行版提供通用的指令</li>
+<li>每台机器 2 GB 或更多的 RAM （如果少于这个数字将会影响你应用的运行内存)2 CPU 核或更多</li>
+<li>集群中的所有机器的网络彼此均能相互连接(公网和内网都可以)</li>
+<li>节点之中不可以有重复的主机名、MAC 地址或 product_uuid。请参见这里了解更多详细信息。</li>
+<li>开启机器上的某些端口。请参见这里 了解更多详细信息。</li>
+<li>禁用交换分区。为了保证 kubelet 正常工作，你 必须 禁用交换分区。</li>
+</ol>
+<h3 id="确保每个节点上mac地址和product_uuid的唯一性">确保每个节点上MAC地址和product_uuid的唯一性</h3>
+<ol>
+<li>你可以使用命令 ip link 或 ifconfig -a 来获取网络接口的 MAC 地址</li>
+<li>可以使用 sudo cat /sys/class/dmi/id/product_uuid 命令对 product_uuid 校验</li>
+</ol>
+<h3 id="检测网络适配器">检测网络适配器</h3>
+<p>如果你有一个以上的网络适配器，同时你的 Kubernetes 组件通过默认路由不可达，我们建议你预先添加 IP 路由规则，
+这样 Kubernetes 集群就可以通过对应的适配器完成连接</p>
+<h3 id="允许-iptables-检查桥接流量">允许 iptables 检查桥接流量</h3>
+<p>确保 br_netfilter 模块被加载。这一操作可以通过运行 lsmod | grep br_netfilter 来完成。
+若要显式加载该模块，可执行 sudo modprobe br_netfilter。</p>
+<p>为了让你的 Linux 节点上的 iptables 能够正确地查看桥接流量，你需要确保在你的 sysctl 配置中将 net.bridge.bridge-nf-call-iptables 设置为 1。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">br_netfilter
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.bridge.bridge-nf-call-ip6tables = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.bridge.bridge-nf-call-iptables = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>sudo sysctl --system
+</span></span></code></pre></div><h3 id="检查所需端口">检查所需端口</h3>
+<p>启用这些必要的端口后才能使 Kubernetes 的各组件相互通信。可以使用 telnet 来检查端口是否启用，例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>telnet 127.0.0.1 <span style="color:#ae81ff">6443</span>
+</span></span></code></pre></div><p>你使用的 Pod 网络插件 (详见后续章节) 也可能需要开启某些特定端口。由于各个 Pod 网络插件的功能都有所不同， 请参阅他们各自文档中对端口的要求。</p>
+<h3 id="安装-runtime">安装 runtime</h3>
+<p>安装docker等环境</p>
+<h3 id="安装-kubeadmkubelet-和-kubectl">安装 kubeadm、kubelet 和 kubectl</h3>
+<p>kubeadm：用来初始化集群的指令。</p>
+<p>kubelet：在集群中的每个节点上用来启动 Pod 和容器等。</p>
+<p>kubectl：用来与集群通信的命令行工具。</p>
+<p>kubeadm 不能 帮你安装或者管理 kubelet 或 kubectl，所以你需要 确保它们与通过 kubeadm 安装的控制平面的版本相匹配。
+如果不这样做，则存在发生版本偏差的风险，可能会导致一些预料之外的错误和问题。
+然而，控制平面与 kubelet 间的相差一个次要版本不一致是支持的，但 kubelet 的版本不可以超过 API 服务器的版本。
+例如，1.7.0 版本的 kubelet 可以完全兼容 1.8.0 版本的 API 服务器，反之则不可以。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[kubernetes]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">name=Kubernetes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">enabled=1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">gpgcheck=1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">repo_gpgcheck=1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">exclude=kubelet kubeadm kubectl
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># GOOGLE不可达用阿里云源替换</span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[kubernetes]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">name=Kubernetes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-\$basearch
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">enabled=1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">gpgcheck=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">repo_gpgcheck=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将 SELinux 设置为 permissive 模式（相当于将其禁用）</span>
+</span></span><span style="display:flex;"><span>sudo setenforce <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>sudo sed -i <span style="color:#e6db74">&#39;s/^SELINUX=enforcing$/SELINUX=permissive/&#39;</span> /etc/selinux/config
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo yum install -y kubelet kubeadm kubectl --disableexcludes<span style="color:#f92672">=</span>kubernetes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo systemctl enable --now kubelet
+</span></span></code></pre></div><p>请注意：</p>
+<p>通过运行命令 setenforce 0 和 sed &hellip; 将 SELinux 设置为 permissive 模式 可以有效地将其禁用。
+这是允许容器访问主机文件系统所必需的，而这些操作时为了例如 Pod 网络工作正常。</p>
+<p>你必须这么做，直到 kubelet 做出对 SELinux 的支持进行升级为止。</p>
+<p>如果你知道如何配置 SELinux 则可以将其保持启用状态，但可能需要设定 kubeadm 不支持的部分配置</p>
+<h3 id="配置-cgroup-驱动程序">配置 cgroup 驱动程序</h3>
+<p>容器运行时和 kubelet 都具有名字为 &ldquo;cgroup driver&rdquo; 的属性，该属性对于在 Linux 机器上管理 CGroups 而言非常重要。
+警告：
+你需要确保容器运行时和 kubelet 所使用的是相同的 cgroup 驱动，否则 kubelet 进程会失败。</p>
+<h5 id="修改容器的cgroup-driver">修改容器的Cgroup Driver</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// 修改或创建/etc/docker/daemon.json，加入下面的内容：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;exec-opts&#34;</span>: [<span style="color:#e6db74">&#34;native.cgroupdriver=systemd&#34;</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 重启docker服务</span>
+</span></span><span style="display:flex;"><span>$ sudo systemctl daemon-reload
+</span></span><span style="display:flex;"><span>$ sudo systemctl restart docker
+</span></span><span style="display:flex;"><span>$ sudo systemctl status docker
+</span></span></code></pre></div><h3 id="关闭swap分区">关闭swap分区</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看swap分区</span>
+</span></span><span style="display:flex;"><span>$ free -mh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 临时关闭swap分区</span>
+</span></span><span style="display:flex;"><span>$ swapoff -a   <span style="color:#75715e"># 打开swap分区 swapon -a</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 永久关闭swap分区</span>
+</span></span><span style="display:flex;"><span>$ vim /etc/fstab
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 禁用掉swap部分</span>
+</span></span></code></pre></div>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

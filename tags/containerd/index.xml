@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>containerd on bing随遇而安</title>
+    <link>/tags/containerd/</link>
+    <description>Recent content in containerd on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 11 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/containerd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s containerd容器驱动安装</title>
+      <link>/post/2022-06-11-centos-install-containerd/</link>
+      <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-06-11-centos-install-containerd/</guid>
+      <description>安装yum-utils工具 $ sudo yum install -y yum-utils 添加阿里云docker镜像仓库 $ sudo yum-config-manager \ --add-repo \ http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 安装containerd $ sudo yum install containerd -y 初始化containerd配置信息 $ sudo madir /etc/containerd $ sudo containerd config default &amp;gt; /etc/containerd/config.toml 修改containerd sand_box 和 Cgroup $ vim /etc/containerd/config.toml # 修改sand_box # 查找sand_image 将k8s.gcr.io/pause:3.6 替换成阿里源 registry.aliyuncs.com/google_containers/pause:3.6 # 修改Cgroup # 查找SystemdCgroup 将false 改为 true 启动containerd $ sudo systemctl daemon-reload $ sudo systemctl enable containerd $ sudo systemctl start containerd </description>
+    </item>
+    
+  </channel>
+</rss>

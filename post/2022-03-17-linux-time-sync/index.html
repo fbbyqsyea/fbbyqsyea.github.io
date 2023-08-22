@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>linux机器时间同步 &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>linux机器时间同步</h1>
+  <time datetime=2022-03-17T00:00:00Z class="post-date">Thu, Mar 17, 2022</time>
+  <h3 id="修改时区">修改时区</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span></span></code></pre></div><h3 id="网络时间同步">网络时间同步</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sudo /usr/sbin/ntpdate -u cn.pool.ntp.org
+</span></span></code></pre></div><h3 id="写入硬件时间">写入硬件时间</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 服务器每次重启都会参考硬件的时间，所以需要将当前系统的时间写入到硬件。</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看当前硬件时间</span>
+</span></span><span style="display:flex;"><span>$ hwclock -r
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 写入硬件时间</span>
+</span></span><span style="display:flex;"><span>$ hwclock -w
+</span></span></code></pre></div><h3 id="配置时间自动同步">配置时间自动同步</h3>
+<h5 id="配置开机时间自检">配置开机时间自检</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 向linux系统开机自启动执行文件添加自检任务</span>
+</span></span><span style="display:flex;"><span>$ vim /etc/rc.d/rc.local
+</span></span><span style="display:flex;"><span>$ /usr/sbin/ntpdate -u cn.pool.ntp.org&gt; /var/log/ntpdate_boot.log 2&gt;&amp;1; /sbin/hwclock -w
+</span></span></code></pre></div><h5 id="配置定期时间自检">配置定期时间自检</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 配置定时任务 每10分钟执行时间自检任务</span>
+</span></span><span style="display:flex;"><span>$ sudo crontab -e
+</span></span><span style="display:flex;"><span>$ <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">10</span> * * * /usr/sbin/ntpdate -u cn.pool.ntp.org &gt; /var/log/ntpdate_cron.log 2&gt;&amp;1; /sbin/hwclock -w
+</span></span></code></pre></div>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

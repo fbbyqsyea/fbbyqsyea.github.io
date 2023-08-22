@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>golang获取指定git分支的模块 &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>golang获取指定git分支的模块</h1>
+  <time datetime=2023-06-14T00:00:00Z class="post-date">Wed, Jun 14, 2023</time>
+  <h2 id="问题">问题</h2>
+<p>今天早上接到通知，openai公布了最新的gpt-3.5-turbo和gpt-4的模型版本，gpt-3.5-turbo-0613和gpt4-0613。打算把模型换成最新的模型，打开openai接口的<a href="https://github.com/sashabaranov/go-openai">go sdk</a>，发现已经有<a href="https://github.com/sashabaranov/go-openai/issues/360">issue</a>提出和<a href="https://github.com/sashabaranov/go-openai/pull/361">pull request</a>处理了。master分支已经包含了两个新增的最新的模型，但是tag标签中还未生成新的标签。这个时候我们如果需要使用master分支的代码，而不是最新的tag的代码。我们应该怎么做呢？
+<!-- raw HTML omitted --></p>
+<h2 id="解答">解答</h2>
+<p>我们知道我们在用<code>go get ...</code>和<code>go install ...</code>命令获取git仓库的代码时，优先获取最新tag作为module版本号，并且获取对应tag的的代码，如果没有tag则会根据主线分支(<strong>master</strong>)分支和时间序列的版本号同时获取主线的代码。针对上面的分支，tag代码版本落后于master。我们想要获取主线分支的代码，我们可以指定git 仓库分支进行拉取。具体命令如下。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># go get github.com/xxxx/xxxxx@branch_name</span>
+</span></span><span style="display:flex;"><span>$ go get -u github.com/sashabaranov/go-openai@master
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># go install github.com/xxxx/xxxxx@branch_name</span>
+</span></span><span style="display:flex;"><span>$ go install github.com/sashabaranov/go-openai@master
+</span></span></code></pre></div>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mysql on bing随遇而安</title>
+    <link>/tags/mysql/</link>
+    <description>Recent content in mysql on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 15 May 2023 15:00:00 +0000</lastBuildDate><atom:link href="/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mysql TEXT类型到底能存储多少字符？</title>
+      <link>/post/2023-05-15-mysql-text/</link>
+      <pubDate>Mon, 15 May 2023 15:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-05-15-mysql-text/</guid>
+      <description>问题 业务上有一张日志记录表，有个字段content类型为text，用于存储urlencode之后，json类型的数据。但是最近出现解析失败，显示为空的情况。查询后，发现是存储的格式不是有效的json格式，被mysql强制截取掉了，导致解析失败。所以在这里回顾一下text字段能存储字符的大小。
+学习 在MySQL中，TEXT列是一种用于存储大量文本数据的数据类型。根据MySQL的规范，不同的TEXT类型具有不同的存储能力，其最大存储字符数如下：
+类型 字符 大小 TINYTEXT 255 &amp;lt; 1 KB TEXT 65,535 64 KB MEDIUMTEXT 16,777,215 16 MB LONGTEXT 4,294,967,295 4 GB 请注意，这些是每个TEXT类型的理论上限。实际上，实际可用的存储空间可能会受到其他因素的限制，如行大小限制、表大小限制或文件系统限制。
+此外，还应考虑字符编码的影响。如果使用多字节字符集（如UTF-8），存储的字符数可能会受到字节限制的影响。因此，最大字符数可能会少于理论上的限制。
+总结起来，根据不同的TEXT类型和字符编码，MySQL的TEXT列可以存储的最大字符数在255到4,294,967,295之间。</description>
+    </item>
+    
+  </channel>
+</rss>

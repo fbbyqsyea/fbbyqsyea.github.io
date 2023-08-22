@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>curl on bing随遇而安</title>
+    <link>/tags/curl/</link>
+    <description>Recent content in curl on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 09 May 2023 14:23:56 +0000</lastBuildDate><atom:link href="/tags/curl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP Curl Write Function</title>
+      <link>/post/2023-05-09-php-curl-write-function/</link>
+      <pubDate>Tue, 09 May 2023 14:23:56 +0000</pubDate>
+      
+      <guid>/post/2023-05-09-php-curl-write-function/</guid>
+      <description>Write Function 介绍 在PHP的cURL库中，CURLOPT_WRITEFUNCTION选项用于指定在HTTP请求期间接收到的每个数据块的回调函数。该选项允许您以自定义方式处理接收到的数据。
+以下是在PHP中如何使用CURLOPT_WRITEFUNCTION和cURL的示例：
+// 创建一个cURL句柄 $ch = curl_init(); // 设置URL curl_setopt($ch, CURLOPT_URL, &amp;#39;http://example.com&amp;#39;); // 设置WRITEFUNCTION选项 curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) { // 处理接收到的数据 // 在此示例中，我们只是将数据输出到屏幕上 echo $data; // 返回已处理的字节数 return strlen($data); }); // 执行请求 curl_exec($ch); // 关闭cURL句柄 curl_close($ch); 在上面的示例中，为CURLOPT_WRITEFUNCTION指定的匿名函数将在接收到每个数据块时调用。该函数接受两个参数：cURL句柄（$curl）和接收到的数据（$data）。
+在回调函数内部，您可以对接收到的数据执行任何自定义处理。在此示例中，我们只是将数据输出到屏幕上，但您可以修改它，将其保存到文件中或执行任何其他所需的操作。该函数应返回从接收到的数据中处理的字节数。
+请注意，CURLOPT_WRITEFUNCTION选项从PHP 5.1.3开始可用，并且需要将CURLOPT_RETURNTRANSFER选项设置为true（1）以正常工作。
+统计多个数据块时间间隔 要统计每个数据块之间的间隔时间，您可以使用PHP的microtime()函数来获取当前时间的微秒数。在CURLOPT_WRITEFUNCTION回调函数内部，您可以记录每个数据块的接收时间，并计算与上一个数据块之间的时间差。
+以下是修改后的示例代码，以包括每个数据块之间的时间间隔统计：
+// 创建一个cURL句柄 $ch = curl_init(); // 设置URL curl_setopt($ch, CURLOPT_URL, &amp;#39;http://example.com&amp;#39;); // 设置WRITEFUNCTION选项 curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) { static $previousTime = null; // 上一个数据块的时间 $currentTime = microtime(true); // 当前时间 // 如果是第一个数据块，则不计算时间间隔 if ($previousTime !</description>
+    </item>
+    
+    <item>
+      <title>curl简易教程</title>
+      <link>/post/2022-04-23-curl/</link>
+      <pubDate>Sat, 23 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-04-23-curl/</guid>
+      <description>简介 curl是一个命令行工具，作用是发送网络请求，然后获取数据，显示在标准输出(stdout)上面。支持多种协议。
+示例 查看网页源码 $ curl www.sina.com 保存网页源码 $ curl www.sina.com -o index.html 自动跳转 $ curl -L www.sina.com 显示网页头信息 -i 显示网页头信息和内容 -I只显示网页头信息
+$ curl -i www.sina.com $ curl -I www.sina.com 显示通信过程 -v参数可以显示一次完整的http通信过程。包括端口连接和http request头信息
+$ curl -v www.sina.com 显示更详细的通信过程 $ curl --trace output.txt www.sina.com $ curl --trace-ascii output.txt www.sina.com 发送表单信息 GET只需要把数据附在链接后面即可
+$ curl example.com?a=1&amp;amp;b=2 POST请求必须把数据和链接分开 使用-d或者&amp;ndash;data来发送数据 需要显式的声明post方法
+$ curl -X POST --data &amp;#34;data=111&amp;#34; example.com/form.cgi # 如果数据没有经过表单编码 可以使用--data-urlencode进行编码 $ curl -X POST --data-urlencode &amp;#34;data=测试数据&amp;#34; &amp;#34;http://httpbin.</description>
+    </item>
+    
+  </channel>
+</rss>

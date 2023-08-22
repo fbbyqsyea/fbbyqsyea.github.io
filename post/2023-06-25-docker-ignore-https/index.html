@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>docker 私有仓库设置忽略https &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>docker 私有仓库设置忽略https</h1>
+  <time datetime=2023-06-25T00:00:00Z class="post-date">Sun, Jun 25, 2023</time>
+  <h2 id="背景">背景</h2>
+<p>我们在使用公司私有的docker仓库的时候，通常是没有https的。因此需要设置私有仓库在push和pull镜像文件的时候忽略https验证。具体步骤如下。</p>
+<h2 id="步骤">步骤</h2>
+<ol>
+<li>编辑 Docker Daemon 的配置文件。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 请将 &#34;your-private-registry-url&#34; 替换为你私有仓库的地址，例如 http://example.com。 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">&#34;insecure-registries&#34;</span>: [<span style="color:#e6db74">&#34;your-private-registry-url&#34;</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>保存并关闭配置文件。</p>
+</li>
+<li>
+<p>重新启动 Docker 服务，以使配置更改生效。</p>
+</li>
+</ol>
+<h2 id="讲解">讲解</h2>
+<p><code>insecure-registries</code> 是 Docker Daemon 的配置项之一，用于指定不需要进行 HTTPS 加密的私有仓库地址列表。</p>
+<p>在 Docker 中，默认情况下，所有的镜像仓库都要求使用 HTTPS 进行通信，以确保数据的安全性和完整性。这是由于 HTTPS 使用了加密协议，可以防止数据被窃取或篡改。然而，有时在开发或测试环境中，我们可能会使用自签名证书或没有 HTTPS 支持的私有仓库。</p>
+<p><code>insecure-registries</code> 配置项允许你指定一组私有仓库的地址，告诉 Docker Daemon 这些仓库可以使用不安全的 HTTP 协议进行通信，而无需进行 HTTPS 加密。通过将私有仓库的地址添加到该配置项中，Docker 将不再验证这些仓库的证书，并使用不安全的方式与它们进行通信。</p>
+<p>请注意，使用 <code>insecure-registries</code> 配置项会带来一定的安全风险，因为数据在传输过程中不受加密保护，可能会被窃取或篡改。因此，在生产环境中，建议避免使用该配置项，并始终使用安全的 HTTPS 连接与镜像仓库进行通信。</p>
+
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

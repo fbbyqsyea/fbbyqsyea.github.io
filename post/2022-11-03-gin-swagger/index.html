@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>gin中使用swagger &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>gin中使用swagger</h1>
+  <time datetime=2022-11-03T00:00:00Z class="post-date">Thu, Nov 3, 2022</time>
+  <h2 id="安装">安装</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">## 使用如下命令安装swag命令</span>
+</span></span><span style="display:flex;"><span>➜  go go install github.com/swaggo/swag/cmd/swag@latest
+</span></span><span style="display:flex;"><span>go: downloading github.com/ghodss/yaml v1.0.0
+</span></span><span style="display:flex;"><span>go: downloading github.com/urfave/cli/v2 v2.3.0
+</span></span><span style="display:flex;"><span>go: downloading golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+</span></span><span style="display:flex;"><span>go: downloading golang.org/x/text v0.3.7
+</span></span><span style="display:flex;"><span>go: downloading golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f
+</span></span><span style="display:flex;"><span>go: downloading github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d
+</span></span><span style="display:flex;"><span>go: downloading github.com/russross/blackfriday/v2 v2.0.1
+</span></span><span style="display:flex;"><span>go: downloading github.com/shurcooL/sanitized_anchor_name v1.0.0
+</span></span><span style="display:flex;"><span>➜  go
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 查看是否安装成功</span>
+</span></span><span style="display:flex;"><span>➜  go swag -v     
+</span></span><span style="display:flex;"><span>swag version v1.8.7
+</span></span></code></pre></div><h2 id="注释">注释</h2>
+<p>给代码添加注释，注释主要分为两类，一类是全局注释信息，一般放在入口函数main上。另一类是api注释信息，放在每个每个api处理函数上面</p>
+<h4 id="全局注释">全局注释</h4>
+<h5 id="示例">示例</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// @Title       gin framework layout
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Version     0.0.1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description gin framework layout
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @host localhost:8888
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @securityDefinitions.apikey Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @in                         header
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @name                       Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @description                api request authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">core</span>.<span style="color:#a6e22e">New</span>().<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">RegisterRoutersFunc</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="说明">说明</h5>
+<table>
+<thead>
+<tr>
+<th>注释</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>应用标题</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>应用版本</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>应用描述</td>
+</tr>
+<tr>
+<td>TermsOfService</td>
+<td>服务条款</td>
+</tr>
+<tr>
+<td>Contact.name</td>
+<td>联系名称</td>
+</tr>
+<tr>
+<td>Contact.url</td>
+<td>联系url</td>
+</tr>
+<tr>
+<td>Contact.email</td>
+<td>联系email</td>
+</tr>
+<tr>
+<td>License.name</td>
+<td>协议名称</td>
+</tr>
+<tr>
+<td>License.url</td>
+<td>协议地址</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>服务host</td>
+</tr>
+<tr>
+<td>BasePath</td>
+<td>基础path</td>
+</tr>
+</tbody>
+</table>
+<h6 id="文档">文档</h6>
+<p><a href="https://swaggo.github.io/swaggo.io/declarative_comments_format/general_api_info.html">General API Info</a></p>
+<h4 id="api注释">Api注释</h4>
+<h5 id="示例-1">示例</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     登录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 登录接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Param       data body     UserLoginRequest true &#34;登录凭证&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200  {object} global.Response{data=UserLoginResponseData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user/login  [post]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Login</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">req</span> <span style="color:#a6e22e">UserLoginRequest</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">ShouldBindJSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">req</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">Login</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">req</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     退出登录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 退出登录接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200 {object} global.Response{}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user/logout  [get]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Logout</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">Logout</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetUint64</span>(<span style="color:#e6db74">&#34;Id&#34;</span>)))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     当前登录信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 获取登录信息接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200 {object} global.Response{data=UserCurrentResponseData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user/current  [get]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Current</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">Current</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetUint64</span>(<span style="color:#e6db74">&#34;Id&#34;</span>), <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetBool</span>(<span style="color:#e6db74">&#34;RefreshAuthorization&#34;</span>)))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     修改密码
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 修改密码接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Param       data body     ChangePasswordRequest true &#34;修改密码数据&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200  {object} global.Response{data=global.UpdateResponseData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user/changePassword  [post]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">ChangePassword</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ChangePasswordRequest</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">ShouldBindJSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">req</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Id</span> = <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetUint64</span>(<span style="color:#e6db74">&#34;Id&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">ChangePassword</span>(<span style="color:#a6e22e">req</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     用户信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 用户信息接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       id  query    uint64 true &#34;id&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200 {object} global.Response{data=UserData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user  [get]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Controller</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">c</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">GetRequest</span>{}, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">UserData</span>{}, <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     用户列表
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 用户列表接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       account  query    string false &#34;账号&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       username query    string false &#34;姓名&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       role     query    string false &#34;角色&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       status   query    int    false &#34;状态&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       current  query    int    true  &#34;当前页数&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @param       pageSize query    int    true  &#34;页数量&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200      {object} global.Response{data=[]UserData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user/list  [get]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">UserListRequest</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">ShouldBindQuery</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">req</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">req</span>, <span style="color:#f92672">&amp;</span>[]<span style="color:#a6e22e">UserData</span>{}, <span style="color:#66d9ef">false</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     新增用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 新增用户接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Param       data body     UserInsertRequest true &#34;新增用户信息&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200  {object} global.Response{data=global.InsertResponseData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user  [post]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Insert</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">UserInsertRequest</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">CreatedBy</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">ShouldBindJSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">req</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">Insert</span>(<span style="color:#a6e22e">req</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     更新用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 更新用户接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Param       data body     UserUpdateRequest true &#34;更新用户信息&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200  {object} global.Response{data=global.UpdateResponseData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user  [put]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Controller</span>.<span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">c</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">UserUpdateRequest</span>{})
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary     删除用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Description 删除用户接口
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags        用户
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept      json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Produce     json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security    Authorization
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Param       data body     global.RemovesRequest true &#34;删除用户id&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Response    200  {object} global.Response{data=global.RemoveResponseData}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router      /api/user  [delete]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">u</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserController</span>) <span style="color:#a6e22e">Removes</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">RemovesRequest</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">ShouldBindJSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// login id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">loginId</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetUint64</span>(<span style="color:#e6db74">&#34;Id&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">id</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Ids</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">id</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">loginId</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">Err_User_Can_Not_Remove_self_Response</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">id</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">Err_User_Can_Not_Remove_Super_Response</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// remove login flag
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">DelLoginStatus</span>(<span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">u</span>.<span style="color:#a6e22e">Svc</span>.<span style="color:#a6e22e">Remove</span>(<span style="color:#a6e22e">req</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="说明-1">说明</h5>
+<table>
+<thead>
+<tr>
+<th>注释</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Description</td>
+<td>Api行为的详细说明</td>
+</tr>
+<tr>
+<td>Id</td>
+<td>用于标识操作的唯一字符串。在所有API操作中必须是唯一的</td>
+</tr>
+<tr>
+<td>Tags</td>
+<td>每个API操作的标签列表，用逗号分隔。</td>
+</tr>
+<tr>
+<td>Summary</td>
+<td>Api的简短摘要</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>api可以使用的MIME类型列表。值必须与Mime类型下的描述一致</td>
+</tr>
+<tr>
+<td>Produce</td>
+<td>api可以生成的MIME类型列表。值必须与Mime类型下的描述一致</td>
+</tr>
+<tr>
+<td>Param</td>
+<td>用空格分隔的参数 param name,param type,data type,is mandatory?,comment attribute(optional)</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>每个API操作的安全性</td>
+</tr>
+<tr>
+<td>Success</td>
+<td>用空格分隔的成功响应. return code,{param type},data type,comment</td>
+</tr>
+<tr>
+<td>Failure</td>
+<td>用空格分隔的故障响应. return code,{param type},data type,comment</td>
+</tr>
+<tr>
+<td>Response</td>
+<td>用空格分隔的响应. return code,{param type},data type,comment</td>
+</tr>
+<tr>
+<td>Router</td>
+<td>路由. path,[httpMethod]</td>
+</tr>
+</tbody>
+</table>
+<h6 id="文档-1">文档</h6>
+<p><a href="https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html">API Operation</a></p>
+<h2 id="生成文档">生成文档</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 格式化swag注释</span>
+</span></span><span style="display:flex;"><span>➜  gin-framework-layout git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> swag fmt                                   
+</span></span><span style="display:flex;"><span>➜  gin-framework-layout git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成swag文档</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## --parseDependency, --pd 在依赖文件夹内解析go文件，默认禁用(默认值:false)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## --parseInternal 在内部包中解析go文件，默认禁用(默认值:false)</span>
+</span></span><span style="display:flex;"><span>➜  gin-framework-layout git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> swag init --parseDependency --parseInternal      
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:57 Generate swagger docs....
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:57 Generate general API Info, search dir:./
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.UserLoginRequest
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.Response
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.UserLoginResponseData
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.UserCurrentResponseData
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.ChangePasswordRequest
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.UpdateResponseData
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.UserData
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.Data
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.CreatedBy
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.UpdatedBy
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.UserInsertRequest
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.InsertResponseData
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating user.UserUpdateRequest
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.RemovesRequest
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 Generating global.RemoveResponseData
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 create docs.go at  docs/docs.go
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 create swagger.json at  docs/swagger.json
+</span></span><span style="display:flex;"><span>2022/11/03 16:35:59 create swagger.yaml at  docs/swagger.yaml
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 文档路径</span>
+</span></span><span style="display:flex;"><span>➜  gin-framework-layout git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> cd docs 
+</span></span><span style="display:flex;"><span>➜  docs git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> tree
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── docs.go
+</span></span><span style="display:flex;"><span>├── swagger.json
+</span></span><span style="display:flex;"><span>└── swagger.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> directories, <span style="color:#ae81ff">3</span> files
+</span></span></code></pre></div><h2 id="路由">路由</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">router</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/goweb/gin-framework-core/global&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/gin-gonic/gin&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">swaggerFiles</span> <span style="color:#e6db74">&#34;github.com/swaggo/files&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ginSwagger</span> <span style="color:#e6db74">&#34;github.com/swaggo/gin-swagger&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;github.com/goweb/gin-framework-layout/docs&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">RegisterHealthyCheckRouter</span>(<span style="color:#a6e22e">g</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Engine</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ping router
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/healthyCheck&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusOK</span>, <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">H</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#e6db74">&#34;msg&#34;</span>: <span style="color:#e6db74">&#34;ok&#34;</span>,
+</span></span><span style="display:flex;"><span>		})
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">RegisterSwaggerRouter</span>(<span style="color:#a6e22e">g</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Engine</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// debug mode run swagger server
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">Config</span>.<span style="color:#a6e22e">Sys</span>.<span style="color:#a6e22e">Mode</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">DebugMode</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">Config</span>.<span style="color:#a6e22e">Sys</span>.<span style="color:#a6e22e">Mode</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">TestMode</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// swagger router
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/swagger/*any&#34;</span>, <span style="color:#a6e22e">ginSwagger</span>.<span style="color:#a6e22e">WrapHandler</span>(<span style="color:#a6e22e">swaggerFiles</span>.<span style="color:#a6e22e">Handler</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># go mod tidy下载相关依赖包</span>
+</span></span><span style="display:flex;"><span>➜  gin-framework-layout git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> go mod tidy
+</span></span></code></pre></div><h2 id="访问">访问</h2>
+<p><a href="http://localhost:8888/swagger/index.html">swagger地址:http://localhost:8888/swagger/index.html</a></p>
+
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on bing随遇而安</title>
+    <link>/tags/python/</link>
+    <description>Recent content in python on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 19 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Embedding And SentenceTransformers</title>
+      <link>/post/2023-08-19-sentence-transformers/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-08-19-sentence-transformers/</guid>
+      <description>介绍嵌入技术及其在自然语言处理中的应用，以及SentenceTransformers框架的使用。嵌入可将高维数据映射到低维空间，常用于词嵌入。SentenceTransformers框架能生成句子嵌入向量，支持不同语言的文本嵌入计算，并通过余弦相似度比较句子相似性。</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu系统安装和以守护进程运行jupyter</title>
+      <link>/post/2023-08-19-ubuntu-install-and-systemd-run-jupyter/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-08-19-ubuntu-install-and-systemd-run-jupyter/</guid>
+      <description>介绍在Ubuntu系统上安装并以守护进程方式运行Jupyter的过程。Jupyter是开源的交互式计算环境，最初用于支持Python编程语言的数据分析和可视化。它提供基于Web的界面，允许用户在浏览器中创建和分享包含代码、方程、图表、可视化结果和文本说明的文档。Jupyter支持多种编程语言内核，允许在同一环境中使用不同编程语言进行交互式计算。文章详细介绍了在Ubuntu上使用conda创建和配置Jupyter环境，以及通过systemd以守护进程方式启动Jupyter的步骤。</description>
+    </item>
+    
+    <item>
+      <title>Conda教程</title>
+      <link>/post/2023-05-09-conda/</link>
+      <pubDate>Tue, 09 May 2023 23:20:42 +0000</pubDate>
+      
+      <guid>/post/2023-05-09-conda/</guid>
+      <description>介绍什么是conda以及其优势 Conda是一个开源的包管理器和环境管理器,支持Windows,macOS和Linux系统。Conda可以快速安装、运行和更新包及其依赖项。Conda可以轻松创建、保存、加载和在您的本地计算机之间切换环境。虽然Conda最初是为Python程序创建的,但它可以打包和分发任何语言的软件。 作为包管理器,Conda可以帮助您查找和安装包。如果您需要一个需要不同版本的Python的包,您不需要切换到不同的环境管理器,因为Conda也是一个环境管理器。只需要几个命令,您就可以设置一个完全独立的环境来运行那个不同版本的Python,同时继续在普通环境中运行您通常的Python版本。 在其默认配置中,Conda可以安装和管理 Anaconda®构建,审核和维护的数千个包。 Conda可以与Travis CI和AppVeyor等持续集成系统结合使用,以提供对您的代码的定期自动测试。
+conda的安装 Conda包含在Anaconda和Miniconda的所有版本中。 Conda也包含在Anaconda Enterprise中,它为Python,R,Node.js,Java和其他应用程序栈提供现场企业包和环境管理。Conda也可以在conda-forge社区渠道上获得。您也可以在PyPI上获取Conda,但这种方法可能不太最新。 Conda的安装相当简单,对于个人开发者,推荐使用Anaconda或者Miniconda进行安装,官方文档安装指南如下:
+安装Anaconda: 访问Anaconda网站,选择与您的操作系统对应的安装程序下载 双击安装程序并按照提示操作。安装完成后,您的命令行窗口或终端将直接进入Conda environvent。 安装Miniconda: 访问Miniconda网站,选择与您的操作系统对应的安装程序下载 双击安装程序并按照提示操作。安装完成后,需要手动初始化Conda环境。打开终端/命令行窗口,运行: $ bash $ conda init conda环境的创建、激活和删除 Conda环境可以隔离项目的依赖关系和Python版本。 您可以创建,激活和删除环境,还可以导出和导入环境以进行重复使用。
+创建环境: ## 创建名为myenv的环境 $ conda create --name myenv Retrieving notices: ...working... done Collecting package metadata (current_repodata.json): done Solving environment: done ## Package Plan ## environment location: /Users/fbbyqsyea/miniconda3/envs/myenv Proceed ([y]/n)? y Preparing transaction: done Verifying transaction: done Executing transaction: done # # To activate this environment, use # # $ conda activate myenv # # To deactivate an active environment, use # # $ conda deactivate ## 创建python版本为3.</description>
+    </item>
+    
+  </channel>
+</rss>

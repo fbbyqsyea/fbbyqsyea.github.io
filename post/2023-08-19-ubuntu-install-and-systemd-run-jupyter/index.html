@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ubuntu系统安装和以守护进程运行jupyter &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Ubuntu系统安装和以守护进程运行jupyter</h1>
+  <time datetime=2023-08-19T00:00:00Z class="post-date">Sat, Aug 19, 2023</time>
+  <p>Jupyter是一个开源的交互式计算环境，最初是用于支持Python编程语言的交互式数据分析和可视化工作。它的名称由三个主要支持的编程语言，即Julia、Python和R（R语言）的开头字母组成。Jupyter提供了一个基于Web的界面，允许用户在浏览器中创建和分享文档，这些文档可以包含实时代码、方程、图表、可视化结果以及文本说明，从而实现了代码和解释性内容的结合。</p>
+<p>Jupyter最显著的特点之一是它支持多种编程语言的内核，使得用户可以在同一个环境中使用不同的编程语言进行交互式计算。除了Python、Julia和R，Jupyter还可以通过内核扩展支持其他编程语言。</p>
+<p>下面我将详细的介绍一下在<code>Ubuntu</code>环境下安装<code>jupyter</code>的流程。</p>
+<h2 id="使用conda命令创建jupyter环境">使用<code>conda</code>命令创建<code>jupyter</code>环境</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建一个名称为jupyter的python环境，使用python 3.10.6版本</span>
+</span></span><span style="display:flex;"><span>$ conda create -n jupyter python<span style="color:#f92672">=</span>3.10.6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 激活jupyter环境</span>
+</span></span><span style="display:flex;"><span>$ conda activate jupyter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 在jupyter环境中安装jupyter</span>
+</span></span><span style="display:flex;"><span>$ conda install jupyter
+</span></span></code></pre></div><h2 id="使用jupyter命令初始化配置文件">使用<code>jupyter</code>命令初始化配置文件</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 生成jupyter配置文件   </span>
+</span></span><span style="display:flex;"><span>$ jupyter notebook --generate-config
+</span></span></code></pre></div><h2 id="修改jupyter相关配置">修改<code>jupyter</code>相关配置</h2>
+<h4 id="修改jupyterjupyter_notebook_configpy文件一下内容">修改<code>~/.jupyter/jupyter_notebook_config.py</code>文件一下内容</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 指定jupyter的工作目录</span>
+</span></span><span style="display:flex;"><span>c<span style="color:#f92672">.</span>NotebookApp<span style="color:#f92672">.</span>notebook_dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/data/jupyter_data&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 指定jupyter的允许访问地址为0.0.0.0</span>
+</span></span><span style="display:flex;"><span>c<span style="color:#f92672">.</span>NotebookApp<span style="color:#f92672">.</span>ip <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.0.0.0&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 指定jupyter启动时不自动打开浏览器</span>
+</span></span><span style="display:flex;"><span>c<span style="color:#f92672">.</span>NotebookApp<span style="color:#f92672">.</span>open_browser <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span></code></pre></div><h4 id="生成jupyter相关密码">生成<code>jupyter</code>相关密码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 执行下面命令 输入密码和确认密码</span>
+</span></span><span style="display:flex;"><span>$ jupyter notebook password
+</span></span></code></pre></div><h2 id="以systemd启动jupyter">以<code>systemd</code>启动<code>jupyter</code></h2>
+<h4 id="新建jupyter-systemd文件">新建<code>jupyter systemd</code>文件</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ vim /etc/systemd/system/jupyter.service
+</span></span></code></pre></div><h4 id="新增一下配置信息">新增一下配置信息</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-systemd" data-lang="systemd"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Jupyter Notebook Server</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">After</span><span style="color:#f92672">=</span><span style="color:#e6db74">network.target</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Type</span><span style="color:#f92672">=</span><span style="color:#e6db74">simple</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">User</span><span style="color:#f92672">=</span><span style="color:#e6db74">fbbyqsyea</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">/home/fbbyqsyea/miniconda3/envs/jupyter/bin/jupyter notebook</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Install]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">multi-user.target</span>
+</span></span></code></pre></div><h4 id="运行jupyter">运行<code>jupyter</code></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 载入jupyter</span>
+</span></span><span style="display:flex;"><span>$ sudo systemctl daemon-reload
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置开机自启动</span>
+</span></span><span style="display:flex;"><span>$ sudo systemctl enable jupyter.service
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 运行jupyter</span>
+</span></span><span style="display:flex;"><span>$ sudo systemctl start jupyter.service
+</span></span></code></pre></div>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>

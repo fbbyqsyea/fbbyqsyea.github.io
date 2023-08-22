@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>404 Page not found &middot; bing随遇而安</title>
+  <title>解决 Git 文件大小写不跟踪的问题 &middot; bing随遇而安</title>
   <meta name="description" content="" />
 
   
@@ -51,8 +51,16 @@
 </aside>
 
     <main class="content container">
-    <h1>404: Page not found</h1>
-<p class="lead">Sorry, we've misplaced that URL or it's pointing to something that doesn't exist. <a href="/">Head back home</a> to try finding it again.</p>
+    <div class="post">
+  <h1>解决 Git 文件大小写不跟踪的问题</h1>
+  <time datetime=2023-06-25T00:00:00Z class="post-date">Sun, Jun 25, 2023</time>
+  <p>从 Git 2.0 版本开始，Git 支持配置选项来处理文件名大小写更改。通过设置以下配置，Git 将跟踪文件名的大小写更改：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git config core.ignorecase false
+</span></span></code></pre></div><p>上述命令将在 Git 配置中将 core.ignorecase 设置为 false。这告诉 Git 跟踪文件名大小写的更改，使其在版本控制中被视为更改。</p>
+
+</div>
+
+
     </main>
 
     

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>golang on bing随遇而安</title>
+    <link>/tags/golang/</link>
+    <description>Recent content in golang on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 14 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>golang获取指定git分支的模块</title>
+      <link>/post/2023-06-14-go-get-install-git-branch/</link>
+      <pubDate>Wed, 14 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-06-14-go-get-install-git-branch/</guid>
+      <description>本文解答了如何在Golang中获取指定Git仓库分支的模块。作者描述了一个场景，使用开放式AI接口的Go SDK时，最新的功能更新已经在master分支中处理，但尚未生成新的标签。因此，如果需要获取主线分支（master）的代码，而不是最新标签的代码，可以通过在go get和go install命令中指定仓库分支来实现。</description>
+    </item>
+    
+    <item>
+      <title>Slice踩坑日记</title>
+      <link>/post/2023-05-31-golang-slice/</link>
+      <pubDate>Wed, 31 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-05-31-golang-slice/</guid>
+      <description>本文讲述了在Golang中使用切片（slice）时，遇到的一个问题和解决方法。在项目中使用了map[string][]*openai.Client这种数据结构，用来维护多个标识下的多个openai.Client对象。然而，作者在初始化切片时错误地使用了len(sli)作为切片的容量（capacity），而实际上应该使用0作为切片的长度，指定容量以避免出现问题。</description>
+    </item>
+    
+    <item>
+      <title>http断开后，如何继续执行服务端代码</title>
+      <link>/post/2023-05-21-http-actively-disconnect/</link>
+      <pubDate>Sun, 21 May 2023 11:39:53 +0000</pubDate>
+      
+      <guid>/post/2023-05-21-http-actively-disconnect/</guid>
+      <description>提到了一个业务需求，需要实现一个服务端调用一个采用 Event Stream 格式响应的接口，并实时将数据响应给客户端。在此背景下，遇到了一个问题：当 HTTP 请求断开后，PHP 脚本会终止执行，导致服务端无法从 Event Stream 接口中获取完整的数据。在思考了多种方案后，提出了两个解决方案。</description>
+    </item>
+    
+    <item>
+      <title>goroutine和channel</title>
+      <link>/post/2023-05-13-goroutine-channel/</link>
+      <pubDate>Sat, 13 May 2023 15:08:41 +0000</pubDate>
+      
+      <guid>/post/2023-05-13-goroutine-channel/</guid>
+      <description>问题 有一个品类的csv文件，大概有3w多条数据，里面只有品类名称这一列，现在需要读取csv中的内容，调用接口实现对该品类的打分，讲返回的数据写入新的csv文件，新的csv文件包括两个字段，品类和对应的分数。由于打分接口逻辑比较复杂，单次执行比较耗时，如果让你用go来实现，应该怎么做呢？
+思考 对于上面的问题，可以将主要的功能分为三个函数，csv文件读取、调用接口打分、csv文件写入函数。其中csv文件读取和csv文件写入函数都比较简单，就不在这里多说了。对于调用品类打分接口，如果串行的话，速度太慢。我们可以启用多个goroutine来并行执行，并将执行的结果统一写入到数据收集的channel中。最后将数据收集的channel中的数据写入csv文件就好。下面，我将带着这个问题来回顾学习一下goroutine+channel，最后来解答上面的问题。
+学习 goroutine简介 goroutine 是 Go 语言的一个基础特性。它是一个轻量级的线程,进程内部的线程。
+goroutine 的主要特征: 轻量级:goroutine 的开销很小,一个进程可以同时运行成百上千个 goroutine。 并发:goroutine 可以同时运行,实现并发。 共享内存:goroutine 之间可以访问共享内存,主要通过 channel 进行通信。 轻量级调度:goroutine 之间的调度开销很小,可以快速在 goroutine 之间切换。 goroutine 的用途: 实现并发:可以同时运行多个 goroutine,实现并发操作。 避免阻塞:当一个 goroutine 执行阻塞操作时,可以切换到其他 goroutine 继续执行,避免主线程阻塞。 充分利用多核 CPU:可以启动与 CPU 核心数量相同的 goroutine 最大限度地利用 CPU 资源。 goroutine 的实现原理: Go 语言的运行时(runtime)管理着一个主 Goroutine(Logical Processor)和许多新的 Goroutines。 当主 goroutine 创建新的 goroutine 时,主 goroutine 会得到一个寄存器和栈空间,然后在不同的逻辑处理器上运行 goroutine,模拟出concurrency的效果。 Go 语言的调度器会在逻辑处理器间快速切换 goroutine,让我们感觉所有的 goroutine 是平行执行的,但实际上,任何时刻都只有一个处理器在运行。 goroutine 与线程的区别:
+线程是进程内的执行单元,goroutine 是 Go 语言的执行单元。 线程的调度和切换由 OS 进行管理,goroutine 的调度和切换由 Go 语言的运行时(runtime)进行管理。 线程有较大的资源开销, goroutine 的资源开销比较小。一个进程可以创建上万个 goroutine 但同等条件下只能创建有限数量的线程。 线程的切换代价比较高,goroutine 的切换代价低廉。所以 goroutine 更适合用于高并发场景。 总之,goroutine 是 Go 语言实现高效的并发编程的关键所在。通过 goroutine 和 channel 的配合可以实现高性能的并发系统。 例子 package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) func main() { // 直接调用 f(&amp;#34;direct&amp;#34;) // go run goroutines.</description>
+    </item>
+    
+    <item>
+      <title>go项目开发热更新-fresh</title>
+      <link>/post/2023-02-25-go-fresh/</link>
+      <pubDate>Sat, 25 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-02-25-go-fresh/</guid>
+      <description>什么是热更新 代码热更新是在研发过程中，修改代码后能够实时生效。方便测试修改代码是否达到了预期的结果。 像php这样的动态语言是在运行过程中实时编译的，所以不存在热更新的问题。而像golang这样的 静态语言，由于先要编译成二进制文件才能运行。在研发过程中修改完代码后，再手动生成二进制文 件运行，这样会导致研发效率低下的问题。因此“热更新”这个词就孕育而生。所谓的代码热更新就是 在像golang这样的静态语言研发过程中，修改完代码后能够自动实现代码重新编译运行的软件服务。 热更新的原理 热更新的原理很简单，无非是监控指定项目下的所有文件，在文件发生改动后，自动运行编译命令和 启动命令。 fresh的使用 项目地址 https://github.com/gravityblast/fresh 命令安装 $ go install github.com/pilu/fresh@latest 命令说明 命令 $ fresh -h Usage of C:\Users\bingbing.fu\go\bin\fresh.exe: -c string config file path 说明 root: . // 根目录地址 tmp_path: ./tmp // 生成临时文件地址 build_name: runner-build // 编译项目名称 build_log: runner-build-errors.log // 编译项目错误日志 valid_ext: .go, .tpl, .tmpl, .html // 可用的文件后缀 no_rebuild_ext: .tpl, .tmpl, .html // 不不变异的文件后缀 ignored: assets, tmp // 忽略的监控目录 build_delay: 600 // 编译延时 colors: 1 // 编译命令行颜色 log_color_main: cyan // 主色调 log_color_build: yellow // 编译命令色调 log_color_runner: green // 运行命令色调 log_color_watcher: magenta // 监控命令色调 log_color_app: // app 色调 </description>
+    </item>
+    
+    <item>
+      <title>go workspace简单使用</title>
+      <link>/post/2023-01-05-golang-workspace/</link>
+      <pubDate>Thu, 05 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-01-05-golang-workspace/</guid>
+      <description>为什么会有go workspace 基于Go Module的开发，代码组织有以下两种方式:
+整个项目为一个Module，Module下再拆分为多个功能包 根据不同功能将项目拆分为多个Module 两种方式各有优缺点，其中:
+整个项目为一个Module，各个功能包都在一个Module下，代码变更是实时生效的。但是其中业务代码和功能代码等放在一起，高度耦合。多个项目之间的公共代码不方便共享。 根据不同功能将项目拆分为多个Module，优点是代码之前低耦合，Module之间根据需要相互依赖。缺点是项目依赖的Module改动后，如果用到的改动后的功能就需要先发布依赖Module到代码仓库，然后在项目中更新依赖Module。 针对上面所说的将项目拆分成多个Module，依赖Module需要先发布再更新的问题，有以下两个解决方案:
+使用Go Module中的replace指令，在项目中将依赖替换为本地Module 使用go workspace工作区模式，使用统一的go.work来维护依赖映射 module github.com/xxxxxxx/gin-framework-layout go 1.19 require ( github.com/xxxxxxx/gin-framework-core v0.0.1 github.com/xxxxxxx/go-utils v0.0.0-20221028065316-8abebfd58706 github.com/dgrijalva/jwt-go v3.2.0+incompatible github.com/gin-gonic/gin v1.8.1 github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a github.com/swaggo/gin-swagger v1.5.3 github.com/swaggo/swag v1.8.7 ) replace github.com/xxxxxxx/gin-framework-core =&amp;gt; ../gin-framework-core v0.0.1 replace在开发项目的go.mod文件中将依赖Module使用replace指令替换为本地项目。优点是不需要每次都发布和更新Module，缺点是在每次发布的时候都需要注释掉本地的replace指令。 go workspace工作区模式，是在项目的同级目录创建go.work文件，来使用go.work文件来统一维护当前目录下所有Module之间的依赖，同时也不需要将go.work纳入版本管理，也不需要每次都去删掉或者注释掉相关内容。具体如何使用go workspace,请参照下面示例。 go workspace的用法 我们以的xxxxxxx框架为例，为了代码之间低耦合，我们将框架拆封为三个Module。
+gin-framework-core Module, 基于gin封装的web框架核心，包括加载配置服务、日志服务、数据库操作和redis换成操作等，依赖于函数库go-utils。 go-utils Module, go公共函数库，公共函数都放在这个Module下面，包括md5、http request、nodelog等封装。 gin-framework-layout Module, 基于gin框架封装的业务开发模版，其内部实现了mvc+router服务，依赖于gin-framework-core和go-utils Module。 我们在开发过程中需要同时改到上面三个Module，同时我们希望改动能够实时生效、发布代码到gitea时也不改动任何配置。具体可以这样做:
+新建go代码目录 root@huge-elk:~# mkdir ~/webdata/go -p root@huge-elk:~# cd ~/webdata/go/ root@huge-elk:~/webdata/go# 拉取gin-framework-core,gin-framework-layout,go-utils三个仓库 root@huge-elk:~/webdata/go# git clone git@github.</description>
+    </item>
+    
+    <item>
+      <title>内网goproxy服务搭建配置</title>
+      <link>/post/2022-12-10-go-proxy/</link>
+      <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-12-10-go-proxy/</guid>
+      <description>goproxy是什么 goproxy是go模块代理服务，主要用来加速获取go模块。官方默认的proxy为:https://proxy.golang.org, 国内主要使用的proxy是由七牛云提供的https://goproxy.cn/。
+为什么要在内网搭建goproxy服务 内网自建的goproxy不仅可以访问公网的模块，还可以访问内网的 git server 缓存业务用到的公网第三方模块，防止公网仓库变更或者消失，导致线上编译失败或者紧急回退失败 防止公司内部开发人员配置不当造成 import path 泄露 cache热点依赖，提升代码编译速度等 搭建流程(我们以ubuntu系统为例进行安装。primary为goproxy机器，huge-elk为研发机器) golang安装 通过国内go资源网站studygolang下载安装:https://studygolang.com/dl
+## 下载对应系统的golang root@primary:~# wget https://studygolang.com/dl/golang/go1.19.2.linux-amd64.tar.gz ## 解压到指定目录 root@primary:~# tar zxvf go1.19.2.linux-amd64.tar.gz -C /usr/local ## 将go命令添加到/usr/bin root@primary:/usr/bin# ln /usr/local/go/bin/go -s /usr/bin/go ## 查看go命令是否安装成功 root@primary:~# go version go version go1.19.2 linux/amd64 git安装 ubuntu默认已经安装git。如未安装，请通过官网下载安装:https://git-scm.com/downloads
+# 通过 git version命令来查看是否安装成功 root@primary:~# git version git version 2.34.1 goproxy安装 ## 拉取goproxy代码 root@primary:~# git clone https://github.com/goproxyio/goproxy.git Cloning into &amp;#39;goproxy&amp;#39;... remote: Enumerating objects: 530, done.</description>
+    </item>
+    
+    <item>
+      <title>gin中使用swagger</title>
+      <link>/post/2022-11-03-gin-swagger/</link>
+      <pubDate>Thu, 03 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-11-03-gin-swagger/</guid>
+      <description>安装 ## 使用如下命令安装swag命令 ➜ go go install github.com/swaggo/swag/cmd/swag@latest go: downloading github.com/ghodss/yaml v1.0.0 go: downloading github.com/urfave/cli/v2 v2.3.0 go: downloading golang.org/x/net v0.0.0-20220722155237-a158d28d115b go: downloading golang.org/x/text v0.3.7 go: downloading golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f go: downloading github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d go: downloading github.com/russross/blackfriday/v2 v2.0.1 go: downloading github.com/shurcooL/sanitized_anchor_name v1.0.0 ➜ go ## 查看是否安装成功 ➜ go swag -v swag version v1.8.7 注释 给代码添加注释，注释主要分为两类，一类是全局注释信息，一般放在入口函数main上。另一类是api注释信息，放在每个每个api处理函数上面
+全局注释 示例 // @Title gin framework layout // @Version 0.0.1 // @Description gin framework layout // @host localhost:8888 // @securityDefinitions.</description>
+    </item>
+    
+    <item>
+      <title>Go Modules 配置 &amp; 命令</title>
+      <link>/post/2022-04-23-go-module-cmd/</link>
+      <pubDate>Sat, 23 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2022-04-23-go-module-cmd/</guid>
+      <description>初始化行为 # 创建项目目录 $ mkdir go-gin-example &amp;amp;&amp;amp; cd go-gin-example # 打开go modules开关(目前在1.18中默认值为 auto) $ go env -w GO111MODULE=on # 设置goproxy代理，解决国内外网访问不了导致的包下载不了的问题 该配置有两个参数， # 第一个是 https://goproxy.cn，它是由七牛云背书的一个强大稳定的 Go 模块代理，可以有效地解决你的外网问题； # 第二个是 direct，它是一个特殊的 fallback 选项，它的作用是用于指示 Go 在拉取模块时遇到错误会回源到模块版本的源地址去抓取（比如 GitHub 等）。 $ go env -w GOPROXY=https://goproxy.cn,direct # 初始化Modules 它将会生成 go.mod 文件，需要注意的是 MODULE_PATH 填写的是模块引入路径，你可以根据自己的情况修改路径。 $ go mod init github.com/fbbyqsyea/go-gin-example 基础使用 # go get 拉去最新的依赖 # 拉取最新的版本(优先选取的tag) $ go get golang.org/x/text@latest # 拉取master分支的最新commit $ go get golang.org/x/text@master # 拉取tag指定版本的commit $ go get golang.</description>
+    </item>
+    
+  </channel>
+</rss>

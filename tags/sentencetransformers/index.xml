@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SentenceTransformers on bing随遇而安</title>
+    <link>/tags/sentencetransformers/</link>
+    <description>Recent content in SentenceTransformers on bing随遇而安</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 19 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/sentencetransformers/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Embedding And SentenceTransformers</title>
+      <link>/post/2023-08-19-sentence-transformers/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-08-19-sentence-transformers/</guid>
+      <description>介绍嵌入技术及其在自然语言处理中的应用，以及SentenceTransformers框架的使用。嵌入可将高维数据映射到低维空间，常用于词嵌入。SentenceTransformers框架能生成句子嵌入向量，支持不同语言的文本嵌入计算，并通过余弦相似度比较句子相似性。</description>
+    </item>
+    
+  </channel>
+</rss>

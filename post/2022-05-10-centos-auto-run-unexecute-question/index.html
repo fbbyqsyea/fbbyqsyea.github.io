@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.117.0">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Centos7中配置开机自动执行不生效问题 &middot; bing随遇而安</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+  
+  
+</head>
+
+  <body class="theme-base-0c ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>bing随遇而安</h1></a>
+      <p class="lead">
+       废柴都是间歇性的自虐 强者却是持续性的自律 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="/">首页</a> </li>
+        <li><a href="//tags">标签</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2023. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Centos7中配置开机自动执行不生效问题</h1>
+  <time datetime=2022-05-10T00:00:00Z class="post-date">Tue, May 10, 2022</time>
+  <h2 id="正常配置">正常配置</h2>
+<p>我们正常的业务中，有很多需要开启自动执行的诉求，比如挂在数据盘到数据系统。</p>
+<h6 id="打开rclocal文件">打开rc.local文件</h6>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sudo vim /etc/rc.d/rc.local
+</span></span></code></pre></div><h6 id="在文件最后新增如下内容">在文件最后新增如下内容</h6>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mount -t cifs //192.168.73.1/webdata/golang /usr/local/webdata/golang -o uid<span style="color:#f92672">=</span>1000,gid<span style="color:#f92672">=</span>1000,username<span style="color:#f92672">=</span>share,password<span style="color:#f92672">=</span>share123456
+</span></span></code></pre></div><p>这个时候，正常来说下次启动的时候会自动挂载文件，但是并没有。</p>
+<h2 id="不生效原因">不生效原因</h2>
+<p>从CentOS7.0开始，/etc/rc.d/rc.local文件的初始权限变成了644，默认是不使用/etc/rc.local文件作为开机启动了，
+并且rc-local.service服务的状态是disabled状态。所以我们需要从下面两个方面检查。</p>
+<h6 id="给etcrcdrclocal文件新增执行权限">给/etc/rc.d/rc.local文件新增执行权限</h6>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sudo chmod a+x /etc/rc.d/rc.local
+</span></span></code></pre></div><h6 id="启动rc-localservice">启动rc-local.service</h6>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sudo systemctl enable rc-local.service
+</span></span><span style="display:flex;"><span>$ sudo systemctl start rc-local.service
+</span></span></code></pre></div>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>
