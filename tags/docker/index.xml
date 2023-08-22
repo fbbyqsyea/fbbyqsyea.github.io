@@ -2,72 +2,72 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>docker on bing随遇而安</title>
-    <link>/tags/docker/</link>
+    <link>https://fbbmore.com/tags/docker/</link>
     <description>Recent content in docker on bing随遇而安</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 27 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 27 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://fbbmore.com/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker build导致的磁盘空间不足问题</title>
-      <link>/post/2023-07-27-docker-buildx/</link>
+      <link>https://fbbmore.com/post/2023-07-27-docker-buildx/</link>
       <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-07-27-docker-buildx/</guid>
-      <description>本文介绍了作者在使用Docker构建过程中遇到的磁盘空间不足问题，并解释了产生该问题的原因，即Docker build过程中产生的缓存占用了大量磁盘空间。作者通过docker system df命令查看了Docker的磁盘占用情况，并通过执行docker builder prune命令清理了缓存。文章还探讨了Docker构建缓存的机制，解释了为何需要构建缓存以及如何合理清理它。最后，提供了关于清理不再使用的镜像和容器、使用.dockerignore文件优化构建缓存、使用&amp;ndash;no-cache标志禁用缓存以及定期清理构建缓存的方法和注意事项。</description>
+      <guid>https://fbbmore.com/post/2023-07-27-docker-buildx/</guid>
+      <description>本文介绍了在使用Docker构建过程中遇到的磁盘空间不足问题，并解释了产生该问题的原因，即Docker build过程中产生的缓存占用了大量磁盘空间。通过docker system df命令查看了Docker的磁盘占用情况，并通过执行docker builder prune命令清理了缓存。文章还探讨了Docker构建缓存的机制，解释了为何需要构建缓存以及如何合理清理它。最后，提供了关于清理不再使用的镜像和容器、使用.dockerignore文件优化构建缓存、使用&amp;ndash;no-cache标志禁用缓存以及定期清理构建缓存的方法和注意事项。</description>
     </item>
     
     <item>
       <title>Dockerfile改动一行代码，Jenkins编译速度提升了将近80倍</title>
-      <link>/post/2023-07-27-docker-cache/</link>
+      <link>https://fbbmore.com/post/2023-07-27-docker-cache/</link>
       <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-07-27-docker-cache/</guid>
-      <description>通过优化Dockerfile，作者成功将Jenkins编译速度提升了近80倍。作者通过学习Docker构建缓存机制，忽略无关文件、添加构建层以及使用缓存等方法，对项目的Dockerfile进行改进。原始Dockerfile的基础上，作者增加了RUN go mod download命令，在构建层中下载Go依赖模块，避免重复构建模块。此外，作者还创建了.dockerignore文件来排除无关文件，进一步提高了缓存构建层的复用率。通过这些优化，作者在Jenkins中的编译时间得到了显著改善。这一经验不仅有效提升了构建效率，也为开发流程带来了重大的改进。</description>
+      <guid>https://fbbmore.com/post/2023-07-27-docker-cache/</guid>
+      <description>通过优化Dockerfile，成功将Jenkins编译速度提升了近80倍。通过学习Docker构建缓存机制，忽略无关文件、添加构建层以及使用缓存等方法，对项目的Dockerfile进行改进。原始Dockerfile的基础上，增加了RUN go mod download命令，在构建层中下载Go依赖模块，避免重复构建模块。此外，还创建了.dockerignore文件来排除无关文件，进一步提高了缓存构建层的复用率。通过这些优化，在Jenkins中的编译时间得到了显著改善。这一经验不仅有效提升了构建效率，也为开发流程带来了重大的改进。</description>
     </item>
     
     <item>
       <title>docker 私有仓库设置忽略https</title>
-      <link>/post/2023-06-25-docker-ignore-https/</link>
+      <link>https://fbbmore.com/post/2023-06-25-docker-ignore-https/</link>
       <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-06-25-docker-ignore-https/</guid>
+      <guid>https://fbbmore.com/post/2023-06-25-docker-ignore-https/</guid>
       <description>本文介绍了在使用公司私有Docker仓库时，由于没有HTTPS，如何设置私有仓库在push和pull镜像时忽略HTTPS验证。步骤包括编辑Docker Daemon的配置文件，在insecure-registries配置项中添加私有仓库的地址，以告知Docker Daemon使用不安全的HTTP协议进行通信。文章强调使用insecure-registries会带来一定的安全风险，因此在生产环境中建议使用安全的HTTPS连接与镜像仓库通信。</description>
     </item>
     
     <item>
       <title>常用Docker</title>
-      <link>/post/2022-10-23-common-docker-cmd/</link>
+      <link>https://fbbmore.com/post/2022-10-23-common-docker-cmd/</link>
       <pubDate>Sun, 23 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-10-23-common-docker-cmd/</guid>
+      <guid>https://fbbmore.com/post/2022-10-23-common-docker-cmd/</guid>
       <description>mysql $ docker run --name mysql \ -p 3306:3306 \ --privileged=true \ --restart=always \ -e MYSQL_ROOT_PASSWORD=&amp;#39;Aa!23456&amp;#39; \ -d mysql:5.7 redis $ docker run --name redis \ -p 6379:6379 \ --privileged=true \ --restart=always \ -d redis redis-server etcd $ docker run -d --name Etcd-server \ -p 2379:2379 \ -p 2380:2380 \ --privileged=true \ --restart=always \ --env ALLOW_NONE_AUTHENTICATION=yes \ bitnami/etcd:latest </description>
     </item>
     
     <item>
       <title>k8s containerd容器驱动安装</title>
-      <link>/post/2022-06-11-centos-install-containerd/</link>
+      <link>https://fbbmore.com/post/2022-06-11-centos-install-containerd/</link>
       <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-06-11-centos-install-containerd/</guid>
+      <guid>https://fbbmore.com/post/2022-06-11-centos-install-containerd/</guid>
       <description>安装yum-utils工具 $ sudo yum install -y yum-utils 添加阿里云docker镜像仓库 $ sudo yum-config-manager \ --add-repo \ http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 安装containerd $ sudo yum install containerd -y 初始化containerd配置信息 $ sudo madir /etc/containerd $ sudo containerd config default &amp;gt; /etc/containerd/config.toml 修改containerd sand_box 和 Cgroup $ vim /etc/containerd/config.toml # 修改sand_box # 查找sand_image 将k8s.gcr.io/pause:3.6 替换成阿里源 registry.aliyuncs.com/google_containers/pause:3.6 # 修改Cgroup # 查找SystemdCgroup 将false 改为 true 启动containerd $ sudo systemctl daemon-reload $ sudo systemctl enable containerd $ sudo systemctl start containerd </description>
     </item>
     
     <item>
       <title>centos安装docker</title>
-      <link>/post/2022-05-08-centos-install-docker/</link>
+      <link>https://fbbmore.com/post/2022-05-08-centos-install-docker/</link>
       <pubDate>Sun, 08 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-05-08-centos-install-docker/</guid>
+      <guid>https://fbbmore.com/post/2022-05-08-centos-install-docker/</guid>
       <description>删除老版本的docker $ sudo yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-engine 安装yum-utils工具 添加docker源 $ sudo yum install -y yum-utils $ sudo yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo 替换阿里云docker镜像仓库 $ sudo yum-config-manager \ --add-repo \ http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 选择安装版本 docker支持安装尝鲜版(nightly)、测试版(test)和稳定版(默认版本)
 尝鲜版 $ sudo yum-config-manager --enable docker-ce-nightly 测试版 $ sudo yum-config-manager --enable docker-ce-test 安装docker 安装最新版的docker $ sudo yum install docker-ce docker-ce-cli containerd.io 安装指定版本的docker 查找支持的版本 $ yum list docker-ce --showduplicates | sort -r 安装指定的版本 $ sudo yum install docker-ce-&amp;lt;VERSION_STRING&amp;gt; docker-ce-cli-&amp;lt;VERSION_STRING&amp;gt; containerd.</description>
     </item>
     
     <item>
       <title>docker国内镜像源</title>
-      <link>/post/2022-05-06-docker/</link>
+      <link>https://fbbmore.com/post/2022-05-06-docker/</link>
       <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-05-06-docker/</guid>
+      <guid>https://fbbmore.com/post/2022-05-06-docker/</guid>
       <description>docker国内镜像加速地址 docker中国区官方镜像 https://registry.docker-cn.com 网易 http://hub-mirror.c.163.com ustc(中科大) https://docker.mirrors.ustc.edu.cn 配置流程 在/etc/docker下新建daemon.json配置文件 # vim /etc/docker/daemon.json 在daemon.json文件中写入如下配置信息 { &amp;#34;registry-mirrors&amp;#34;:[ &amp;#34;https://registry.docker-cn.com&amp;#34;, &amp;#34;http://hub-mirror.c.163.com&amp;#34;, &amp;#34;https://docker.mirrors.ustc.edu.cn&amp;#34; ] } 重新加载配置文件 $ systemctl daemon-reload 重启docker # systemctl restart docker 查看镜像源配置信息 # docker info ...... Registry Mirrors: https://registry.docker-cn.com/ http://hub-mirror.c.163.com/ https://docker.mirrors.ustc.edu.cn/ </description>
     </item>
     

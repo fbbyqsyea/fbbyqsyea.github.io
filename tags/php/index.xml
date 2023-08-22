@@ -2,48 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>php on bing随遇而安</title>
-    <link>/tags/php/</link>
+    <link>https://fbbmore.com/tags/php/</link>
     <description>Recent content in php on bing随遇而安</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 21 May 2023 11:39:53 +0000</lastBuildDate><atom:link href="/tags/php/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 May 2023 11:39:53 +0000</lastBuildDate><atom:link href="https://fbbmore.com/tags/php/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>http断开后，如何继续执行服务端代码</title>
-      <link>/post/2023-05-21-http-actively-disconnect/</link>
+      <link>https://fbbmore.com/post/2023-05-21-http-actively-disconnect/</link>
       <pubDate>Sun, 21 May 2023 11:39:53 +0000</pubDate>
       
-      <guid>/post/2023-05-21-http-actively-disconnect/</guid>
+      <guid>https://fbbmore.com/post/2023-05-21-http-actively-disconnect/</guid>
       <description>提到了一个业务需求，需要实现一个服务端调用一个采用 Event Stream 格式响应的接口，并实时将数据响应给客户端。在此背景下，遇到了一个问题：当 HTTP 请求断开后，PHP 脚本会终止执行，导致服务端无法从 Event Stream 接口中获取完整的数据。在思考了多种方案后，提出了两个解决方案。</description>
     </item>
     
     <item>
       <title>PHP register shutdown function</title>
-      <link>/post/2023-05-14-php-register-shutdown-function/</link>
+      <link>https://fbbmore.com/post/2023-05-14-php-register-shutdown-function/</link>
       <pubDate>Sun, 14 May 2023 18:59:00 +0000</pubDate>
       
-      <guid>/post/2023-05-14-php-register-shutdown-function/</guid>
-      <description>问题 最近业务上需要调用一个响应格式为event stream的接口，需要实现下面两点功能。
-请求响应格式为event stream的接口，同时实时的将流式数据输出给前端。 请求结束后将格式化后的流式数据存储到日志中。 我们使用curl的write function 回调函数来处理流式数据的输出。但是如果在event stream请求的过程中如果前端中断请求或者说发生异常，就会出现日志丢失的情况。为了实现不管是请求中断还是发生异常，我们都可以将已有的流式数据和异常数据存储到日志的功能，我们可以使用php的register_shutdown_function来注册一个shutdown回调函数。这样不管是正常请求结束还是异常的请求退出，我们都可以记录相关的已有数据。下面我们就一起来学习一下php的register_shutdown_functioon。
-用法 register_shutdown_function()函数在PHP中注册一个在脚本终止时执行的回调函数。这很有用,可以执行清理操作。
-语法: register_shutdown_function(callback) 例子: &amp;lt;?php register_shutdown_function(&amp;#39;cleanup&amp;#39;); function cleanup() { // 关闭数据库连接,关闭打开的文件等 echo &amp;#39;清理!&amp;#39;; } echo &amp;#39;脚本执行中...&amp;#39;; ?&amp;gt; 即使脚本正常结束,或由exit(),die()或致命错误终止,关闭函数也会被调用。 一些重要点:
-可以注册多个shutdown函数。它们将以相反的注册顺序执行。 从shutdown函数内部注册shutdown函数将导致未定义的行为。 shutdown函数可以死亡,但其余的shutdown函数仍将被调用。 即使页面已经发送,shutdown函数也会执行,所以无法从shutdown函数内发送标头。 总之,register_shutdown_function()允许您在PHP脚本终止时执行重要的清理代码,以避免未预期的副作用。 主要用途:
-关闭数据库连接 释放锁 关闭打开的文件/网络连接 日志记录 清理临时文件 这可以确保您的脚本即使在发生意外情况下也可以正确地清理资源。 解答 // 注册请求终止回调函数 register_shutdown_function(function ($requestParams) use (&amp;amp;$output){ // 记录日志 log( $requestParams, // 调用流式接口的参数 $output, // 流式接口实时响应的数据 connection_aborted(), // 客户端是否已关闭与服务器的连接 error_get_last(), // 错误信息 ); }, $requestParams); </description>
+      <guid>https://fbbmore.com/post/2023-05-14-php-register-shutdown-function/</guid>
+      <description>介绍php的register_shutdown_function函数</description>
     </item>
     
     <item>
       <title>PHP Curl Write Function</title>
-      <link>/post/2023-05-09-php-curl-write-function/</link>
+      <link>https://fbbmore.com/post/2023-05-09-php-curl-write-function/</link>
       <pubDate>Tue, 09 May 2023 14:23:56 +0000</pubDate>
       
-      <guid>/post/2023-05-09-php-curl-write-function/</guid>
-      <description>Write Function 介绍 在PHP的cURL库中，CURLOPT_WRITEFUNCTION选项用于指定在HTTP请求期间接收到的每个数据块的回调函数。该选项允许您以自定义方式处理接收到的数据。
-以下是在PHP中如何使用CURLOPT_WRITEFUNCTION和cURL的示例：
-// 创建一个cURL句柄 $ch = curl_init(); // 设置URL curl_setopt($ch, CURLOPT_URL, &amp;#39;http://example.com&amp;#39;); // 设置WRITEFUNCTION选项 curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) { // 处理接收到的数据 // 在此示例中，我们只是将数据输出到屏幕上 echo $data; // 返回已处理的字节数 return strlen($data); }); // 执行请求 curl_exec($ch); // 关闭cURL句柄 curl_close($ch); 在上面的示例中，为CURLOPT_WRITEFUNCTION指定的匿名函数将在接收到每个数据块时调用。该函数接受两个参数：cURL句柄（$curl）和接收到的数据（$data）。
-在回调函数内部，您可以对接收到的数据执行任何自定义处理。在此示例中，我们只是将数据输出到屏幕上，但您可以修改它，将其保存到文件中或执行任何其他所需的操作。该函数应返回从接收到的数据中处理的字节数。
-请注意，CURLOPT_WRITEFUNCTION选项从PHP 5.1.3开始可用，并且需要将CURLOPT_RETURNTRANSFER选项设置为true（1）以正常工作。
-统计多个数据块时间间隔 要统计每个数据块之间的间隔时间，您可以使用PHP的microtime()函数来获取当前时间的微秒数。在CURLOPT_WRITEFUNCTION回调函数内部，您可以记录每个数据块的接收时间，并计算与上一个数据块之间的时间差。
-以下是修改后的示例代码，以包括每个数据块之间的时间间隔统计：
-// 创建一个cURL句柄 $ch = curl_init(); // 设置URL curl_setopt($ch, CURLOPT_URL, &amp;#39;http://example.com&amp;#39;); // 设置WRITEFUNCTION选项 curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) { static $previousTime = null; // 上一个数据块的时间 $currentTime = microtime(true); // 当前时间 // 如果是第一个数据块，则不计算时间间隔 if ($previousTime !</description>
+      <guid>https://fbbmore.com/post/2023-05-09-php-curl-write-function/</guid>
+      <description>学习使用php curl请求中的CURLOPT_WRITEFUNCTION callback函数</description>
     </item>
     
   </channel>

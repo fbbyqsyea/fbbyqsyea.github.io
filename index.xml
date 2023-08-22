@@ -2,284 +2,253 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>bing随遇而安</title>
-    <link>/</link>
+    <link>https://fbbmore.com/</link>
     <description>Recent content on bing随遇而安</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 19 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 19 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://fbbmore.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Embedding And SentenceTransformers</title>
-      <link>/post/2023-08-19-sentence-transformers/</link>
+      <link>https://fbbmore.com/post/2023-08-19-sentence-transformers/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-08-19-sentence-transformers/</guid>
+      <guid>https://fbbmore.com/post/2023-08-19-sentence-transformers/</guid>
       <description>介绍嵌入技术及其在自然语言处理中的应用，以及SentenceTransformers框架的使用。嵌入可将高维数据映射到低维空间，常用于词嵌入。SentenceTransformers框架能生成句子嵌入向量，支持不同语言的文本嵌入计算，并通过余弦相似度比较句子相似性。</description>
     </item>
     
     <item>
       <title>Ubuntu系统安装和以守护进程运行jupyter</title>
-      <link>/post/2023-08-19-ubuntu-install-and-systemd-run-jupyter/</link>
+      <link>https://fbbmore.com/post/2023-08-19-ubuntu-install-and-systemd-run-jupyter/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-08-19-ubuntu-install-and-systemd-run-jupyter/</guid>
+      <guid>https://fbbmore.com/post/2023-08-19-ubuntu-install-and-systemd-run-jupyter/</guid>
       <description>介绍在Ubuntu系统上安装并以守护进程方式运行Jupyter的过程。Jupyter是开源的交互式计算环境，最初用于支持Python编程语言的数据分析和可视化。它提供基于Web的界面，允许用户在浏览器中创建和分享包含代码、方程、图表、可视化结果和文本说明的文档。Jupyter支持多种编程语言内核，允许在同一环境中使用不同编程语言进行交互式计算。文章详细介绍了在Ubuntu上使用conda创建和配置Jupyter环境，以及通过systemd以守护进程方式启动Jupyter的步骤。</description>
     </item>
     
     <item>
       <title>Docker build导致的磁盘空间不足问题</title>
-      <link>/post/2023-07-27-docker-buildx/</link>
+      <link>https://fbbmore.com/post/2023-07-27-docker-buildx/</link>
       <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-07-27-docker-buildx/</guid>
-      <description>本文介绍了作者在使用Docker构建过程中遇到的磁盘空间不足问题，并解释了产生该问题的原因，即Docker build过程中产生的缓存占用了大量磁盘空间。作者通过docker system df命令查看了Docker的磁盘占用情况，并通过执行docker builder prune命令清理了缓存。文章还探讨了Docker构建缓存的机制，解释了为何需要构建缓存以及如何合理清理它。最后，提供了关于清理不再使用的镜像和容器、使用.dockerignore文件优化构建缓存、使用&amp;ndash;no-cache标志禁用缓存以及定期清理构建缓存的方法和注意事项。</description>
+      <guid>https://fbbmore.com/post/2023-07-27-docker-buildx/</guid>
+      <description>本文介绍了在使用Docker构建过程中遇到的磁盘空间不足问题，并解释了产生该问题的原因，即Docker build过程中产生的缓存占用了大量磁盘空间。通过docker system df命令查看了Docker的磁盘占用情况，并通过执行docker builder prune命令清理了缓存。文章还探讨了Docker构建缓存的机制，解释了为何需要构建缓存以及如何合理清理它。最后，提供了关于清理不再使用的镜像和容器、使用.dockerignore文件优化构建缓存、使用&amp;ndash;no-cache标志禁用缓存以及定期清理构建缓存的方法和注意事项。</description>
     </item>
     
     <item>
       <title>Dockerfile改动一行代码，Jenkins编译速度提升了将近80倍</title>
-      <link>/post/2023-07-27-docker-cache/</link>
+      <link>https://fbbmore.com/post/2023-07-27-docker-cache/</link>
       <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-07-27-docker-cache/</guid>
-      <description>通过优化Dockerfile，作者成功将Jenkins编译速度提升了近80倍。作者通过学习Docker构建缓存机制，忽略无关文件、添加构建层以及使用缓存等方法，对项目的Dockerfile进行改进。原始Dockerfile的基础上，作者增加了RUN go mod download命令，在构建层中下载Go依赖模块，避免重复构建模块。此外，作者还创建了.dockerignore文件来排除无关文件，进一步提高了缓存构建层的复用率。通过这些优化，作者在Jenkins中的编译时间得到了显著改善。这一经验不仅有效提升了构建效率，也为开发流程带来了重大的改进。</description>
+      <guid>https://fbbmore.com/post/2023-07-27-docker-cache/</guid>
+      <description>通过优化Dockerfile，成功将Jenkins编译速度提升了近80倍。通过学习Docker构建缓存机制，忽略无关文件、添加构建层以及使用缓存等方法，对项目的Dockerfile进行改进。原始Dockerfile的基础上，增加了RUN go mod download命令，在构建层中下载Go依赖模块，避免重复构建模块。此外，还创建了.dockerignore文件来排除无关文件，进一步提高了缓存构建层的复用率。通过这些优化，在Jenkins中的编译时间得到了显著改善。这一经验不仅有效提升了构建效率，也为开发流程带来了重大的改进。</description>
     </item>
     
     <item>
       <title>docker 私有仓库设置忽略https</title>
-      <link>/post/2023-06-25-docker-ignore-https/</link>
+      <link>https://fbbmore.com/post/2023-06-25-docker-ignore-https/</link>
       <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-06-25-docker-ignore-https/</guid>
+      <guid>https://fbbmore.com/post/2023-06-25-docker-ignore-https/</guid>
       <description>本文介绍了在使用公司私有Docker仓库时，由于没有HTTPS，如何设置私有仓库在push和pull镜像时忽略HTTPS验证。步骤包括编辑Docker Daemon的配置文件，在insecure-registries配置项中添加私有仓库的地址，以告知Docker Daemon使用不安全的HTTP协议进行通信。文章强调使用insecure-registries会带来一定的安全风险，因此在生产环境中建议使用安全的HTTPS连接与镜像仓库通信。</description>
     </item>
     
     <item>
       <title>解决 Git 文件大小写不跟踪的问题</title>
-      <link>/post/2023-06-25-git-core-ignorecase/</link>
+      <link>https://fbbmore.com/post/2023-06-25-git-core-ignorecase/</link>
       <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-06-25-git-core-ignorecase/</guid>
+      <guid>https://fbbmore.com/post/2023-06-25-git-core-ignorecase/</guid>
       <description>解决 Git 文件大小写不跟踪的问题</description>
     </item>
     
     <item>
       <title>golang获取指定git分支的模块</title>
-      <link>/post/2023-06-14-go-get-install-git-branch/</link>
+      <link>https://fbbmore.com/post/2023-06-14-go-get-install-git-branch/</link>
       <pubDate>Wed, 14 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-06-14-go-get-install-git-branch/</guid>
-      <description>本文解答了如何在Golang中获取指定Git仓库分支的模块。作者描述了一个场景，使用开放式AI接口的Go SDK时，最新的功能更新已经在master分支中处理，但尚未生成新的标签。因此，如果需要获取主线分支（master）的代码，而不是最新标签的代码，可以通过在go get和go install命令中指定仓库分支来实现。</description>
+      <guid>https://fbbmore.com/post/2023-06-14-go-get-install-git-branch/</guid>
+      <description>本文解答了如何在Golang中获取指定Git仓库分支的模块。</description>
     </item>
     
     <item>
       <title>三步生成研测https证书</title>
-      <link>/post/2023-06-14-three-step-https-nginx/</link>
+      <link>https://fbbmore.com/post/2023-06-14-three-step-https-nginx/</link>
       <pubDate>Wed, 14 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-06-14-three-step-https-nginx/</guid>
+      <guid>https://fbbmore.com/post/2023-06-14-three-step-https-nginx/</guid>
       <description>介绍如何在研发测试环境中快速生成支持HTTPS的证书。</description>
     </item>
     
     <item>
       <title>git如何初始化master分支</title>
-      <link>/post/2023-06-06-git-branch-rename/</link>
+      <link>https://fbbmore.com/post/2023-06-06-git-branch-rename/</link>
       <pubDate>Tue, 06 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-06-06-git-branch-rename/</guid>
-      <description>本文介绍了在Git中如何初始化master分支。由于Git命令行版本从2.28开始将默认主分支名称从&amp;quot;master&amp;quot;改为&amp;quot;main&amp;quot;，但一些公司的Git服务仍将master作为主线分支，因此创建新项目分支时出现了不一致情况。</description>
+      <guid>https://fbbmore.com/post/2023-06-06-git-branch-rename/</guid>
+      <description>本文介绍了在Git中如何初始化master分支。</description>
     </item>
     
     <item>
       <title>Slice踩坑日记</title>
-      <link>/post/2023-05-31-golang-slice/</link>
+      <link>https://fbbmore.com/post/2023-05-31-golang-slice/</link>
       <pubDate>Wed, 31 May 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-05-31-golang-slice/</guid>
+      <guid>https://fbbmore.com/post/2023-05-31-golang-slice/</guid>
       <description>本文讲述了在Golang中使用切片（slice）时，遇到的一个问题和解决方法。在项目中使用了map[string][]*openai.Client这种数据结构，用来维护多个标识下的多个openai.Client对象。然而，作者在初始化切片时错误地使用了len(sli)作为切片的容量（capacity），而实际上应该使用0作为切片的长度，指定容量以避免出现问题。</description>
     </item>
     
     <item>
       <title>http断开后，如何继续执行服务端代码</title>
-      <link>/post/2023-05-21-http-actively-disconnect/</link>
+      <link>https://fbbmore.com/post/2023-05-21-http-actively-disconnect/</link>
       <pubDate>Sun, 21 May 2023 11:39:53 +0000</pubDate>
       
-      <guid>/post/2023-05-21-http-actively-disconnect/</guid>
+      <guid>https://fbbmore.com/post/2023-05-21-http-actively-disconnect/</guid>
       <description>提到了一个业务需求，需要实现一个服务端调用一个采用 Event Stream 格式响应的接口，并实时将数据响应给客户端。在此背景下，遇到了一个问题：当 HTTP 请求断开后，PHP 脚本会终止执行，导致服务端无法从 Event Stream 接口中获取完整的数据。在思考了多种方案后，提出了两个解决方案。</description>
     </item>
     
     <item>
       <title>Mysql TEXT类型到底能存储多少字符？</title>
-      <link>/post/2023-05-15-mysql-text/</link>
+      <link>https://fbbmore.com/post/2023-05-15-mysql-text/</link>
       <pubDate>Mon, 15 May 2023 15:00:00 +0000</pubDate>
       
-      <guid>/post/2023-05-15-mysql-text/</guid>
-      <description>问题 业务上有一张日志记录表，有个字段content类型为text，用于存储urlencode之后，json类型的数据。但是最近出现解析失败，显示为空的情况。查询后，发现是存储的格式不是有效的json格式，被mysql强制截取掉了，导致解析失败。所以在这里回顾一下text字段能存储字符的大小。
-学习 在MySQL中，TEXT列是一种用于存储大量文本数据的数据类型。根据MySQL的规范，不同的TEXT类型具有不同的存储能力，其最大存储字符数如下：
-类型 字符 大小 TINYTEXT 255 &amp;lt; 1 KB TEXT 65,535 64 KB MEDIUMTEXT 16,777,215 16 MB LONGTEXT 4,294,967,295 4 GB 请注意，这些是每个TEXT类型的理论上限。实际上，实际可用的存储空间可能会受到其他因素的限制，如行大小限制、表大小限制或文件系统限制。
-此外，还应考虑字符编码的影响。如果使用多字节字符集（如UTF-8），存储的字符数可能会受到字节限制的影响。因此，最大字符数可能会少于理论上的限制。
-总结起来，根据不同的TEXT类型和字符编码，MySQL的TEXT列可以存储的最大字符数在255到4,294,967,295之间。</description>
+      <guid>https://fbbmore.com/post/2023-05-15-mysql-text/</guid>
+      <description>重温text可存储字符数</description>
     </item>
     
     <item>
       <title>PHP register shutdown function</title>
-      <link>/post/2023-05-14-php-register-shutdown-function/</link>
+      <link>https://fbbmore.com/post/2023-05-14-php-register-shutdown-function/</link>
       <pubDate>Sun, 14 May 2023 18:59:00 +0000</pubDate>
       
-      <guid>/post/2023-05-14-php-register-shutdown-function/</guid>
-      <description>问题 最近业务上需要调用一个响应格式为event stream的接口，需要实现下面两点功能。
-请求响应格式为event stream的接口，同时实时的将流式数据输出给前端。 请求结束后将格式化后的流式数据存储到日志中。 我们使用curl的write function 回调函数来处理流式数据的输出。但是如果在event stream请求的过程中如果前端中断请求或者说发生异常，就会出现日志丢失的情况。为了实现不管是请求中断还是发生异常，我们都可以将已有的流式数据和异常数据存储到日志的功能，我们可以使用php的register_shutdown_function来注册一个shutdown回调函数。这样不管是正常请求结束还是异常的请求退出，我们都可以记录相关的已有数据。下面我们就一起来学习一下php的register_shutdown_functioon。
-用法 register_shutdown_function()函数在PHP中注册一个在脚本终止时执行的回调函数。这很有用,可以执行清理操作。
-语法: register_shutdown_function(callback) 例子: &amp;lt;?php register_shutdown_function(&amp;#39;cleanup&amp;#39;); function cleanup() { // 关闭数据库连接,关闭打开的文件等 echo &amp;#39;清理!&amp;#39;; } echo &amp;#39;脚本执行中...&amp;#39;; ?&amp;gt; 即使脚本正常结束,或由exit(),die()或致命错误终止,关闭函数也会被调用。 一些重要点:
-可以注册多个shutdown函数。它们将以相反的注册顺序执行。 从shutdown函数内部注册shutdown函数将导致未定义的行为。 shutdown函数可以死亡,但其余的shutdown函数仍将被调用。 即使页面已经发送,shutdown函数也会执行,所以无法从shutdown函数内发送标头。 总之,register_shutdown_function()允许您在PHP脚本终止时执行重要的清理代码,以避免未预期的副作用。 主要用途:
-关闭数据库连接 释放锁 关闭打开的文件/网络连接 日志记录 清理临时文件 这可以确保您的脚本即使在发生意外情况下也可以正确地清理资源。 解答 // 注册请求终止回调函数 register_shutdown_function(function ($requestParams) use (&amp;amp;$output){ // 记录日志 log( $requestParams, // 调用流式接口的参数 $output, // 流式接口实时响应的数据 connection_aborted(), // 客户端是否已关闭与服务器的连接 error_get_last(), // 错误信息 ); }, $requestParams); </description>
+      <guid>https://fbbmore.com/post/2023-05-14-php-register-shutdown-function/</guid>
+      <description>介绍php的register_shutdown_function函数</description>
     </item>
     
     <item>
       <title>goroutine和channel</title>
-      <link>/post/2023-05-13-goroutine-channel/</link>
+      <link>https://fbbmore.com/post/2023-05-13-goroutine-channel/</link>
       <pubDate>Sat, 13 May 2023 15:08:41 +0000</pubDate>
       
-      <guid>/post/2023-05-13-goroutine-channel/</guid>
-      <description>问题 有一个品类的csv文件，大概有3w多条数据，里面只有品类名称这一列，现在需要读取csv中的内容，调用接口实现对该品类的打分，讲返回的数据写入新的csv文件，新的csv文件包括两个字段，品类和对应的分数。由于打分接口逻辑比较复杂，单次执行比较耗时，如果让你用go来实现，应该怎么做呢？
-思考 对于上面的问题，可以将主要的功能分为三个函数，csv文件读取、调用接口打分、csv文件写入函数。其中csv文件读取和csv文件写入函数都比较简单，就不在这里多说了。对于调用品类打分接口，如果串行的话，速度太慢。我们可以启用多个goroutine来并行执行，并将执行的结果统一写入到数据收集的channel中。最后将数据收集的channel中的数据写入csv文件就好。下面，我将带着这个问题来回顾学习一下goroutine+channel，最后来解答上面的问题。
-学习 goroutine简介 goroutine 是 Go 语言的一个基础特性。它是一个轻量级的线程,进程内部的线程。
-goroutine 的主要特征: 轻量级:goroutine 的开销很小,一个进程可以同时运行成百上千个 goroutine。 并发:goroutine 可以同时运行,实现并发。 共享内存:goroutine 之间可以访问共享内存,主要通过 channel 进行通信。 轻量级调度:goroutine 之间的调度开销很小,可以快速在 goroutine 之间切换。 goroutine 的用途: 实现并发:可以同时运行多个 goroutine,实现并发操作。 避免阻塞:当一个 goroutine 执行阻塞操作时,可以切换到其他 goroutine 继续执行,避免主线程阻塞。 充分利用多核 CPU:可以启动与 CPU 核心数量相同的 goroutine 最大限度地利用 CPU 资源。 goroutine 的实现原理: Go 语言的运行时(runtime)管理着一个主 Goroutine(Logical Processor)和许多新的 Goroutines。 当主 goroutine 创建新的 goroutine 时,主 goroutine 会得到一个寄存器和栈空间,然后在不同的逻辑处理器上运行 goroutine,模拟出concurrency的效果。 Go 语言的调度器会在逻辑处理器间快速切换 goroutine,让我们感觉所有的 goroutine 是平行执行的,但实际上,任何时刻都只有一个处理器在运行。 goroutine 与线程的区别:
-线程是进程内的执行单元,goroutine 是 Go 语言的执行单元。 线程的调度和切换由 OS 进行管理,goroutine 的调度和切换由 Go 语言的运行时(runtime)进行管理。 线程有较大的资源开销, goroutine 的资源开销比较小。一个进程可以创建上万个 goroutine 但同等条件下只能创建有限数量的线程。 线程的切换代价比较高,goroutine 的切换代价低廉。所以 goroutine 更适合用于高并发场景。 总之,goroutine 是 Go 语言实现高效的并发编程的关键所在。通过 goroutine 和 channel 的配合可以实现高性能的并发系统。 例子 package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) func main() { // 直接调用 f(&amp;#34;direct&amp;#34;) // go run goroutines.</description>
+      <guid>https://fbbmore.com/post/2023-05-13-goroutine-channel/</guid>
+      <description>学习使用golang中的goroutine和channel</description>
     </item>
     
     <item>
       <title>Conda教程</title>
-      <link>/post/2023-05-09-conda/</link>
+      <link>https://fbbmore.com/post/2023-05-09-conda/</link>
       <pubDate>Tue, 09 May 2023 23:20:42 +0000</pubDate>
       
-      <guid>/post/2023-05-09-conda/</guid>
-      <description>介绍什么是conda以及其优势 Conda是一个开源的包管理器和环境管理器,支持Windows,macOS和Linux系统。Conda可以快速安装、运行和更新包及其依赖项。Conda可以轻松创建、保存、加载和在您的本地计算机之间切换环境。虽然Conda最初是为Python程序创建的,但它可以打包和分发任何语言的软件。 作为包管理器,Conda可以帮助您查找和安装包。如果您需要一个需要不同版本的Python的包,您不需要切换到不同的环境管理器,因为Conda也是一个环境管理器。只需要几个命令,您就可以设置一个完全独立的环境来运行那个不同版本的Python,同时继续在普通环境中运行您通常的Python版本。 在其默认配置中,Conda可以安装和管理 Anaconda®构建,审核和维护的数千个包。 Conda可以与Travis CI和AppVeyor等持续集成系统结合使用,以提供对您的代码的定期自动测试。
-conda的安装 Conda包含在Anaconda和Miniconda的所有版本中。 Conda也包含在Anaconda Enterprise中,它为Python,R,Node.js,Java和其他应用程序栈提供现场企业包和环境管理。Conda也可以在conda-forge社区渠道上获得。您也可以在PyPI上获取Conda,但这种方法可能不太最新。 Conda的安装相当简单,对于个人开发者,推荐使用Anaconda或者Miniconda进行安装,官方文档安装指南如下:
-安装Anaconda: 访问Anaconda网站,选择与您的操作系统对应的安装程序下载 双击安装程序并按照提示操作。安装完成后,您的命令行窗口或终端将直接进入Conda environvent。 安装Miniconda: 访问Miniconda网站,选择与您的操作系统对应的安装程序下载 双击安装程序并按照提示操作。安装完成后,需要手动初始化Conda环境。打开终端/命令行窗口,运行: $ bash $ conda init conda环境的创建、激活和删除 Conda环境可以隔离项目的依赖关系和Python版本。 您可以创建,激活和删除环境,还可以导出和导入环境以进行重复使用。
-创建环境: ## 创建名为myenv的环境 $ conda create --name myenv Retrieving notices: ...working... done Collecting package metadata (current_repodata.json): done Solving environment: done ## Package Plan ## environment location: /Users/fbbyqsyea/miniconda3/envs/myenv Proceed ([y]/n)? y Preparing transaction: done Verifying transaction: done Executing transaction: done # # To activate this environment, use # # $ conda activate myenv # # To deactivate an active environment, use # # $ conda deactivate ## 创建python版本为3.</description>
+      <guid>https://fbbmore.com/post/2023-05-09-conda/</guid>
+      <description>conda的基础使用。</description>
     </item>
     
     <item>
       <title>PHP Curl Write Function</title>
-      <link>/post/2023-05-09-php-curl-write-function/</link>
+      <link>https://fbbmore.com/post/2023-05-09-php-curl-write-function/</link>
       <pubDate>Tue, 09 May 2023 14:23:56 +0000</pubDate>
       
-      <guid>/post/2023-05-09-php-curl-write-function/</guid>
-      <description>Write Function 介绍 在PHP的cURL库中，CURLOPT_WRITEFUNCTION选项用于指定在HTTP请求期间接收到的每个数据块的回调函数。该选项允许您以自定义方式处理接收到的数据。
-以下是在PHP中如何使用CURLOPT_WRITEFUNCTION和cURL的示例：
-// 创建一个cURL句柄 $ch = curl_init(); // 设置URL curl_setopt($ch, CURLOPT_URL, &amp;#39;http://example.com&amp;#39;); // 设置WRITEFUNCTION选项 curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) { // 处理接收到的数据 // 在此示例中，我们只是将数据输出到屏幕上 echo $data; // 返回已处理的字节数 return strlen($data); }); // 执行请求 curl_exec($ch); // 关闭cURL句柄 curl_close($ch); 在上面的示例中，为CURLOPT_WRITEFUNCTION指定的匿名函数将在接收到每个数据块时调用。该函数接受两个参数：cURL句柄（$curl）和接收到的数据（$data）。
-在回调函数内部，您可以对接收到的数据执行任何自定义处理。在此示例中，我们只是将数据输出到屏幕上，但您可以修改它，将其保存到文件中或执行任何其他所需的操作。该函数应返回从接收到的数据中处理的字节数。
-请注意，CURLOPT_WRITEFUNCTION选项从PHP 5.1.3开始可用，并且需要将CURLOPT_RETURNTRANSFER选项设置为true（1）以正常工作。
-统计多个数据块时间间隔 要统计每个数据块之间的间隔时间，您可以使用PHP的microtime()函数来获取当前时间的微秒数。在CURLOPT_WRITEFUNCTION回调函数内部，您可以记录每个数据块的接收时间，并计算与上一个数据块之间的时间差。
-以下是修改后的示例代码，以包括每个数据块之间的时间间隔统计：
-// 创建一个cURL句柄 $ch = curl_init(); // 设置URL curl_setopt($ch, CURLOPT_URL, &amp;#39;http://example.com&amp;#39;); // 设置WRITEFUNCTION选项 curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($curl, $data) { static $previousTime = null; // 上一个数据块的时间 $currentTime = microtime(true); // 当前时间 // 如果是第一个数据块，则不计算时间间隔 if ($previousTime !</description>
+      <guid>https://fbbmore.com/post/2023-05-09-php-curl-write-function/</guid>
+      <description>学习使用php curl请求中的CURLOPT_WRITEFUNCTION callback函数</description>
     </item>
     
     <item>
-      <title>go项目开发热更新-fresh</title>
-      <link>/post/2023-02-25-go-fresh/</link>
+      <title>go项目开发热更新-fresh、</title>
+      <link>https://fbbmore.com/post/2023-02-25-go-fresh/</link>
       <pubDate>Sat, 25 Feb 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-02-25-go-fresh/</guid>
-      <description>什么是热更新 代码热更新是在研发过程中，修改代码后能够实时生效。方便测试修改代码是否达到了预期的结果。 像php这样的动态语言是在运行过程中实时编译的，所以不存在热更新的问题。而像golang这样的 静态语言，由于先要编译成二进制文件才能运行。在研发过程中修改完代码后，再手动生成二进制文 件运行，这样会导致研发效率低下的问题。因此“热更新”这个词就孕育而生。所谓的代码热更新就是 在像golang这样的静态语言研发过程中，修改完代码后能够自动实现代码重新编译运行的软件服务。 热更新的原理 热更新的原理很简单，无非是监控指定项目下的所有文件，在文件发生改动后，自动运行编译命令和 启动命令。 fresh的使用 项目地址 https://github.com/gravityblast/fresh 命令安装 $ go install github.com/pilu/fresh@latest 命令说明 命令 $ fresh -h Usage of C:\Users\bingbing.fu\go\bin\fresh.exe: -c string config file path 说明 root: . // 根目录地址 tmp_path: ./tmp // 生成临时文件地址 build_name: runner-build // 编译项目名称 build_log: runner-build-errors.log // 编译项目错误日志 valid_ext: .go, .tpl, .tmpl, .html // 可用的文件后缀 no_rebuild_ext: .tpl, .tmpl, .html // 不不变异的文件后缀 ignored: assets, tmp // 忽略的监控目录 build_delay: 600 // 编译延时 colors: 1 // 编译命令行颜色 log_color_main: cyan // 主色调 log_color_build: yellow // 编译命令色调 log_color_runner: green // 运行命令色调 log_color_watcher: magenta // 监控命令色调 log_color_app: // app 色调 </description>
+      <guid>https://fbbmore.com/post/2023-02-25-go-fresh/</guid>
+      <description>golang代码开发过程中的热更新工具。</description>
     </item>
     
     <item>
       <title>go workspace简单使用</title>
-      <link>/post/2023-01-05-golang-workspace/</link>
+      <link>https://fbbmore.com/post/2023-01-05-golang-workspace/</link>
       <pubDate>Thu, 05 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-01-05-golang-workspace/</guid>
-      <description>为什么会有go workspace 基于Go Module的开发，代码组织有以下两种方式:
-整个项目为一个Module，Module下再拆分为多个功能包 根据不同功能将项目拆分为多个Module 两种方式各有优缺点，其中:
-整个项目为一个Module，各个功能包都在一个Module下，代码变更是实时生效的。但是其中业务代码和功能代码等放在一起，高度耦合。多个项目之间的公共代码不方便共享。 根据不同功能将项目拆分为多个Module，优点是代码之前低耦合，Module之间根据需要相互依赖。缺点是项目依赖的Module改动后，如果用到的改动后的功能就需要先发布依赖Module到代码仓库，然后在项目中更新依赖Module。 针对上面所说的将项目拆分成多个Module，依赖Module需要先发布再更新的问题，有以下两个解决方案:
-使用Go Module中的replace指令，在项目中将依赖替换为本地Module 使用go workspace工作区模式，使用统一的go.work来维护依赖映射 module github.com/xxxxxxx/gin-framework-layout go 1.19 require ( github.com/xxxxxxx/gin-framework-core v0.0.1 github.com/xxxxxxx/go-utils v0.0.0-20221028065316-8abebfd58706 github.com/dgrijalva/jwt-go v3.2.0+incompatible github.com/gin-gonic/gin v1.8.1 github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a github.com/swaggo/gin-swagger v1.5.3 github.com/swaggo/swag v1.8.7 ) replace github.com/xxxxxxx/gin-framework-core =&amp;gt; ../gin-framework-core v0.0.1 replace在开发项目的go.mod文件中将依赖Module使用replace指令替换为本地项目。优点是不需要每次都发布和更新Module，缺点是在每次发布的时候都需要注释掉本地的replace指令。 go workspace工作区模式，是在项目的同级目录创建go.work文件，来使用go.work文件来统一维护当前目录下所有Module之间的依赖，同时也不需要将go.work纳入版本管理，也不需要每次都去删掉或者注释掉相关内容。具体如何使用go workspace,请参照下面示例。 go workspace的用法 我们以的xxxxxxx框架为例，为了代码之间低耦合，我们将框架拆封为三个Module。
-gin-framework-core Module, 基于gin封装的web框架核心，包括加载配置服务、日志服务、数据库操作和redis换成操作等，依赖于函数库go-utils。 go-utils Module, go公共函数库，公共函数都放在这个Module下面，包括md5、http request、nodelog等封装。 gin-framework-layout Module, 基于gin框架封装的业务开发模版，其内部实现了mvc+router服务，依赖于gin-framework-core和go-utils Module。 我们在开发过程中需要同时改到上面三个Module，同时我们希望改动能够实时生效、发布代码到gitea时也不改动任何配置。具体可以这样做:
-新建go代码目录 root@huge-elk:~# mkdir ~/webdata/go -p root@huge-elk:~# cd ~/webdata/go/ root@huge-elk:~/webdata/go# 拉取gin-framework-core,gin-framework-layout,go-utils三个仓库 root@huge-elk:~/webdata/go# git clone git@github.</description>
+      <guid>https://fbbmore.com/post/2023-01-05-golang-workspace/</guid>
+      <description>go workspace简单使用</description>
     </item>
     
     <item>
       <title>GIT ssh config</title>
-      <link>/post/2022-12-10-git-ssh-config/</link>
+      <link>https://fbbmore.com/post/2022-12-10-git-ssh-config/</link>
       <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-12-10-git-ssh-config/</guid>
+      <guid>https://fbbmore.com/post/2022-12-10-git-ssh-config/</guid>
       <description>Host * HostkeyAlgorithms +ssh-rsa PubkeyAcceptedKeyTypes +ssh-rsa # [github.com] Host github.com HostName github.com Port 22 User git IdentityFile ~/.ssh/id_rsa </description>
     </item>
     
     <item>
       <title>内网goproxy服务搭建配置</title>
-      <link>/post/2022-12-10-go-proxy/</link>
+      <link>https://fbbmore.com/post/2022-12-10-go-proxy/</link>
       <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-12-10-go-proxy/</guid>
-      <description>goproxy是什么 goproxy是go模块代理服务，主要用来加速获取go模块。官方默认的proxy为:https://proxy.golang.org, 国内主要使用的proxy是由七牛云提供的https://goproxy.cn/。
-为什么要在内网搭建goproxy服务 内网自建的goproxy不仅可以访问公网的模块，还可以访问内网的 git server 缓存业务用到的公网第三方模块，防止公网仓库变更或者消失，导致线上编译失败或者紧急回退失败 防止公司内部开发人员配置不当造成 import path 泄露 cache热点依赖，提升代码编译速度等 搭建流程(我们以ubuntu系统为例进行安装。primary为goproxy机器，huge-elk为研发机器) golang安装 通过国内go资源网站studygolang下载安装:https://studygolang.com/dl
-## 下载对应系统的golang root@primary:~# wget https://studygolang.com/dl/golang/go1.19.2.linux-amd64.tar.gz ## 解压到指定目录 root@primary:~# tar zxvf go1.19.2.linux-amd64.tar.gz -C /usr/local ## 将go命令添加到/usr/bin root@primary:/usr/bin# ln /usr/local/go/bin/go -s /usr/bin/go ## 查看go命令是否安装成功 root@primary:~# go version go version go1.19.2 linux/amd64 git安装 ubuntu默认已经安装git。如未安装，请通过官网下载安装:https://git-scm.com/downloads
-# 通过 git version命令来查看是否安装成功 root@primary:~# git version git version 2.34.1 goproxy安装 ## 拉取goproxy代码 root@primary:~# git clone https://github.com/goproxyio/goproxy.git Cloning into &amp;#39;goproxy&amp;#39;... remote: Enumerating objects: 530, done.</description>
+      <guid>https://fbbmore.com/post/2022-12-10-go-proxy/</guid>
+      <description>内网goproxy服务搭建配置</description>
     </item>
     
     <item>
       <title>jwt学习和使用</title>
-      <link>/post/2022-11-05-jwt/</link>
+      <link>https://fbbmore.com/post/2022-11-05-jwt/</link>
       <pubDate>Sat, 05 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-11-05-jwt/</guid>
+      <guid>https://fbbmore.com/post/2022-11-05-jwt/</guid>
       <description>学习 我们通过 jwt.io网站关于jwt的介绍文章(https://jwt.io/introduction)来学习jwt。 jwt是什么？(What is JSON Web Token?) 原文 JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
 Although JWTs can be encrypted to also provide secrecy between parties, we will focus on signed tokens.</description>
     </item>
     
     <item>
       <title>gin中使用swagger</title>
-      <link>/post/2022-11-03-gin-swagger/</link>
+      <link>https://fbbmore.com/post/2022-11-03-gin-swagger/</link>
       <pubDate>Thu, 03 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-11-03-gin-swagger/</guid>
+      <guid>https://fbbmore.com/post/2022-11-03-gin-swagger/</guid>
       <description>安装 ## 使用如下命令安装swag命令 ➜ go go install github.com/swaggo/swag/cmd/swag@latest go: downloading github.com/ghodss/yaml v1.0.0 go: downloading github.com/urfave/cli/v2 v2.3.0 go: downloading golang.org/x/net v0.0.0-20220722155237-a158d28d115b go: downloading golang.org/x/text v0.3.7 go: downloading golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f go: downloading github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d go: downloading github.com/russross/blackfriday/v2 v2.0.1 go: downloading github.com/shurcooL/sanitized_anchor_name v1.0.0 ➜ go ## 查看是否安装成功 ➜ go swag -v swag version v1.8.7 注释 给代码添加注释，注释主要分为两类，一类是全局注释信息，一般放在入口函数main上。另一类是api注释信息，放在每个每个api处理函数上面
 全局注释 示例 // @Title gin framework layout // @Version 0.0.1 // @Description gin framework layout // @host localhost:8888 // @securityDefinitions.</description>
     </item>
     
     <item>
       <title>GIT Init</title>
-      <link>/post/2022-10-23-git-init/</link>
+      <link>https://fbbmore.com/post/2022-10-23-git-init/</link>
       <pubDate>Sun, 23 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-10-23-git-init/</guid>
+      <guid>https://fbbmore.com/post/2022-10-23-git-init/</guid>
       <description>从命令行创建一个新的仓库 touch README.md git init git add README.md git commit -m &amp;#34;first commit&amp;#34; git remote add origin git@github.com:fbbyqsyea/fbbyqsyea.github.io.git git push -u origin master 从命令行推送已经创建的仓库 git remote add origin git@github.com:fbbyqsyea/fbbyqsyea.github.io.git git push -u origin master </description>
     </item>
     
     <item>
       <title>常用Docker</title>
-      <link>/post/2022-10-23-common-docker-cmd/</link>
+      <link>https://fbbmore.com/post/2022-10-23-common-docker-cmd/</link>
       <pubDate>Sun, 23 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-10-23-common-docker-cmd/</guid>
+      <guid>https://fbbmore.com/post/2022-10-23-common-docker-cmd/</guid>
       <description>mysql $ docker run --name mysql \ -p 3306:3306 \ --privileged=true \ --restart=always \ -e MYSQL_ROOT_PASSWORD=&amp;#39;Aa!23456&amp;#39; \ -d mysql:5.7 redis $ docker run --name redis \ -p 6379:6379 \ --privileged=true \ --restart=always \ -d redis redis-server etcd $ docker run -d --name Etcd-server \ -p 2379:2379 \ -p 2380:2380 \ --privileged=true \ --restart=always \ --env ALLOW_NONE_AUTHENTICATION=yes \ bitnami/etcd:latest </description>
     </item>
     
     <item>
       <title>multipass教程</title>
-      <link>/post/2022-07-05-multipass/</link>
+      <link>https://fbbmore.com/post/2022-07-05-multipass/</link>
       <pubDate>Tue, 05 Jul 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-07-05-multipass/</guid>
+      <guid>https://fbbmore.com/post/2022-07-05-multipass/</guid>
       <description>How to create an instance create a instance ## 创建一个默认实例 $ multipass launch Launched: enjoyed-coatimundi ## 查看实例详情 $ multipass info enjoyed-coatimundi Name: enjoyed-coatimundi State: Running IPv4: 192.168.64.2 Release: Ubuntu 20.04.4 LTS Image hash: 75a04c7eed58 (Ubuntu 20.04 LTS) Load: 0.05 0.15 0.08 Disk usage: 1.4G out of 4.7G Memory usage: 139.4M out of 976.9M Mounts: -- create an instance with a specific image ## 查找可用的镜像 $ multipass find Image Aliases Version Description snapcraft:core18 18.</description>
     </item>
     
     <item>
       <title>k8s containerd容器驱动安装</title>
-      <link>/post/2022-06-11-centos-install-containerd/</link>
+      <link>https://fbbmore.com/post/2022-06-11-centos-install-containerd/</link>
       <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-06-11-centos-install-containerd/</guid>
+      <guid>https://fbbmore.com/post/2022-06-11-centos-install-containerd/</guid>
       <description>安装yum-utils工具 $ sudo yum install -y yum-utils 添加阿里云docker镜像仓库 $ sudo yum-config-manager \ --add-repo \ http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 安装containerd $ sudo yum install containerd -y 初始化containerd配置信息 $ sudo madir /etc/containerd $ sudo containerd config default &amp;gt; /etc/containerd/config.toml 修改containerd sand_box 和 Cgroup $ vim /etc/containerd/config.toml # 修改sand_box # 查找sand_image 将k8s.gcr.io/pause:3.6 替换成阿里源 registry.aliyuncs.com/google_containers/pause:3.6 # 修改Cgroup # 查找SystemdCgroup 将false 改为 true 启动containerd $ sudo systemctl daemon-reload $ sudo systemctl enable containerd $ sudo systemctl start containerd </description>
     </item>
     
     <item>
       <title>Centos7中配置开机自动执行不生效问题</title>
-      <link>/post/2022-05-10-centos-auto-run-unexecute-question/</link>
+      <link>https://fbbmore.com/post/2022-05-10-centos-auto-run-unexecute-question/</link>
       <pubDate>Tue, 10 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-05-10-centos-auto-run-unexecute-question/</guid>
+      <guid>https://fbbmore.com/post/2022-05-10-centos-auto-run-unexecute-question/</guid>
       <description>正常配置 我们正常的业务中，有很多需要开启自动执行的诉求，比如挂在数据盘到数据系统。
 打开rc.local文件 $ sudo vim /etc/rc.d/rc.local 在文件最后新增如下内容 mount -t cifs //192.168.73.1/webdata/golang /usr/local/webdata/golang -o uid=1000,gid=1000,username=share,password=share123456 这个时候，正常来说下次启动的时候会自动挂载文件，但是并没有。
 不生效原因 从CentOS7.0开始，/etc/rc.d/rc.local文件的初始权限变成了644，默认是不使用/etc/rc.local文件作为开机启动了， 并且rc-local.service服务的状态是disabled状态。所以我们需要从下面两个方面检查。
@@ -288,29 +257,29 @@ Although JWTs can be encrypted to also provide secrecy between parties, we will 
     
     <item>
       <title>centos安装docker</title>
-      <link>/post/2022-05-08-centos-install-docker/</link>
+      <link>https://fbbmore.com/post/2022-05-08-centos-install-docker/</link>
       <pubDate>Sun, 08 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-05-08-centos-install-docker/</guid>
+      <guid>https://fbbmore.com/post/2022-05-08-centos-install-docker/</guid>
       <description>删除老版本的docker $ sudo yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-engine 安装yum-utils工具 添加docker源 $ sudo yum install -y yum-utils $ sudo yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo 替换阿里云docker镜像仓库 $ sudo yum-config-manager \ --add-repo \ http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 选择安装版本 docker支持安装尝鲜版(nightly)、测试版(test)和稳定版(默认版本)
 尝鲜版 $ sudo yum-config-manager --enable docker-ce-nightly 测试版 $ sudo yum-config-manager --enable docker-ce-test 安装docker 安装最新版的docker $ sudo yum install docker-ce docker-ce-cli containerd.io 安装指定版本的docker 查找支持的版本 $ yum list docker-ce --showduplicates | sort -r 安装指定的版本 $ sudo yum install docker-ce-&amp;lt;VERSION_STRING&amp;gt; docker-ce-cli-&amp;lt;VERSION_STRING&amp;gt; containerd.</description>
     </item>
     
     <item>
       <title>docker国内镜像源</title>
-      <link>/post/2022-05-06-docker/</link>
+      <link>https://fbbmore.com/post/2022-05-06-docker/</link>
       <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-05-06-docker/</guid>
+      <guid>https://fbbmore.com/post/2022-05-06-docker/</guid>
       <description>docker国内镜像加速地址 docker中国区官方镜像 https://registry.docker-cn.com 网易 http://hub-mirror.c.163.com ustc(中科大) https://docker.mirrors.ustc.edu.cn 配置流程 在/etc/docker下新建daemon.json配置文件 # vim /etc/docker/daemon.json 在daemon.json文件中写入如下配置信息 { &amp;#34;registry-mirrors&amp;#34;:[ &amp;#34;https://registry.docker-cn.com&amp;#34;, &amp;#34;http://hub-mirror.c.163.com&amp;#34;, &amp;#34;https://docker.mirrors.ustc.edu.cn&amp;#34; ] } 重新加载配置文件 $ systemctl daemon-reload 重启docker # systemctl restart docker 查看镜像源配置信息 # docker info ...... Registry Mirrors: https://registry.docker-cn.com/ http://hub-mirror.c.163.com/ https://docker.mirrors.ustc.edu.cn/ </description>
     </item>
     
     <item>
       <title>curl简易教程</title>
-      <link>/post/2022-04-23-curl/</link>
+      <link>https://fbbmore.com/post/2022-04-23-curl/</link>
       <pubDate>Sat, 23 Apr 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-04-23-curl/</guid>
+      <guid>https://fbbmore.com/post/2022-04-23-curl/</guid>
       <description>简介 curl是一个命令行工具，作用是发送网络请求，然后获取数据，显示在标准输出(stdout)上面。支持多种协议。
 示例 查看网页源码 $ curl www.sina.com 保存网页源码 $ curl www.sina.com -o index.html 自动跳转 $ curl -L www.sina.com 显示网页头信息 -i 显示网页头信息和内容 -I只显示网页头信息
 $ curl -i www.sina.com $ curl -I www.sina.com 显示通信过程 -v参数可以显示一次完整的http通信过程。包括端口连接和http request头信息
@@ -321,19 +290,19 @@ $ curl -X POST --data &amp;#34;data=111&amp;#34; example.com/form.cgi # 如果�
     
     <item>
       <title>Go Modules 配置 &amp; 命令</title>
-      <link>/post/2022-04-23-go-module-cmd/</link>
+      <link>https://fbbmore.com/post/2022-04-23-go-module-cmd/</link>
       <pubDate>Sat, 23 Apr 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-04-23-go-module-cmd/</guid>
+      <guid>https://fbbmore.com/post/2022-04-23-go-module-cmd/</guid>
       <description>初始化行为 # 创建项目目录 $ mkdir go-gin-example &amp;amp;&amp;amp; cd go-gin-example # 打开go modules开关(目前在1.18中默认值为 auto) $ go env -w GO111MODULE=on # 设置goproxy代理，解决国内外网访问不了导致的包下载不了的问题 该配置有两个参数， # 第一个是 https://goproxy.cn，它是由七牛云背书的一个强大稳定的 Go 模块代理，可以有效地解决你的外网问题； # 第二个是 direct，它是一个特殊的 fallback 选项，它的作用是用于指示 Go 在拉取模块时遇到错误会回源到模块版本的源地址去抓取（比如 GitHub 等）。 $ go env -w GOPROXY=https://goproxy.cn,direct # 初始化Modules 它将会生成 go.mod 文件，需要注意的是 MODULE_PATH 填写的是模块引入路径，你可以根据自己的情况修改路径。 $ go mod init github.com/fbbyqsyea/go-gin-example 基础使用 # go get 拉去最新的依赖 # 拉取最新的版本(优先选取的tag) $ go get golang.org/x/text@latest # 拉取master分支的最新commit $ go get golang.org/x/text@master # 拉取tag指定版本的commit $ go get golang.</description>
     </item>
     
     <item>
       <title>入门makefile</title>
-      <link>/post/2022-04-23-makefile/</link>
+      <link>https://fbbmore.com/post/2022-04-23-makefile/</link>
       <pubDate>Sat, 23 Apr 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-04-23-makefile/</guid>
+      <guid>https://fbbmore.com/post/2022-04-23-makefile/</guid>
       <description>make是什么 make是一个自动化构建工具，会在当前目录寻找Makefile或者makefile文件。如果存在，会依据文件的构建规则去完成构建。 当然了，实际商Makefile内都是依据make语法规则，自己编写的shell命令等。
 它是一个简答的工具，规则也很简单。在支持的范围内，编译A，依赖B，再编译c，完全没问题。
 规则 Makefile由多条规则构成。每个规则都以一个target开头。后跟一个:冒号。冒号后面是一个目标的prerequisites(前置条件)。紧跟着新开一行，必须以tab作为开头。后面紧跟着命令；也就是你希望target需要做的事情。
@@ -343,19 +312,19 @@ $ curl -X POST --data &amp;#34;data=111&amp;#34; example.com/form.cgi # 如果�
     
     <item>
       <title>linux机器时间同步</title>
-      <link>/post/2022-03-17-linux-time-sync/</link>
+      <link>https://fbbmore.com/post/2022-03-17-linux-time-sync/</link>
       <pubDate>Thu, 17 Mar 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-03-17-linux-time-sync/</guid>
+      <guid>https://fbbmore.com/post/2022-03-17-linux-time-sync/</guid>
       <description>修改时区 $ sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 网络时间同步 $ sudo /usr/sbin/ntpdate -u cn.pool.ntp.org 写入硬件时间 # 服务器每次重启都会参考硬件的时间，所以需要将当前系统的时间写入到硬件。 # 查看当前硬件时间 $ hwclock -r # 写入硬件时间 $ hwclock -w 配置时间自动同步 配置开机时间自检 # 向linux系统开机自启动执行文件添加自检任务 $ vim /etc/rc.d/rc.local $ /usr/sbin/ntpdate -u cn.pool.ntp.org&amp;gt; /var/log/ntpdate_boot.log 2&amp;gt;&amp;amp;1; /sbin/hwclock -w 配置定期时间自检 # 配置定时任务 每10分钟执行时间自检任务 $ sudo crontab -e $ 00 10 * * * /usr/sbin/ntpdate -u cn.pool.ntp.org &amp;gt; /var/log/ntpdate_cron.log 2&amp;gt;&amp;amp;1; /sbin/hwclock -w </description>
     </item>
     
     <item>
       <title>启动k8s服务</title>
-      <link>/post/2022-03-17-start-k8s/</link>
+      <link>https://fbbmore.com/post/2022-03-17-start-k8s/</link>
       <pubDate>Thu, 17 Mar 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-03-17-start-k8s/</guid>
+      <guid>https://fbbmore.com/post/2022-03-17-start-k8s/</guid>
       <description>kubeadm、kubelet、kubectl简介 参照前一篇的文章，在k8s-master和k8s-node节点上都安装了kubeadm、kubelet、kubectl服务。
 Kubeadm是一个提供了 kubeadm init 和 kubeadm join 的工具，作为创建 Kubernetes 集群的 “快捷途径” 的最佳实践。kubeadm 通过执行必要的操作来启动和运行最小可用集群。 按照设计，它只关注启动引导，而非配置机器。同样的， 安装各种 “锦上添花” 的扩展，例如 Kubernetes Dashboard、 监控方案、以及特定云平台的扩展，都不在讨论范围内。相反，我们希望在 kubeadm 之上构建更高级别以及更加合规的工具， 理想情况下，使用 kubeadm 作为所有部署工作的基准将会更加易于创建一致性集群。
 kubelet 是在每个 Node 节点上运行的主要 “节点代理”。它可以使用以下之一向 apiserver 注册： 主机名（hostname）；覆盖主机名的参数；某云驱动的特定逻辑。kubelet 是基于 PodSpec 来工作的。每个 PodSpec 是一个描述 Pod 的 YAML 或 JSON 对象。 kubelet 接受通过各种机制（主要是通过 apiserver）提供的一组 PodSpec，并确保这些 PodSpec 中描述的容器处于运行状态且运行状况良好。 kubelet 不管理不是由 Kubernetes 创建的容器。
@@ -364,10 +333,10 @@ kubelet 是在每个 Node 节点上运行的主要 “节点代理”。它可�
     
     <item>
       <title>Centos安装k8s</title>
-      <link>/post/2022-03-15-centos-install-k8s/</link>
+      <link>https://fbbmore.com/post/2022-03-15-centos-install-k8s/</link>
       <pubDate>Tue, 15 Mar 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2022-03-15-centos-install-k8s/</guid>
+      <guid>https://fbbmore.com/post/2022-03-15-centos-install-k8s/</guid>
       <description>准备开始 一台兼容的 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版以及一些不提供包管理器的发行版提供通用的指令 每台机器 2 GB 或更多的 RAM （如果少于这个数字将会影响你应用的运行内存)2 CPU 核或更多 集群中的所有机器的网络彼此均能相互连接(公网和内网都可以) 节点之中不可以有重复的主机名、MAC 地址或 product_uuid。请参见这里了解更多详细信息。 开启机器上的某些端口。请参见这里 了解更多详细信息。 禁用交换分区。为了保证 kubelet 正常工作，你 必须 禁用交换分区。 确保每个节点上MAC地址和product_uuid的唯一性 你可以使用命令 ip link 或 ifconfig -a 来获取网络接口的 MAC 地址 可以使用 sudo cat /sys/class/dmi/id/product_uuid 命令对 product_uuid 校验 检测网络适配器 如果你有一个以上的网络适配器，同时你的 Kubernetes 组件通过默认路由不可达，我们建议你预先添加 IP 路由规则， 这样 Kubernetes 集群就可以通过对应的适配器完成连接
 允许 iptables 检查桥接流量 确保 br_netfilter 模块被加载。这一操作可以通过运行 lsmod | grep br_netfilter 来完成。 若要显式加载该模块，可执行 sudo modprobe br_netfilter。</description>
     </item>

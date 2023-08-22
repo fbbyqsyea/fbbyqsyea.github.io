@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>DevOps on bing随遇而安</title>
-    <link>/tags/devops/</link>
+    <link>https://fbbmore.com/tags/devops/</link>
     <description>Recent content in DevOps on bing随遇而安</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 27 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 27 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://fbbmore.com/tags/devops/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker build导致的磁盘空间不足问题</title>
-      <link>/post/2023-07-27-docker-buildx/</link>
+      <link>https://fbbmore.com/post/2023-07-27-docker-buildx/</link>
       <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-07-27-docker-buildx/</guid>
-      <description>本文介绍了作者在使用Docker构建过程中遇到的磁盘空间不足问题，并解释了产生该问题的原因，即Docker build过程中产生的缓存占用了大量磁盘空间。作者通过docker system df命令查看了Docker的磁盘占用情况，并通过执行docker builder prune命令清理了缓存。文章还探讨了Docker构建缓存的机制，解释了为何需要构建缓存以及如何合理清理它。最后，提供了关于清理不再使用的镜像和容器、使用.dockerignore文件优化构建缓存、使用&amp;ndash;no-cache标志禁用缓存以及定期清理构建缓存的方法和注意事项。</description>
+      <guid>https://fbbmore.com/post/2023-07-27-docker-buildx/</guid>
+      <description>本文介绍了在使用Docker构建过程中遇到的磁盘空间不足问题，并解释了产生该问题的原因，即Docker build过程中产生的缓存占用了大量磁盘空间。通过docker system df命令查看了Docker的磁盘占用情况，并通过执行docker builder prune命令清理了缓存。文章还探讨了Docker构建缓存的机制，解释了为何需要构建缓存以及如何合理清理它。最后，提供了关于清理不再使用的镜像和容器、使用.dockerignore文件优化构建缓存、使用&amp;ndash;no-cache标志禁用缓存以及定期清理构建缓存的方法和注意事项。</description>
     </item>
     
     <item>
       <title>Dockerfile改动一行代码，Jenkins编译速度提升了将近80倍</title>
-      <link>/post/2023-07-27-docker-cache/</link>
+      <link>https://fbbmore.com/post/2023-07-27-docker-cache/</link>
       <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-07-27-docker-cache/</guid>
-      <description>通过优化Dockerfile，作者成功将Jenkins编译速度提升了近80倍。作者通过学习Docker构建缓存机制，忽略无关文件、添加构建层以及使用缓存等方法，对项目的Dockerfile进行改进。原始Dockerfile的基础上，作者增加了RUN go mod download命令，在构建层中下载Go依赖模块，避免重复构建模块。此外，作者还创建了.dockerignore文件来排除无关文件，进一步提高了缓存构建层的复用率。通过这些优化，作者在Jenkins中的编译时间得到了显著改善。这一经验不仅有效提升了构建效率，也为开发流程带来了重大的改进。</description>
+      <guid>https://fbbmore.com/post/2023-07-27-docker-cache/</guid>
+      <description>通过优化Dockerfile，成功将Jenkins编译速度提升了近80倍。通过学习Docker构建缓存机制，忽略无关文件、添加构建层以及使用缓存等方法，对项目的Dockerfile进行改进。原始Dockerfile的基础上，增加了RUN go mod download命令，在构建层中下载Go依赖模块，避免重复构建模块。此外，还创建了.dockerignore文件来排除无关文件，进一步提高了缓存构建层的复用率。通过这些优化，在Jenkins中的编译时间得到了显著改善。这一经验不仅有效提升了构建效率，也为开发流程带来了重大的改进。</description>
     </item>
     
   </channel>
