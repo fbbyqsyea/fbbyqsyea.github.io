@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PHP Curl Write Function | bing随遇而安</title>
+    <meta name="generator" content="VuePress 1.9.9">
+    <link rel="icon" href="/logo.png">
+    <meta name="description" content="
+Write Function 介绍
+
+在PHP的cURL库中，CURLOPT_WRITEFUNCTION选项用于指定在HTTP请求期间接收到的每个数据块的回调函数。该选项允许您以自定义方式处理接收到的数据。
+
+以下是在PHP中如何使用CURLOPT_WRITEFUNCTION和cURL的示例：
+
+    // 创建一个cURL句柄
+    $ch = curl_init() ...">
+    
+    <link rel="preload" href="/assets/css/0.styles.7de31a01.css" as="style"><link rel="preload" href="/assets/js/app.612f43a5.js" as="script"><link rel="preload" href="/assets/js/6.86d33cf6.js" as="script"><link rel="preload" href="/assets/js/3.122d5fd9.js" as="script"><link rel="preload" href="/assets/js/35.6f691c6e.js" as="script"><link rel="prefetch" href="/assets/js/10.df2b3759.js"><link rel="prefetch" href="/assets/js/11.059f07af.js"><link rel="prefetch" href="/assets/js/12.d23da198.js"><link rel="prefetch" href="/assets/js/13.cb896045.js"><link rel="prefetch" href="/assets/js/14.f7014cd5.js"><link rel="prefetch" href="/assets/js/15.38ff99fb.js"><link rel="prefetch" href="/assets/js/16.dc5bdee6.js"><link rel="prefetch" href="/assets/js/17.dc7e2fb9.js"><link rel="prefetch" href="/assets/js/18.ef545b08.js"><link rel="prefetch" href="/assets/js/19.68950198.js"><link rel="prefetch" href="/assets/js/20.f1270bba.js"><link rel="prefetch" href="/assets/js/21.810170aa.js"><link rel="prefetch" href="/assets/js/22.c8a75e86.js"><link rel="prefetch" href="/assets/js/23.b68e382b.js"><link rel="prefetch" href="/assets/js/24.7b27e58d.js"><link rel="prefetch" href="/assets/js/25.458d330e.js"><link rel="prefetch" href="/assets/js/26.738ddbfb.js"><link rel="prefetch" href="/assets/js/27.e3340bba.js"><link rel="prefetch" href="/assets/js/28.e9eeb2dc.js"><link rel="prefetch" href="/assets/js/29.4085281b.js"><link rel="prefetch" href="/assets/js/30.22ecda06.js"><link rel="prefetch" href="/assets/js/31.99984a1c.js"><link rel="prefetch" href="/assets/js/32.ddc9eac0.js"><link rel="prefetch" href="/assets/js/33.d359f095.js"><link rel="prefetch" href="/assets/js/34.35598e0c.js"><link rel="prefetch" href="/assets/js/36.a2787b7b.js"><link rel="prefetch" href="/assets/js/37.262a9a32.js"><link rel="prefetch" href="/assets/js/38.2ef0f3f2.js"><link rel="prefetch" href="/assets/js/39.2c4dfd38.js"><link rel="prefetch" href="/assets/js/4.380f1af6.js"><link rel="prefetch" href="/assets/js/40.aef1cd81.js"><link rel="prefetch" href="/assets/js/41.cd84e3b3.js"><link rel="prefetch" href="/assets/js/42.8f2d9bf3.js"><link rel="prefetch" href="/assets/js/43.d191af09.js"><link rel="prefetch" href="/assets/js/44.d3482114.js"><link rel="prefetch" href="/assets/js/45.043a93d9.js"><link rel="prefetch" href="/assets/js/46.4f54c806.js"><link rel="prefetch" href="/assets/js/47.6ade199f.js"><link rel="prefetch" href="/assets/js/48.37e5831d.js"><link rel="prefetch" href="/assets/js/49.c7f86f9f.js"><link rel="prefetch" href="/assets/js/5.084c9b71.js"><link rel="prefetch" href="/assets/js/7.358fd391.js"><link rel="prefetch" href="/assets/js/8.6d90bc1f.js"><link rel="prefetch" href="/assets/js/9.bf0c8df5.js"><link rel="prefetch" href="/assets/js/vuejs-paginate.ac365ac7.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.7de31a01.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/" class="nav-link home-link">bing随遇而安 </a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/" class="nav-link mobile-home-link">bing随遇而安 </a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/tag/" class="nav-link">Tags</a></li> <li class="mobile-nav-item"><!----></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title">
+        
+      </h1> <div class="post-meta"><div itemprop="publisher author" itemtype="http://schema.org/Person" itemscope="itemscope" class="post-meta-author"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-navigation"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg> <span itemprop="name">BING随遇而安</span> <span itemprop="address">   in Shanghai</span></div> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2023-05-09T14:23:56.000Z">
+      Tue May 09 2023
+    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-42ccfcd5><a href="/tag/php" data-v-42ccfcd5><span data-v-42ccfcd5>php</span></a></li><li class="post-tag" data-v-42ccfcd5><a href="/tag/curl" data-v-42ccfcd5><span data-v-42ccfcd5>curl</span></a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><h1 id="php-curl-write-function"><a href="#php-curl-write-function" class="header-anchor">#</a> PHP Curl Write Function</h1> <h2 id="write-function-介绍"><a href="#write-function-介绍" class="header-anchor">#</a> Write Function 介绍</h2> <p>在PHP的cURL库中，CURLOPT_WRITEFUNCTION选项用于指定在HTTP请求期间接收到的每个数据块的回调函数。该选项允许您以自定义方式处理接收到的数据。</p> <p>以下是在PHP中如何使用CURLOPT_WRITEFUNCTION和cURL的示例：</p> <div class="language-php extra-class"><pre class="language-php"><code>    <span class="token comment">// 创建一个cURL句柄</span>
+    <span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 设置URL</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_URL</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'http://example.com'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 设置WRITEFUNCTION选项</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_WRITEFUNCTION</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token variable">$curl</span><span class="token punctuation">,</span> <span class="token variable">$data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 处理接收到的数据</span>
+        <span class="token comment">// 在此示例中，我们只是将数据输出到屏幕上</span>
+        <span class="token keyword">echo</span> <span class="token variable">$data</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 返回已处理的字节数</span>
+        <span class="token keyword">return</span> <span class="token function">strlen</span><span class="token punctuation">(</span><span class="token variable">$data</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 执行请求</span>
+    <span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 关闭cURL句柄</span>
+    <span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>在上面的示例中，为CURLOPT_WRITEFUNCTION指定的匿名函数将在接收到每个数据块时调用。该函数接受两个参数：cURL句柄（$curl）和接收到的数据（$data）。</p> <p>在回调函数内部，您可以对接收到的数据执行任何自定义处理。在此示例中，我们只是将数据输出到屏幕上，但您可以修改它，将其保存到文件中或执行任何其他所需的操作。该函数应返回从接收到的数据中处理的字节数。</p> <p>请注意，CURLOPT_WRITEFUNCTION选项从PHP 5.1.3开始可用，并且需要将CURLOPT_RETURNTRANSFER选项设置为true（1）以正常工作。</p> <h2 id="统计多个数据块时间间隔"><a href="#统计多个数据块时间间隔" class="header-anchor">#</a> 统计多个数据块时间间隔</h2> <p>要统计每个数据块之间的间隔时间，您可以使用PHP的microtime()函数来获取当前时间的微秒数。在CURLOPT_WRITEFUNCTION回调函数内部，您可以记录每个数据块的接收时间，并计算与上一个数据块之间的时间差。</p> <p>以下是修改后的示例代码，以包括每个数据块之间的时间间隔统计：</p> <div class="language-php extra-class"><pre class="language-php"><code>    <span class="token comment">// 创建一个cURL句柄</span>
+    <span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 设置URL</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_URL</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'http://example.com'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 设置WRITEFUNCTION选项</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_WRITEFUNCTION</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token variable">$curl</span><span class="token punctuation">,</span> <span class="token variable">$data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">static</span> <span class="token variable">$previousTime</span> <span class="token operator">=</span> <span class="token constant">null</span><span class="token punctuation">;</span> <span class="token comment">// 上一个数据块的时间</span>
+        <span class="token variable">$currentTime</span> <span class="token operator">=</span> <span class="token function">microtime</span><span class="token punctuation">(</span><span class="token constant boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 当前时间</span>
+
+        <span class="token comment">// 如果是第一个数据块，则不计算时间间隔</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$previousTime</span> <span class="token operator">!==</span> <span class="token constant">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token variable">$interval</span> <span class="token operator">=</span> <span class="token variable">$currentTime</span> <span class="token operator">-</span> <span class="token variable">$previousTime</span><span class="token punctuation">;</span>
+            <span class="token keyword">echo</span> <span class="token string double-quoted-string">&quot;Time interval: &quot;</span> <span class="token operator">.</span> <span class="token variable">$interval</span> <span class="token operator">.</span> <span class="token string double-quoted-string">&quot; seconds\n&quot;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// 处理接收到的数据</span>
+        <span class="token comment">// 在此示例中，我们只是将数据输出到屏幕上</span>
+        <span class="token keyword">echo</span> <span class="token variable">$data</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 更新上一个数据块的时间</span>
+        <span class="token variable">$previousTime</span> <span class="token operator">=</span> <span class="token variable">$currentTime</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 返回已处理的字节数</span>
+        <span class="token keyword">return</span> <span class="token function">strlen</span><span class="token punctuation">(</span><span class="token variable">$data</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 执行请求</span>
+    <span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 关闭cURL句柄</span>
+    <span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>在上述示例中，我们使用static关键字在回调函数内部声明了一个静态变量$previousTime，用于存储上一个数据块的时间。通过使用microtime(true)获取当前时间的微秒数，并计算与上一个数据块的时间差，您可以获得每个数据块之间的时间间隔。在示例中，我们将时间间隔以秒为单位输出到屏幕上。</p> <p>请注意，对于第一个数据块，由于没有前一个数据块，因此没有时间间隔可计算，因此我们在回调函数内添加了一个条件来排除第一个数据块的时间间隔统计。</p></div> <footer><!----> <hr> <!----></footer></article> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h2 active"><a href="#write-function-介绍" title="Write Function 介绍">Write Function 介绍</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#统计多个数据块时间间隔" title="统计多个数据块时间间隔">统计多个数据块时间间隔</a></div></div></div></div> <footer class="footer" data-v-3d9deeb8><div class="footer-left-wrap" data-v-3d9deeb8><ul class="contact" data-v-3d9deeb8></ul></div> <div class="footer-right-wrap" data-v-3d9deeb8><ul class="copyright" data-v-3d9deeb8></ul></div></footer></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.612f43a5.js" defer></script><script src="/assets/js/6.86d33cf6.js" defer></script><script src="/assets/js/3.122d5fd9.js" defer></script><script src="/assets/js/35.6f691c6e.js" defer></script>
+  </body>
+</html>
