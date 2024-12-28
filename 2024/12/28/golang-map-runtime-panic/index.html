@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>【生产Debug日记】Go Map 并发操作导致的K8S服务重启 | bing随遇而安</title>
+    <meta name="generator" content="VuePress 1.9.9">
+    <link rel="icon" href="/logo.png">
+    <meta name="description" content="
+背景
+
+最近从grafana的alert中收到一个告警，告警内容是K8S服务pod重启了，查看pod日志描述信息显示如下：
+kubectl describe xxxxxx-api-6577f45dd5-9gprq
+Name:         xxxxxx-api-6577f45dd5-9gprq
+Namespace:    xxxxxx
+Prior ...">
+    
+    <link rel="preload" href="/assets/css/0.styles.29350883.css" as="style"><link rel="preload" href="/assets/js/app.b92e4c86.js" as="script"><link rel="preload" href="/assets/js/6.38d57c41.js" as="script"><link rel="preload" href="/assets/js/3.122d5fd9.js" as="script"><link rel="preload" href="/assets/js/67.1a255188.js" as="script"><link rel="prefetch" href="/assets/js/10.ae514871.js"><link rel="prefetch" href="/assets/js/11.2657ec05.js"><link rel="prefetch" href="/assets/js/12.d23da198.js"><link rel="prefetch" href="/assets/js/13.cb896045.js"><link rel="prefetch" href="/assets/js/14.f7014cd5.js"><link rel="prefetch" href="/assets/js/15.96e62451.js"><link rel="prefetch" href="/assets/js/16.cd507b31.js"><link rel="prefetch" href="/assets/js/17.04f2ae02.js"><link rel="prefetch" href="/assets/js/18.fdec87a3.js"><link rel="prefetch" href="/assets/js/19.c871bc56.js"><link rel="prefetch" href="/assets/js/20.3cc1bb01.js"><link rel="prefetch" href="/assets/js/21.a51c24b2.js"><link rel="prefetch" href="/assets/js/22.1dc4fe77.js"><link rel="prefetch" href="/assets/js/23.7fe9c05a.js"><link rel="prefetch" href="/assets/js/24.e780ac86.js"><link rel="prefetch" href="/assets/js/25.80262333.js"><link rel="prefetch" href="/assets/js/26.cea7e97b.js"><link rel="prefetch" href="/assets/js/27.23141d4c.js"><link rel="prefetch" href="/assets/js/28.37f965f5.js"><link rel="prefetch" href="/assets/js/29.7e8ed812.js"><link rel="prefetch" href="/assets/js/30.1dfae280.js"><link rel="prefetch" href="/assets/js/31.619710f3.js"><link rel="prefetch" href="/assets/js/32.b2ba2b4e.js"><link rel="prefetch" href="/assets/js/33.8f979719.js"><link rel="prefetch" href="/assets/js/34.77ca4544.js"><link rel="prefetch" href="/assets/js/35.8b63bb58.js"><link rel="prefetch" href="/assets/js/36.b0bfa1bd.js"><link rel="prefetch" href="/assets/js/37.9b94c454.js"><link rel="prefetch" href="/assets/js/38.e4061449.js"><link rel="prefetch" href="/assets/js/39.d954ad62.js"><link rel="prefetch" href="/assets/js/4.380f1af6.js"><link rel="prefetch" href="/assets/js/40.e6e0cf43.js"><link rel="prefetch" href="/assets/js/41.9c6c775f.js"><link rel="prefetch" href="/assets/js/42.77b86103.js"><link rel="prefetch" href="/assets/js/43.33631ddf.js"><link rel="prefetch" href="/assets/js/44.f44794e6.js"><link rel="prefetch" href="/assets/js/45.6d68edbe.js"><link rel="prefetch" href="/assets/js/46.11933b89.js"><link rel="prefetch" href="/assets/js/47.b6e39b73.js"><link rel="prefetch" href="/assets/js/48.0a94ac53.js"><link rel="prefetch" href="/assets/js/49.99856a36.js"><link rel="prefetch" href="/assets/js/5.084c9b71.js"><link rel="prefetch" href="/assets/js/50.cf6f1a0e.js"><link rel="prefetch" href="/assets/js/51.4a83ff5a.js"><link rel="prefetch" href="/assets/js/52.c3da932d.js"><link rel="prefetch" href="/assets/js/53.80758316.js"><link rel="prefetch" href="/assets/js/54.576aac00.js"><link rel="prefetch" href="/assets/js/55.a76ea924.js"><link rel="prefetch" href="/assets/js/56.108df189.js"><link rel="prefetch" href="/assets/js/57.1c7288b2.js"><link rel="prefetch" href="/assets/js/58.e72496b2.js"><link rel="prefetch" href="/assets/js/59.24849df3.js"><link rel="prefetch" href="/assets/js/60.324d69e9.js"><link rel="prefetch" href="/assets/js/61.e99100ac.js"><link rel="prefetch" href="/assets/js/62.65521ed5.js"><link rel="prefetch" href="/assets/js/63.e999e220.js"><link rel="prefetch" href="/assets/js/64.76caf964.js"><link rel="prefetch" href="/assets/js/65.2e2bfa34.js"><link rel="prefetch" href="/assets/js/66.1a72febd.js"><link rel="prefetch" href="/assets/js/68.3b545b2a.js"><link rel="prefetch" href="/assets/js/69.df1dda37.js"><link rel="prefetch" href="/assets/js/7.358fd391.js"><link rel="prefetch" href="/assets/js/70.f89cee38.js"><link rel="prefetch" href="/assets/js/71.a43f27af.js"><link rel="prefetch" href="/assets/js/72.d01a651a.js"><link rel="prefetch" href="/assets/js/73.65ac9f48.js"><link rel="prefetch" href="/assets/js/74.3a134e0d.js"><link rel="prefetch" href="/assets/js/75.82990909.js"><link rel="prefetch" href="/assets/js/76.bcaafc54.js"><link rel="prefetch" href="/assets/js/77.c26e4a56.js"><link rel="prefetch" href="/assets/js/78.a27d4d32.js"><link rel="prefetch" href="/assets/js/79.42ca257a.js"><link rel="prefetch" href="/assets/js/8.d351dd84.js"><link rel="prefetch" href="/assets/js/9.0a60c476.js"><link rel="prefetch" href="/assets/js/vuejs-paginate.ac365ac7.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.29350883.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/" class="nav-link home-link">bing随遇而安 </a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/" class="nav-link">首页</a></li><li class="nav-item"><a href="/algorithm/" class="nav-link">算法</a></li><li class="nav-item"><a href="/data-structure/" class="nav-link">数据结构</a></li><li class="nav-item"><a href="/interview/" class="nav-link">面试</a></li><li class="nav-item"><a href="/tag/" class="nav-link">标签</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/" class="nav-link mobile-home-link">bing随遇而安 </a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/" class="nav-link">首页</a></li><li class="mobile-nav-item"><a href="/algorithm/" class="nav-link">算法</a></li><li class="mobile-nav-item"><a href="/data-structure/" class="nav-link">数据结构</a></li><li class="mobile-nav-item"><a href="/interview/" class="nav-link">面试</a></li><li class="mobile-nav-item"><a href="/tag/" class="nav-link">标签</a></li> <li class="mobile-nav-item"><!----></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title">
+        
+      </h1> <div class="post-meta"><div itemprop="publisher author" itemtype="http://schema.org/Person" itemscope="itemscope" class="post-meta-author"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-navigation"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg> <span itemprop="name">BING随遇而安</span> <span itemprop="address">   in Shanghai</span></div> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2024-12-28T00:00:00.000Z">
+      2024-12-28
+    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-42ccfcd5><a href="/tag/golang" data-v-42ccfcd5><span data-v-42ccfcd5>golang</span></a></li><li class="post-tag" data-v-42ccfcd5><a href="/tag/k8s" data-v-42ccfcd5><span data-v-42ccfcd5>k8s</span></a></li><li class="post-tag" data-v-42ccfcd5><a href="/tag/【生产Debug日记】" data-v-42ccfcd5><span data-v-42ccfcd5>【生产Debug日记】</span></a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><h1 id="【生产debug日记】go-map-并发操作导致的k8s服务重启"><a href="#【生产debug日记】go-map-并发操作导致的k8s服务重启" class="header-anchor">#</a> 【生产Debug日记】Go Map 并发操作导致的K8S服务重启</h1> <h2 id="背景"><a href="#背景" class="header-anchor">#</a> 背景</h2> <p>最近从<code>grafana</code>的<code>alert</code>中收到一个告警，告警内容是<code>K8S</code>服务<code>pod</code>重启了，查看<code>pod</code>日志描述信息显示如下：</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># kubectl describe xxxxxx-api-6577f45dd5-9gprq</span>
+Name:         xxxxxx-api-6577f45dd5-9gprq
+Namespace:    xxxxxx
+Priority:     <span class="token number">0</span>
+Node:         <span class="token number">10.0</span>.11.15/10.0.11.15
+Start Time:   Tue, <span class="token number">24</span> Dec <span class="token number">2024</span> <span class="token number">16</span>:23:07 +0800
+Labels:       pod-template-hash<span class="token operator">=</span>6577f45dd5
+              <span class="token assign-left variable">app</span><span class="token operator">=</span>xxxxxx-api
+Annotations:  <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+Status:       Running
+IP:           <span class="token number">10.230</span>.83.56
+IPs:
+  IP:           <span class="token number">10.230</span>.83.56
+Controlled By:  ReplicaSet/xxxxxx-api-6577f45dd5
+Containers:
+  xxxxxx-api:
+    Container ID:   docker://40ad476607e55cec892f495ac668ad8e30dc6e3f8c4e80a50c00ddc926f5e918
+    Image:          harbor.k8s.com/fanli_xxxxxx/xxxxxx_api:v0.0.0-20241224161914
+    Image ID:       docker-pullable://harbor.k8s.com/xxxxxx/xxxxxx_api@sha256:b04d274d0c448ed1159d1ea341fcd8ec3480016c260ac7b151eea607d0da9458
+    Port:           <span class="token number">8888</span>/TCP
+    Host Port:      <span class="token number">0</span>/TCP
+    State:          Running
+      Started:      Wed, <span class="token number">25</span> Dec <span class="token number">2024</span> 08:44:18 +0800
+    Last State:     Terminated
+      Reason:       Error
+      xxxxxx Code:    <span class="token number">2</span>
+      Started:      Wed, <span class="token number">25</span> Dec <span class="token number">2024</span> 05:12:12 +0800
+      Finished:     Wed, <span class="token number">25</span> Dec <span class="token number">2024</span> 08:44:16 +0800
+    Ready:          True
+    Restart Count:  <span class="token number">4</span>
+    Limits:
+      cpu:  <span class="token number">4</span>
+    Requests:
+      cpu:      500m
+      memory:   1048Mi
+    Liveness:   http-get http://:8888/healthcheck <span class="token assign-left variable">delay</span><span class="token operator">=</span>5s <span class="token assign-left variable">timeout</span><span class="token operator">=</span>3s <span class="token assign-left variable">period</span><span class="token operator">=</span>45s <span class="token comment">#success=1 #failure=3</span>
+    Readiness:  http-get http://:8888/healthcheck <span class="token assign-left variable">delay</span><span class="token operator">=</span>5s <span class="token assign-left variable">timeout</span><span class="token operator">=</span>1s <span class="token assign-left variable">period</span><span class="token operator">=</span>10s <span class="token comment">#success=3 #failure=3</span>
+    Environment:
+      MY_POD_NAME:  xxxxxx-api-6577f45dd5-9gprq <span class="token punctuation">(</span>v1:metadata.name<span class="token punctuation">)</span>
+    Mounts:
+      /data/applogs from xxxxxxwebdata-log <span class="token punctuation">(</span>rw<span class="token punctuation">)</span>
+      /data/weblogs from xxxxxxwebdata-log <span class="token punctuation">(</span>rw<span class="token punctuation">)</span>
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-zd7z8 <span class="token punctuation">(</span>ro<span class="token punctuation">)</span>
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  xxxxxxwebdata-log:
+    Type:          HostPath <span class="token punctuation">(</span>bare <span class="token function">host</span> directory volume<span class="token punctuation">)</span>
+    Path:          /xxxxxx/logs/
+    HostPathType:  DirectoryOrCreate
+  default-token-zd7z8:
+    Type:        Secret <span class="token punctuation">(</span>a volume populated by a Secret<span class="token punctuation">)</span>
+    SecretName:  default-token-zd7z8
+    Optional:    <span class="token boolean">false</span>
+QoS Class:       Burstable
+Node-Selectors:  <span class="token assign-left variable">type</span><span class="token operator">=</span>Physical-machine
+Tolerations:     node.kubernetes.io/not-ready:NoExecute <span class="token assign-left variable">op</span><span class="token operator">=</span>Exists <span class="token keyword">for</span> 300s
+                 node.kubernetes.io/unreachable:NoExecute <span class="token assign-left variable">op</span><span class="token operator">=</span>Exists <span class="token keyword">for</span> 300s
+Events:          <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+</code></pre></div><p>可以从描述信息中看出，Pod在运行时重启了4次，并且最后一次重启是因为xxxxxx Code为2，表示程序异常退出。我们继续查看Pod的日志，以获取更多详细信息。</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># kubectl logs xxxxxx-api-6577f45dd5-9gprq --previous</span>
+</code></pre></div><p>输入日志很多，主要的报错信息如下：</p> <div class="language-bash extra-class"><pre class="language-bash"><code>fatal error: concurrent map iteration and map <span class="token function">write</span>
+
+goroutine <span class="token number">162439</span> <span class="token punctuation">[</span>running<span class="token punctuation">]</span>:
+github.com/dtapps/go-library/utils/gorequest.<span class="token punctuation">(</span>*Params<span class="token punctuation">)</span>.DeepCopy<span class="token punctuation">(</span><span class="token punctuation">..</span>.<span class="token punctuation">)</span>
+	/go/pkg/mod/github.com/dtapps/go-library@v1.0.157/utils/gorequest/params.go:66
+github.com/dtapps/go-library/utils/gorequest.request<span class="token punctuation">(</span>0xc0004204e0, <span class="token punctuation">{</span>0x3111ee0, 0x481d920<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	/go/pkg/mod/github.com/dtapps/go-library@v1.0.157/utils/gorequest/http.go:195 +0x19a
+github.com/dtapps/go-library/utils/gorequest.<span class="token punctuation">(</span>*App<span class="token punctuation">)</span>.Get<span class="token punctuation">(</span>0xc000562710?, <span class="token punctuation">{</span>0x3111ee0?, 0x481d920?<span class="token punctuation">}</span>, <span class="token punctuation">{</span>0x0?, 0xc0005627a0?, 0x411c5b?<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	/go/pkg/mod/github.com/dtapps/go-library@v1.0.157/utils/gorequest/http.go:170 +0xd8
+github.com/dtapps/go-library/service/pinduoduo.<span class="token punctuation">(</span>*Client<span class="token punctuation">)</span>.request<span class="token punctuation">(</span>0xc0004369c0, <span class="token punctuation">{</span>0x3111ee0, 0x481d920<span class="token punctuation">}</span>, 0xc0010c0d80<span class="token punctuation">)</span>
+	/go/pkg/mod/github.com/dtapps/go-library@v1.0.157/service/pinduoduo/request.go:21 +0x197
+github.com/dtapps/go-library/service/pinduoduo.<span class="token punctuation">(</span>*Client<span class="token punctuation">)</span>.GoodsDetail<span class="token punctuation">(</span>0xc0004369c0, <span class="token punctuation">{</span>0x3111ee0, 0x481d920<span class="token punctuation">}</span>, <span class="token punctuation">{</span>0xc000562d90?, 0x1?, 0x1?<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	/go/pkg/mod/github.com/dtapps/go-library@v1.0.157/service/pinduoduo/pdd.ddk.goods.detail.go:106 +0x11c
+gitea.xxxxxx.com/goweb/fsdk-go/fsdkunion.<span class="token punctuation">(</span>*PddClient<span class="token punctuation">)</span>.PddDdkGoodsDetail<span class="token punctuation">(</span>0xc000211620?, 0x0, <span class="token punctuation">{</span>0xc0014bd1d0, 0x24<span class="token punctuation">}</span>, 0xc0010c0d50<span class="token punctuation">)</span>
+	/go/pkg/mod/gitea.xxxxxx.com/goweb/fsdk-go@v0.0.0-20241221060227-0ed7d0a9c9ac/fsdkunion/pdd.go:69 +0x96
+gitea.xxxxxx.com/goweb/xxxxxx/api/internal/service.<span class="token punctuation">(</span>*Service<span class="token punctuation">)</span>.GetUnionPddItemDetail<span class="token punctuation">(</span>0xc000783500, 0xc0010c0d50?, <span class="token punctuation">{</span>0xc0014bd1d0?, 0xa?<span class="token punctuation">}</span>, 0xc000514120?<span class="token punctuation">)</span>
+	/builder/api/internal/service/unionpddservice.go:143 +0x8b
+gitea.xxxxxx.com/goweb/xxxxxx/api/internal/service.<span class="token punctuation">(</span>*Service<span class="token punctuation">)</span>.GetUnionPddItemsByGoodsSignList.func1<span class="token punctuation">(</span><span class="token punctuation">{</span>0xc0011eb1a0?, 0xc0016c68c0?, 0xc00061b7a0?<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	/builder/api/internal/service/unionpddservice.go:96 +0x179
+gitea.xxxxxx.com/goweb/fsdk-go/fsdktype.<span class="token punctuation">(</span>*SafeGo<span class="token punctuation">)</span>.Go.func1<span class="token punctuation">(</span><span class="token punctuation">{</span>0x0?, 0x72aea5?, 0xc000ef5d40?<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	/go/pkg/mod/gitea.xxxxxx.com/goweb/fsdk-go@v0.0.0-20241221060227-0ed7d0a9c9ac/fsdktype/safego.go:36 +0x96
+created by gitea.xxxxxx.com/goweb/fsdk-go/fsdktype.<span class="token punctuation">(</span>*SafeGo<span class="token punctuation">)</span>.Go <span class="token keyword">in</span> goroutine <span class="token number">162413</span>
+	/go/pkg/mod/gitea.xxxxxx.com/goweb/fsdk-go@v0.0.0-20241221060227-0ed7d0a9c9ac/fsdktype/safego.go:24 +0xe7
+</code></pre></div><p>从上面的日志可以看出，服务退出的原因是：<code>map</code>发生了并发的遍历和修改。发生在<code>github.com/dtapps/go-library/utils/gorequest.(*Params).DeepCopy</code>函数中。函数内容如下：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// DeepCopy 深度复制</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Params<span class="token punctuation">)</span> <span class="token function">DeepCopy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token punctuation">{</span>
+	targetMap <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 从原始复制到目标</span>
+	<span class="token keyword">for</span> key<span class="token punctuation">,</span> value <span class="token operator">:=</span> <span class="token keyword">range</span> <span class="token operator">*</span>p <span class="token punctuation">{</span>
+		targetMap<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> value
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 重新申请一个新的map</span>
+	<span class="token operator">*</span>p <span class="token operator">=</span> <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	<span class="token keyword">return</span> targetMap
+<span class="token punctuation">}</span>
+</code></pre></div><p>从代码中可以看出，<code>DeepCopy</code>函数的主要功能是将<code>Params</code>类型的值复制到一个新的<code>map</code>中，并清空原始的<code>map</code>。这里发送并发读写的只能是<code>*p</code>。我们接着往上找<code>Prams</code>类型的定义和引用。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// Params 参数</span>
+<span class="token keyword">type</span> Params <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token comment">// App 实例</span>
+<span class="token keyword">type</span> App <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	Uri                          <span class="token builtin">string</span>           <span class="token comment">// 全局请求地址，没有设置url才会使用</span>
+	Error                        <span class="token builtin">error</span>            <span class="token comment">// 错误</span>
+	httpUri                      <span class="token builtin">string</span>           <span class="token comment">// 请求地址</span>
+	httpMethod                   <span class="token builtin">string</span>           <span class="token comment">// 请求方法</span>
+	httpHeader                   Headers          <span class="token comment">// 请求头</span>
+	httpParams                   Params           <span class="token comment">// 请求参数</span>
+	httpCookie                   <span class="token builtin">string</span>           <span class="token comment">// Cookie</span>
+	responseContent              Response         <span class="token comment">// 返回内容</span>
+	httpContentType              <span class="token builtin">string</span>           <span class="token comment">// 请求内容类型</span>
+	debug                        <span class="token builtin">bool</span>             <span class="token comment">// 是否开启调试模式</span>
+	p12Cert                      <span class="token operator">*</span>tls<span class="token punctuation">.</span>Certificate <span class="token comment">// p12证书内容</span>
+	tlsMinVersion<span class="token punctuation">,</span> tlsMaxVersion <span class="token builtin">uint16</span>           <span class="token comment">// TLS版本</span>
+	config                       <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		systemOs     <span class="token builtin">string</span> <span class="token comment">// 系统类型</span>
+		systemKernel <span class="token builtin">string</span> <span class="token comment">// 系统内核</span>
+		goVersion    <span class="token builtin">string</span> <span class="token comment">// go版本</span>
+		sdkVersion   <span class="token builtin">string</span> <span class="token comment">// sdk版本</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>到这里我们可以看出，<code>Params</code>类型是<code>App</code>结构体中的一个字段。<code>App</code>结构体在<code>github.com/dtapps/go-library/utils/gorequest</code>包中定义。我们接着往上找<code>App</code>类型的定义和引用。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// Client 实例</span>
+<span class="token keyword">type</span> Client <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	requestClient <span class="token operator">*</span>gorequest<span class="token punctuation">.</span>App <span class="token comment">// 请求服务</span>
+	config        <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		clientId     <span class="token builtin">string</span> <span class="token comment">// POP分配给应用的client_id</span>
+		clientSecret <span class="token builtin">string</span> <span class="token comment">// POP分配给应用的client_secret</span>
+		mediaId      <span class="token builtin">string</span> <span class="token comment">// 媒体ID</span>
+		pid          <span class="token builtin">string</span> <span class="token comment">// 推广位</span>
+	<span class="token punctuation">}</span>
+	zap <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		status <span class="token builtin">bool</span>             <span class="token comment">// 状态</span>
+		client <span class="token operator">*</span>golog<span class="token punctuation">.</span>ApiZapLog <span class="token comment">// 日志服务</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>从代码中可以看出，<code>App</code>类型是<code>Client</code>结构体中的一个字段。<code>Client</code>类型在<code>github.com/dtapps/go-library/service/pinduoduo</code>包中定义。我们接着往上找<code>Client</code>类型的定义和引用。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// 拼多多客户端</span>
+<span class="token keyword">type</span> PddClient <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	AppKey    <span class="token builtin">string</span>
+	AppSecret <span class="token builtin">string</span>
+	MediaId   <span class="token builtin">string</span>
+	Pid       <span class="token builtin">string</span>
+	client    <span class="token operator">*</span>pinduoduo<span class="token punctuation">.</span>Client
+<span class="token punctuation">}</span>
+</code></pre></div><p>到这里事情就明了了，我们在服务中定义拼多多客户端的时候只实例了一个<code>pinduoduo.Client</code>，当又多个请求同时调用<code>GetUnionPddItemDetail</code>方法时，就会发生并发读写<code>Params</code>类型的值，导致程序崩溃。</p> <h3 id="解决方案"><a href="#解决方案" class="header-anchor">#</a> 解决方案</h3> <p>在我们自己定义的<code>PddClient</code>中，我们只记录拼多多的<code>AppKey</code>、<code>AppSecret</code>、<code>MediaId</code>和<code>Pid</code>，而不记录<code>pinduoduo.Client</code>。在每次请求时，我们重新实例化<code>pinduoduo.Client</code>，这样就不会发生并发读写<code>Params</code>类型的值了。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// 拼多多客户端</span>
+<span class="token keyword">type</span> PddClient <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	AppKey    <span class="token builtin">string</span>
+	AppSecret <span class="token builtin">string</span>
+	MediaId   <span class="token builtin">string</span>
+	Pid       <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Client 实例</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>PddClient<span class="token punctuation">)</span> <span class="token function">Client</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span>pinduoduo<span class="token punctuation">.</span>Client <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> pinduoduo<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>AppKey<span class="token punctuation">,</span> p<span class="token punctuation">.</span>AppSecret<span class="token punctuation">,</span> p<span class="token punctuation">.</span>MediaId<span class="token punctuation">,</span> p<span class="token punctuation">.</span>Pid<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer><!----> <hr> <!----></footer></article> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h2 active"><a href="#背景" title="背景">背景</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#解决方案" title="解决方案">解决方案</a></div></div></div></div> <footer class="footer" data-v-3d9deeb8><div class="footer-left-wrap" data-v-3d9deeb8><ul class="contact" data-v-3d9deeb8><li class="contact-item" data-v-3d9deeb8><a href="https://github.com/fbbyqsyea" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-3d9deeb8><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github" data-v-3d9deeb8><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-v-3d9deeb8></path></svg>
+          
+        </a></li></ul></div> <div class="footer-right-wrap" data-v-3d9deeb8><ul class="copyright" data-v-3d9deeb8><li class="copyright-item" data-v-3d9deeb8>MIT Licensed | Copyright © 2024-fbbyqsyea</li></ul></div></footer></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b92e4c86.js" defer></script><script src="/assets/js/6.38d57c41.js" defer></script><script src="/assets/js/3.122d5fd9.js" defer></script><script src="/assets/js/67.1a255188.js" defer></script>
+  </body>
+</html>
