@@ -1,0 +1,41 @@
+baseURL: http://192.168.1.237:8080/
+title: Bing随遇而安
+theme: book
+
+languageCode: zh-cn
+defaultContentLanguage: zh
+disablePathToLower: true
+
+copyright: ""
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    startLevel: 1
+  highlight:
+    noClasses: false
+    style: dracula
+
+languages:
+  zh:
+    languageName: 中文
+    contentDir: content
+    weight: 1
+    menu:
+      before: []
+      after:
+        - name: GitHub
+          url: "https://github.com/"
+          weight: 10
+
+params:
+  BookTheme: dark
+  BookFavicon: "favicon.svg"
+  BookLogo: "logo.svg"
+  BookSection: books
+  BookSearch: true
+  BookComments: false
+  BookToC: true
+  BookPortableLinks: false

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="模型下载与转换# 方式一：直接使用预量化 GGUF（推荐）# 从 Hugging Face 下载# hf download unsloth/Qwen3.5-0.8B-GGUF \ --include &#34;*Q4_K_M*&#34; \ --local-dir ./models/从 Hub 直接启动# # 自动下载并启动（默认 Q4_K_M） llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF # 指定量化格式 llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF:Q8_0 # 指定具体文件 llama-server \ --hf-repo unsloth/Qwen3.5-0.8B-GGUF \ --hf-file Qwen3.5-0.8B-Q4_K_M.gguf \ -c 4096搜索可用模型# 所有 llama.cpp 兼容模型：https://huggingface.co/models?apps=llama.cpp&amp;sort=trending 按名称搜索：https://huggingface.co/models?search=qwen3&amp;apps=llama.cpp 按大小筛选：https://huggingface.co/models?search=qwen&amp;apps=llama.cpp&amp;num_parameters=min:0,max:8B 常用量化上传者：
+bartowski — 覆盖面最广 unsloth — 高质量量化 MaziyarPanahi — 多格式支持 方式二：从原始模型转换# 步骤一：下载原始模型# hf download Qwen/Qwen3.5-0.8B --local-dir models/qwen35-0.8b/步骤二：转换为 FP16 GGUF# cd llama.cpp python convert_hf_to_gguf.py \ ../models/qwen35-0.8b/ \ --outfile ../models/qwen35-0.8b-f16.gguf \ --outtype f16转换后的 FP16 文件大小约为 参数量 × 2 字节。0.8B 模型约 1.6GB。
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8080/books/llama-cpp/03-model/">
+  <meta property="og:site_name" content="Bing随遇而安">
+  <meta property="og:title" content="模型下载与转换">
+  <meta property="og:description" content="模型下载与转换# 方式一：直接使用预量化 GGUF（推荐）# 从 Hugging Face 下载# hf download unsloth/Qwen3.5-0.8B-GGUF \ --include &#34;*Q4_K_M*&#34; \ --local-dir ./models/从 Hub 直接启动# # 自动下载并启动（默认 Q4_K_M） llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF # 指定量化格式 llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF:Q8_0 # 指定具体文件 llama-server \ --hf-repo unsloth/Qwen3.5-0.8B-GGUF \ --hf-file Qwen3.5-0.8B-Q4_K_M.gguf \ -c 4096搜索可用模型# 所有 llama.cpp 兼容模型：https://huggingface.co/models?apps=llama.cpp&amp;sort=trending 按名称搜索：https://huggingface.co/models?search=qwen3&amp;apps=llama.cpp 按大小筛选：https://huggingface.co/models?search=qwen&amp;apps=llama.cpp&amp;num_parameters=min:0,max:8B 常用量化上传者：
+bartowski — 覆盖面最广 unsloth — 高质量量化 MaziyarPanahi — 多格式支持 方式二：从原始模型转换# 步骤一：下载原始模型# hf download Qwen/Qwen3.5-0.8B --local-dir models/qwen35-0.8b/步骤二：转换为 FP16 GGUF# cd llama.cpp python convert_hf_to_gguf.py \ ../models/qwen35-0.8b/ \ --outfile ../models/qwen35-0.8b-f16.gguf \ --outtype f16转换后的 FP16 文件大小约为 参数量 × 2 字节。0.8B 模型约 1.6GB。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="books">
+    <meta property="article:published_time" content="2026-05-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-05-05T00:00:00+00:00">
+
+
+  <meta itemprop="name" content="模型下载与转换">
+  <meta itemprop="description" content="模型下载与转换# 方式一：直接使用预量化 GGUF（推荐）# 从 Hugging Face 下载# hf download unsloth/Qwen3.5-0.8B-GGUF \ --include &#34;*Q4_K_M*&#34; \ --local-dir ./models/从 Hub 直接启动# # 自动下载并启动（默认 Q4_K_M） llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF # 指定量化格式 llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF:Q8_0 # 指定具体文件 llama-server \ --hf-repo unsloth/Qwen3.5-0.8B-GGUF \ --hf-file Qwen3.5-0.8B-Q4_K_M.gguf \ -c 4096搜索可用模型# 所有 llama.cpp 兼容模型：https://huggingface.co/models?apps=llama.cpp&amp;sort=trending 按名称搜索：https://huggingface.co/models?search=qwen3&amp;apps=llama.cpp 按大小筛选：https://huggingface.co/models?search=qwen&amp;apps=llama.cpp&amp;num_parameters=min:0,max:8B 常用量化上传者：
+bartowski — 覆盖面最广 unsloth — 高质量量化 MaziyarPanahi — 多格式支持 方式二：从原始模型转换# 步骤一：下载原始模型# hf download Qwen/Qwen3.5-0.8B --local-dir models/qwen35-0.8b/步骤二：转换为 FP16 GGUF# cd llama.cpp python convert_hf_to_gguf.py \ ../models/qwen35-0.8b/ \ --outfile ../models/qwen35-0.8b-f16.gguf \ --outtype f16转换后的 FP16 文件大小约为 参数量 × 2 字节。0.8B 模型约 1.6GB。">
+  <meta itemprop="datePublished" content="2026-05-05T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-05-05T00:00:00+00:00">
+  <meta itemprop="wordCount" content="157">
+
+<title>模型下载与转换 | Bing随遇而安</title>
+<link rel="icon" href="/favicon.svg" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:8080/books/llama-cpp/03-model/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/zh.search.min.114359fdd643ad95f649c023fff01b72dd7047d1861d5d5aa1557fbd4b781cf3.js" integrity="sha256-EUNZ/dZDrZX2ScAj//Abct1wR9GGHV1aoVV/vUt4HPM=" crossorigin="anonymous"></script>
+
+
+
+  <style>
+ 
+
+:root {
+     
+    --body-background: #000000;
+    --body-font-color: #ffffff;
+    --color-link: #75beff;
+    --color-visited-link: #75beff;
+    
+     
+    --color-accent: #6fc3df;
+    --color-border: #6fc3df;
+    --color-border-active: #ffffff;
+    
+     
+    --menu-background: #000000;
+    --menu-font-color: #ffffff;
+    --menu-border-color: #6fc3df;
+    
+     
+    --header-background: #000000;
+    --header-font-color: #ffffff;
+    --header-border-color: #6fc3df;
+
+     
+    --code-background: #000000;
+    --code-border: #6fc3df;
+}
+
+body {
+    background-color: var(--body-background) !important;
+    color: var(--body-font-color) !important;
+}
+
+ 
+.book-menu {
+    background: var(--menu-background) !important;
+    border-right: 2px solid var(--menu-border-color) !important;
+}
+
+.book-menu nav a {
+    color: var(--menu-font-color) !important;
+}
+
+.book-menu nav a:hover {
+    color: var(--color-accent) !important;
+    opacity: 1;
+}
+
+.book-menu nav a.active {
+    color: var(--color-accent) !important;
+    font-weight: bold;
+    background: rgba(111, 195, 223, 0.1);
+}
+
+ 
+.book-header {
+    background: var(--header-background) !important;
+    border-bottom: 2px solid var(--header-border-color) !important;
+    color: var(--header-font-color);
+}
+
+.book-header input {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+ 
+.book-content {
+    background: #000000;
+}
+
+ 
+.markdown {
+    color: #ffffff;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+.markdown a {
+    color: var(--color-link);
+    border-bottom: 1px dotted var(--color-link);
+}
+
+.markdown a:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+ 
+.markdown table {
+    border-color: #6fc3df;
+}
+.markdown table th, .markdown table td {
+    border-color: #6fc3df;
+}
+.markdown table th {
+    background-color: #111;
+}
+
+ 
+.book-markdown pre {
+    background: var(--code-background) !important;
+    border: 1px solid var(--code-border) !important;
+    box-shadow: none;
+    padding: 1rem;
+}
+
+.book-markdown code {
+    background: #111111 !important;
+    border: 1px solid #333;
+    color: #d4d4d4;
+}
+
+ 
+.markdown p code, .markdown li code, .markdown table code {
+    background: #111111 !important;
+    border: 1px solid #444;
+    color: #9cdcfe;  
+}
+
+ 
+.chroma {
+    background-color: #000000 !important;
+    color: #ffffff;
+    border: none;
+}
+
+ 
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+
+ 
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+    color: #ce9178 !important;
+}
+
+ 
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+
+ 
+.chroma .nf, .chroma .fm {
+    color: #dcdcaa !important;
+}
+
+ 
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+    color: #b5cea8 !important;
+}
+
+ 
+.chroma .kt, .chroma .nc {
+    color: #4ec9b0 !important;
+}
+
+ 
+.chroma .nv, .chroma .vc {
+    color: #9cdcfe !important;
+}
+
+ 
+.chroma .p, .chroma .o {
+    color: #ffffff !important;
+}
+
+ 
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+    background: #6fc3df;  
+    border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+ 
+.book-toc nav a {
+    color: #888;
+}
+.book-toc nav a:hover {
+    color: #fff;
+}
+.book-toc nav a.active {
+    color: #6fc3df;
+    border-left: 2px solid #6fc3df;
+}
+
+ 
+.book-brand img {
+    filter: none !important;
+}
+.book-header {
+    gap: 0.5rem;
+}
+</style>
+
+</head>
+<body dir="ltr" class="book-kind-page book-type-books">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.svg" alt="Logo" /><span>Bing随遇而安</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/" class="">
+      llama.cpp 本地推理指南</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/01-intro/" class="">
+      简介</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/02-install/" class="">
+      编译与安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/03-model/" class="active">
+      模型下载与转换</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/04-inference/" class="">
+      推理与服务部署</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/05-quantization/" class="">
+      量化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/06-advanced/" class="">
+      高级用法</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/07-tools/" class="">
+      完整工具参考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+<ul><li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li></ul>
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>模型下载与转换</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#模型下载与转换">模型下载与转换</a>
+      <ul>
+        <li><a href="#方式一直接使用预量化-gguf推荐">方式一：直接使用预量化 GGUF（推荐）</a>
+          <ul>
+            <li><a href="#从-hugging-face-下载">从 Hugging Face 下载</a></li>
+            <li><a href="#从-hub-直接启动">从 Hub 直接启动</a></li>
+            <li><a href="#搜索可用模型">搜索可用模型</a></li>
+          </ul>
+        </li>
+        <li><a href="#方式二从原始模型转换">方式二：从原始模型转换</a>
+          <ul>
+            <li><a href="#步骤一下载原始模型">步骤一：下载原始模型</a></li>
+            <li><a href="#步骤二转换为-fp16-gguf">步骤二：转换为 FP16 GGUF</a></li>
+            <li><a href="#步骤三量化">步骤三：量化</a></li>
+          </ul>
+        </li>
+        <li><a href="#查看模型元信息">查看模型元信息</a></li>
+        <li><a href="#-重要限制不能从已量化的模型再量化">⚠️ 重要限制：不能从已量化的模型再量化</a></li>
+        <li><a href="#模型格式对比08b">模型格式对比（0.8B）</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="模型下载与转换">模型下载与转换<a class="anchor" href="#%e6%a8%a1%e5%9e%8b%e4%b8%8b%e8%bd%bd%e4%b8%8e%e8%bd%ac%e6%8d%a2">#</a></h1>
+<h2 id="方式一直接使用预量化-gguf推荐">方式一：直接使用预量化 GGUF（推荐）<a class="anchor" href="#%e6%96%b9%e5%bc%8f%e4%b8%80%e7%9b%b4%e6%8e%a5%e4%bd%bf%e7%94%a8%e9%a2%84%e9%87%8f%e5%8c%96-gguf%e6%8e%a8%e8%8d%90">#</a></h2>
+<h3 id="从-hugging-face-下载">从 Hugging Face 下载<a class="anchor" href="#%e4%bb%8e-hugging-face-%e4%b8%8b%e8%bd%bd">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hf download unsloth/Qwen3.5-0.8B-GGUF <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --include <span class="s2">&#34;*Q4_K_M*&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --local-dir ./models/</span></span></code></pre></div><h3 id="从-hub-直接启动">从 Hub 直接启动<a class="anchor" href="#%e4%bb%8e-hub-%e7%9b%b4%e6%8e%a5%e5%90%af%e5%8a%a8">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 自动下载并启动（默认 Q4_K_M）</span>
+</span></span><span class="line"><span class="cl">llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 指定量化格式</span>
+</span></span><span class="line"><span class="cl">llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF:Q8_0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 指定具体文件</span>
+</span></span><span class="line"><span class="cl">llama-server <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --hf-repo unsloth/Qwen3.5-0.8B-GGUF <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --hf-file Qwen3.5-0.8B-Q4_K_M.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -c <span class="m">4096</span></span></span></code></pre></div><h3 id="搜索可用模型">搜索可用模型<a class="anchor" href="#%e6%90%9c%e7%b4%a2%e5%8f%af%e7%94%a8%e6%a8%a1%e5%9e%8b">#</a></h3>
+<ul>
+<li>所有 llama.cpp 兼容模型：https://huggingface.co/models?apps=llama.cpp&amp;sort=trending</li>
+<li>按名称搜索：https://huggingface.co/models?search=qwen3&amp;apps=llama.cpp</li>
+<li>按大小筛选：https://huggingface.co/models?search=qwen&amp;apps=llama.cpp&amp;num_parameters=min:0,max:8B</li>
+</ul>
+<p>常用量化上传者：</p>
+<ul>
+<li><code>bartowski</code> — 覆盖面最广</li>
+<li><code>unsloth</code> — 高质量量化</li>
+<li><code>MaziyarPanahi</code> — 多格式支持</li>
+</ul>
+<h2 id="方式二从原始模型转换">方式二：从原始模型转换<a class="anchor" href="#%e6%96%b9%e5%bc%8f%e4%ba%8c%e4%bb%8e%e5%8e%9f%e5%a7%8b%e6%a8%a1%e5%9e%8b%e8%bd%ac%e6%8d%a2">#</a></h2>
+<h3 id="步骤一下载原始模型">步骤一：下载原始模型<a class="anchor" href="#%e6%ad%a5%e9%aa%a4%e4%b8%80%e4%b8%8b%e8%bd%bd%e5%8e%9f%e5%a7%8b%e6%a8%a1%e5%9e%8b">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hf download Qwen/Qwen3.5-0.8B --local-dir models/qwen35-0.8b/</span></span></code></pre></div><h3 id="步骤二转换为-fp16-gguf">步骤二：转换为 FP16 GGUF<a class="anchor" href="#%e6%ad%a5%e9%aa%a4%e4%ba%8c%e8%bd%ac%e6%8d%a2%e4%b8%ba-fp16-gguf">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> llama.cpp
+</span></span><span class="line"><span class="cl">python convert_hf_to_gguf.py <span class="se">\
+</span></span></span><span class="line"><span class="cl">  ../models/qwen35-0.8b/ <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --outfile ../models/qwen35-0.8b-f16.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --outtype f16</span></span></code></pre></div><p>转换后的 FP16 文件大小约为 <code>参数量 × 2</code> 字节。0.8B 模型约 1.6GB。</p>
+<h3 id="步骤三量化">步骤三：量化<a class="anchor" href="#%e6%ad%a5%e9%aa%a4%e4%b8%89%e9%87%8f%e5%8c%96">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./build/bin/llama-quantize <span class="se">\
+</span></span></span><span class="line"><span class="cl">  ../models/qwen35-0.8b-f16.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">  ../models/qwen35-0.8b-Q4_K_M.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">  Q4_K_M</span></span></code></pre></div><h2 id="查看模型元信息">查看模型元信息<a class="anchor" href="#%e6%9f%a5%e7%9c%8b%e6%a8%a1%e5%9e%8b%e5%85%83%e4%bf%a1%e6%81%af">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ./build/bin/llama-gguf model.gguf
+</span></span><span class="line"><span class="cl">general.architecture    <span class="o">=</span> qwen35
+</span></span><span class="line"><span class="cl">general.name            <span class="o">=</span> Qwen3.5-0.8B
+</span></span><span class="line"><span class="cl">qwen35.block_count      <span class="o">=</span> <span class="m">24</span>
+</span></span><span class="line"><span class="cl">qwen35.context_length   <span class="o">=</span> <span class="m">262144</span></span></span></code></pre></div><h2 id="-重要限制不能从已量化的模型再量化">⚠️ 重要限制：不能从已量化的模型再量化<a class="anchor" href="#-%e9%87%8d%e8%a6%81%e9%99%90%e5%88%b6%e4%b8%8d%e8%83%bd%e4%bb%8e%e5%b7%b2%e9%87%8f%e5%8c%96%e7%9a%84%e6%a8%a1%e5%9e%8b%e5%86%8d%e9%87%8f%e5%8c%96">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ❌ 会失败</span>
+</span></span><span class="line"><span class="cl">./build/bin/llama-quantize model-Q4_K_M.gguf model-Q8_0.gguf Q8_0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 报错：requantizing from type q6_K is disabled</span></span></span></code></pre></div><p><strong>原因</strong>：量化是有损压缩，低精度丢失的信息无法恢复。必须从 FP16/BF16 原始模型开始。</p>
+<h2 id="模型格式对比08b">模型格式对比（0.8B）<a class="anchor" href="#%e6%a8%a1%e5%9e%8b%e6%a0%bc%e5%bc%8f%e5%af%b9%e6%af%9408b">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>格式</th>
+          <th>大小</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>FP16</td>
+          <td>~1.6 GB</td>
+          <td>原始精度，转换起点</td>
+      </tr>
+      <tr>
+          <td>Q8_0</td>
+          <td>~850 MB</td>
+          <td>接近无损</td>
+      </tr>
+      <tr>
+          <td>Q6_K</td>
+          <td>~660 MB</td>
+          <td>高质量/体积比</td>
+      </tr>
+      <tr>
+          <td>Q5_K_M</td>
+          <td>~580 MB</td>
+          <td>均衡选择</td>
+      </tr>
+      <tr>
+          <td>Q4_K_M</td>
+          <td>~508 MB</td>
+          <td><strong>推荐默认</strong></td>
+      </tr>
+      <tr>
+          <td>Q3_K_M</td>
+          <td>~410 MB</td>
+          <td>较小质量损失</td>
+      </tr>
+      <tr>
+          <td>Q2_K</td>
+          <td>~330 MB</td>
+          <td>仅限极端资源限制</td>
+      </tr>
+  </tbody>
+</table>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/books/llama-cpp/02-install/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>编译与安装</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/books/llama-cpp/04-inference/" class="flex align-center">
+        <span>推理与服务部署</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#模型下载与转换">模型下载与转换</a>
+      <ul>
+        <li><a href="#方式一直接使用预量化-gguf推荐">方式一：直接使用预量化 GGUF（推荐）</a>
+          <ul>
+            <li><a href="#从-hugging-face-下载">从 Hugging Face 下载</a></li>
+            <li><a href="#从-hub-直接启动">从 Hub 直接启动</a></li>
+            <li><a href="#搜索可用模型">搜索可用模型</a></li>
+          </ul>
+        </li>
+        <li><a href="#方式二从原始模型转换">方式二：从原始模型转换</a>
+          <ul>
+            <li><a href="#步骤一下载原始模型">步骤一：下载原始模型</a></li>
+            <li><a href="#步骤二转换为-fp16-gguf">步骤二：转换为 FP16 GGUF</a></li>
+            <li><a href="#步骤三量化">步骤三：量化</a></li>
+          </ul>
+        </li>
+        <li><a href="#查看模型元信息">查看模型元信息</a></li>
+        <li><a href="#-重要限制不能从已量化的模型再量化">⚠️ 重要限制：不能从已量化的模型再量化</a></li>
+        <li><a href="#模型格式对比08b">模型格式对比（0.8B）</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

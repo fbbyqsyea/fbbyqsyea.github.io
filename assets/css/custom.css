@@ -1,0 +1,99 @@
+/* VS Code Dark+ Style Overrides */
+
+/* Editor Background */
+body {
+  --body-font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", system-ui, "Ubuntu", "Droid Sans", sans-serif;
+}
+
+/* Code Block Background matching VS Code Editor */
+.book-markdown pre,
+.book-markdown code {
+  background-color: #1e1e1e !important;
+  font-family: Consolas, "Courier New", monospace !important;
+  font-size: 14px !important;
+  border-radius: 6px;
+}
+
+/* Inline code */
+.book-markdown p code,
+.book-markdown li code,
+.book-markdown table code {
+  background-color: #2d2d30 !important;
+  color: #d4d4d4 !important;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Adjust pre padding */
+.book-markdown pre {
+  padding: 16px !important;
+  border: none !important;
+}
+
+/* Scrollbar style like VS Code */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+/* Syntax Highlighting Tweaks (VS Code Dark+ Colors) */
+/* These ensure the Chroma output matches VS Code exactly */
+.chroma {
+  color: #d4d4d4;
+  background-color: #1e1e1e;
+}
+
+/* Keywords: Blue */
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+  color: #569cd6 !important;
+}
+
+/* Strings: Orange */
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+  color: #ce9178 !important;
+}
+
+/* Comments: Green */
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+  color: #6a9955 !important;
+  font-style: italic;
+}
+
+/* Functions: Yellow */
+.chroma .nf, .chroma .fm {
+  color: #dcdcaa !important;
+}
+
+/* Numbers: Light Green */
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+  color: #b5cea8 !important;
+}
+
+/* Types: Teal */
+.chroma .kt, .chroma .nc {
+  color: #4ec9b0 !important;
+}
+
+/* Variables: Light Blue */
+.chroma .nv, .chroma .vc {
+  color: #9cdcfe !important;
+}
+
+/* Operators */
+.chroma .o {
+  color: #d4d4d4 !important;
+}

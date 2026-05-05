@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="推理与服务部署# CLI 交互式推理# ./build/bin/llama-cli \ -m ~/.models/unsloth/Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q4_K_M.gguf \ -p &#34;Hello, please introduce yourself.&#34; \ -n 128 \ --temp 0.7 \ -ngl 99关键参数：
+参数 简写 说明 默认值 --model -m 模型路径 必需 --prompt -p 提示词 交互模式 --n-predict -n 最大生成 token -1（无限） --temperature 采样温度 0.8 -ngl GPU 卸载层数 99 -c 上下文长度 4096 --threads -t CPU 线程数 物理核心数 llama-server：HTTP 服务# 启动服务# ./build/bin/llama-server \ -m model.gguf \ --port 8080 \ --host 0.0.0.0 \ -ngl 99启动后浏览器访问 http://192.168.1.237:8080，自带 Web UI。
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8080/llama-cpp-guide/04-inference/">
+  <meta property="og:site_name" content="Bing随遇而安">
+  <meta property="og:title" content="推理与服务部署">
+  <meta property="og:description" content="推理与服务部署# CLI 交互式推理# ./build/bin/llama-cli \ -m ~/.models/unsloth/Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q4_K_M.gguf \ -p &#34;Hello, please introduce yourself.&#34; \ -n 128 \ --temp 0.7 \ -ngl 99关键参数：
+参数 简写 说明 默认值 --model -m 模型路径 必需 --prompt -p 提示词 交互模式 --n-predict -n 最大生成 token -1（无限） --temperature 采样温度 0.8 -ngl GPU 卸载层数 99 -c 上下文长度 4096 --threads -t CPU 线程数 物理核心数 llama-server：HTTP 服务# 启动服务# ./build/bin/llama-server \ -m model.gguf \ --port 8080 \ --host 0.0.0.0 \ -ngl 99启动后浏览器访问 http://192.168.1.237:8080，自带 Web UI。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="llama-cpp-guide">
+    <meta property="article:published_time" content="2026-05-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-05-05T00:00:00+00:00">
+
+
+  <meta itemprop="name" content="推理与服务部署">
+  <meta itemprop="description" content="推理与服务部署# CLI 交互式推理# ./build/bin/llama-cli \ -m ~/.models/unsloth/Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q4_K_M.gguf \ -p &#34;Hello, please introduce yourself.&#34; \ -n 128 \ --temp 0.7 \ -ngl 99关键参数：
+参数 简写 说明 默认值 --model -m 模型路径 必需 --prompt -p 提示词 交互模式 --n-predict -n 最大生成 token -1（无限） --temperature 采样温度 0.8 -ngl GPU 卸载层数 99 -c 上下文长度 4096 --threads -t CPU 线程数 物理核心数 llama-server：HTTP 服务# 启动服务# ./build/bin/llama-server \ -m model.gguf \ --port 8080 \ --host 0.0.0.0 \ -ngl 99启动后浏览器访问 http://192.168.1.237:8080，自带 Web UI。">
+  <meta itemprop="datePublished" content="2026-05-05T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-05-05T00:00:00+00:00">
+  <meta itemprop="wordCount" content="173">
+
+<title>推理与服务部署 | Bing随遇而安</title>
+<link rel="icon" href="/favicon.svg" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:8080/llama-cpp-guide/04-inference/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/zh.search.min.4b7109289e9e5a41dda75c882417620796b59bd31f744aed7ad10a7f39338c8a.js" integrity="sha256-S3EJKJ6eWkHdp1yIJBdiB5a1m9MfdErtetEKfzkzjIo=" crossorigin="anonymous"></script>
+
+
+
+  <style>
+ 
+
+:root {
+     
+    --body-background: #000000;
+    --body-font-color: #ffffff;
+    --color-link: #75beff;
+    --color-visited-link: #75beff;
+    
+     
+    --color-accent: #6fc3df;
+    --color-border: #6fc3df;
+    --color-border-active: #ffffff;
+    
+     
+    --menu-background: #000000;
+    --menu-font-color: #ffffff;
+    --menu-border-color: #6fc3df;
+    
+     
+    --header-background: #000000;
+    --header-font-color: #ffffff;
+    --header-border-color: #6fc3df;
+
+     
+    --code-background: #000000;
+    --code-border: #6fc3df;
+}
+
+body {
+    background-color: var(--body-background) !important;
+    color: var(--body-font-color) !important;
+}
+
+ 
+.book-menu {
+    background: var(--menu-background) !important;
+    border-right: 2px solid var(--menu-border-color) !important;
+}
+
+.book-menu nav a {
+    color: var(--menu-font-color) !important;
+}
+
+.book-menu nav a:hover {
+    color: var(--color-accent) !important;
+    opacity: 1;
+}
+
+.book-menu nav a.active {
+    color: var(--color-accent) !important;
+    font-weight: bold;
+    background: rgba(111, 195, 223, 0.1);
+}
+
+ 
+.book-header {
+    background: var(--header-background) !important;
+    border-bottom: 2px solid var(--header-border-color) !important;
+    color: var(--header-font-color);
+}
+
+.book-header input {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+ 
+.book-content {
+    background: #000000;
+}
+
+ 
+.markdown {
+    color: #ffffff;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+.markdown a {
+    color: var(--color-link);
+    border-bottom: 1px dotted var(--color-link);
+}
+
+.markdown a:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+ 
+.markdown table {
+    border-color: #6fc3df;
+}
+.markdown table th, .markdown table td {
+    border-color: #6fc3df;
+}
+.markdown table th {
+    background-color: #111;
+}
+
+ 
+.book-markdown pre {
+    background: var(--code-background) !important;
+    border: 1px solid var(--code-border) !important;
+    box-shadow: none;
+    padding: 1rem;
+}
+
+.book-markdown code {
+    background: #111111 !important;
+    border: 1px solid #333;
+    color: #d4d4d4;
+}
+
+ 
+.markdown p code, .markdown li code, .markdown table code {
+    background: #111111 !important;
+    border: 1px solid #444;
+    color: #9cdcfe;  
+}
+
+ 
+.chroma {
+    background-color: #000000 !important;
+    color: #ffffff;
+    border: none;
+}
+
+ 
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+
+ 
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+    color: #ce9178 !important;
+}
+
+ 
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+
+ 
+.chroma .nf, .chroma .fm {
+    color: #dcdcaa !important;
+}
+
+ 
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+    color: #b5cea8 !important;
+}
+
+ 
+.chroma .kt, .chroma .nc {
+    color: #4ec9b0 !important;
+}
+
+ 
+.chroma .nv, .chroma .vc {
+    color: #9cdcfe !important;
+}
+
+ 
+.chroma .p, .chroma .o {
+    color: #ffffff !important;
+}
+
+ 
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+    background: #6fc3df;  
+    border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+ 
+.book-toc nav a {
+    color: #888;
+}
+.book-toc nav a:hover {
+    color: #fff;
+}
+.book-toc nav a.active {
+    color: #6fc3df;
+    border-left: 2px solid #6fc3df;
+}
+
+ 
+.book-brand img {
+    filter: none !important;
+}
+.book-header {
+    gap: 0.5rem;
+}
+</style>
+
+</head>
+<body dir="ltr" class="book-kind-page book-type-llama-cpp-guide">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.svg" alt="Logo" /><span>Bing随遇而安</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/02-install/" class="">
+      编译与安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/06-advanced/" class="">
+      高级用法</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/01-intro/" class="">
+      简介</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/05-quantization/" class="">
+      量化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/03-model/" class="">
+      模型下载与转换</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/04-inference/" class="active">
+      推理与服务部署</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/llama-cpp-guide/07-tools/" class="">
+      完整工具参考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+<ul><li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li></ul>
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>推理与服务部署</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#推理与服务部署">推理与服务部署</a>
+      <ul>
+        <li><a href="#cli-交互式推理">CLI 交互式推理</a></li>
+        <li><a href="#llama-serverhttp-服务">llama-server：HTTP 服务</a>
+          <ul>
+            <li><a href="#启动服务">启动服务</a></li>
+            <li><a href="#openai-兼容-api">OpenAI 兼容 API</a></li>
+            <li><a href="#实测性能qwen35-08b-q4_k_mrtx-3090">实测性能（Qwen3.5-0.8B Q4_K_M，RTX 3090）</a></li>
+          </ul>
+        </li>
+        <li><a href="#llama-bench-性能基准">llama-bench 性能基准</a>
+          <ul>
+            <li><a href="#实测数据对比rtx-3090--i9-13900k">实测数据对比（RTX 3090 + i9-13900K）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="推理与服务部署">推理与服务部署<a class="anchor" href="#%e6%8e%a8%e7%90%86%e4%b8%8e%e6%9c%8d%e5%8a%a1%e9%83%a8%e7%bd%b2">#</a></h1>
+<h2 id="cli-交互式推理">CLI 交互式推理<a class="anchor" href="#cli-%e4%ba%a4%e4%ba%92%e5%bc%8f%e6%8e%a8%e7%90%86">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./build/bin/llama-cli <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -m ~/.models/unsloth/Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q4_K_M.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -p <span class="s2">&#34;Hello, please introduce yourself.&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -n <span class="m">128</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --temp 0.7 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -ngl <span class="m">99</span></span></span></code></pre></div><p><strong>关键参数</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>简写</th>
+          <th>说明</th>
+          <th>默认值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--model</code></td>
+          <td><code>-m</code></td>
+          <td>模型路径</td>
+          <td>必需</td>
+      </tr>
+      <tr>
+          <td><code>--prompt</code></td>
+          <td><code>-p</code></td>
+          <td>提示词</td>
+          <td>交互模式</td>
+      </tr>
+      <tr>
+          <td><code>--n-predict</code></td>
+          <td><code>-n</code></td>
+          <td>最大生成 token</td>
+          <td>-1（无限）</td>
+      </tr>
+      <tr>
+          <td><code>--temperature</code></td>
+          <td></td>
+          <td>采样温度</td>
+          <td>0.8</td>
+      </tr>
+      <tr>
+          <td><code>-ngl</code></td>
+          <td></td>
+          <td>GPU 卸载层数</td>
+          <td>99</td>
+      </tr>
+      <tr>
+          <td><code>-c</code></td>
+          <td></td>
+          <td>上下文长度</td>
+          <td>4096</td>
+      </tr>
+      <tr>
+          <td><code>--threads</code></td>
+          <td><code>-t</code></td>
+          <td>CPU 线程数</td>
+          <td>物理核心数</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="llama-serverhttp-服务">llama-server：HTTP 服务<a class="anchor" href="#llama-serverhttp-%e6%9c%8d%e5%8a%a1">#</a></h2>
+<h3 id="启动服务">启动服务<a class="anchor" href="#%e5%90%af%e5%8a%a8%e6%9c%8d%e5%8a%a1">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./build/bin/llama-server <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -m model.gguf <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --port <span class="m">8080</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --host 0.0.0.0 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -ngl <span class="m">99</span></span></span></code></pre></div><p>启动后浏览器访问 <code>http://192.168.1.237:8080</code>，自带 Web UI。</p>
+<h3 id="openai-兼容-api">OpenAI 兼容 API<a class="anchor" href="#openai-%e5%85%bc%e5%ae%b9-api">#</a></h3>
+<p><strong>健康检查</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -s http://localhost:8080/health
+</span></span><span class="line"><span class="cl"><span class="c1"># {&#34;status&#34;:&#34;ok&#34;}</span></span></span></code></pre></div><p><strong>聊天补全</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -s http://localhost:8080/v1/chat/completions <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -H <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -d <span class="s1">&#39;{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    &#34;messages&#34;: [{&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: &#34;用中文解释什么是 llama.cpp&#34;}],
+</span></span></span><span class="line"><span class="cl"><span class="s1">    &#34;max_tokens&#34;: 200
+</span></span></span><span class="line"><span class="cl"><span class="s1">  }&#39;</span></span></span></code></pre></div><h3 id="实测性能qwen35-08b-q4_k_mrtx-3090">实测性能（Qwen3.5-0.8B Q4_K_M，RTX 3090）<a class="anchor" href="#%e5%ae%9e%e6%b5%8b%e6%80%a7%e8%83%bdqwen35-08b-q4_k_mrtx-3090">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>指标</th>
+          <th>值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Prompt 处理</td>
+          <td>39.11 ms / 16 tokens（409 tok/s）</td>
+      </tr>
+      <tr>
+          <td>文本生成</td>
+          <td>546.59 ms / 200 tokens（366 tok/s）</td>
+      </tr>
+      <tr>
+          <td>总响应时间</td>
+          <td>585.69 ms</td>
+      </tr>
+      <tr>
+          <td>显存占用</td>
+          <td>约 8825 MB</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="llama-bench-性能基准">llama-bench 性能基准<a class="anchor" href="#llama-bench-%e6%80%a7%e8%83%bd%e5%9f%ba%e5%87%86">#</a></h2>
+<h3 id="实测数据对比rtx-3090--i9-13900k">实测数据对比（RTX 3090 + i9-13900K）<a class="anchor" href="#%e5%ae%9e%e6%b5%8b%e6%95%b0%e6%8d%ae%e5%af%b9%e6%af%94rtx-3090--i9-13900k">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>配置</th>
+          <th>Prompt 处理（pp512）</th>
+          <th>文本生成（tg128）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>GPU（24 层全卸载）</strong></td>
+          <td><strong>6,128 tok/s</strong></td>
+          <td><strong>368 tok/s</strong></td>
+      </tr>
+      <tr>
+          <td>GPU + Flash Attention</td>
+          <td>6,173 tok/s</td>
+          <td>359 tok/s</td>
+      </tr>
+      <tr>
+          <td><strong>纯 CPU（8 线程）</strong></td>
+          <td><strong>750 tok/s</strong></td>
+          <td><strong>44 tok/s</strong></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>关键结论</strong>：</p>
+<ol>
+<li><strong>GPU 加速带来 8 倍以上速度提升</strong></li>
+<li><strong>Flash Attention 对小模型影响很小</strong>（+0.7% prompt，-2.5% 生成）</li>
+<li><strong>纯 CPU 仍可流畅运行小模型</strong>，44 tok/s 已足够对话使用</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/llama-cpp-guide/03-model/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>模型下载与转换</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/llama-cpp-guide/07-tools/" class="flex align-center">
+        <span>完整工具参考</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#推理与服务部署">推理与服务部署</a>
+      <ul>
+        <li><a href="#cli-交互式推理">CLI 交互式推理</a></li>
+        <li><a href="#llama-serverhttp-服务">llama-server：HTTP 服务</a>
+          <ul>
+            <li><a href="#启动服务">启动服务</a></li>
+            <li><a href="#openai-兼容-api">OpenAI 兼容 API</a></li>
+            <li><a href="#实测性能qwen35-08b-q4_k_mrtx-3090">实测性能（Qwen3.5-0.8B Q4_K_M，RTX 3090）</a></li>
+          </ul>
+        </li>
+        <li><a href="#llama-bench-性能基准">llama-bench 性能基准</a>
+          <ul>
+            <li><a href="#实测数据对比rtx-3090--i9-13900k">实测数据对比（RTX 3090 + i9-13900K）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
