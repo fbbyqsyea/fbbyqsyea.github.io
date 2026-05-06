@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script>
+<head>
   <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -11,7 +11,7 @@ https://github.com/alex-shpak/hugo-book
 <meta name="description" content="">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
-<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8080/tags/">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://fbbyqsyea.github.io/tags/">
   <meta property="og:site_name" content="Bing随遇而安">
   <meta property="og:title" content="Tags">
   <meta property="og:locale" content="zh_cn">
@@ -23,42 +23,37 @@ https://github.com/alex-shpak/hugo-book
 <title>Tags | Bing随遇而安</title>
 <link rel="icon" href="/favicon.svg" >
 <link rel="manifest" href="/manifest.json">
-<link rel="canonical" href="http://localhost:8080/tags/">
+<link rel="canonical" href="https://fbbyqsyea.github.io/tags/">
 <link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
 
 
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/zh.search.min.114359fdd643ad95f649c023fff01b72dd7047d1861d5d5aa1557fbd4b781cf3.js" integrity="sha256-EUNZ/dZDrZX2ScAj//Abct1wR9GGHV1aoVV/vUt4HPM=" crossorigin="anonymous"></script>
+  <script defer src="/zh.search.min.43cfd04bacf6e09b7231ab6da4b9414a1433c7a838e1d3a6424fca2a653fb214.js" integrity="sha256-Q8/QS6z24JtyMattpLlBShQzx6g44dOmQk/KKmU/shQ=" crossorigin="anonymous"></script>
 
 
-<link rel="alternate" type="application/rss+xml" href="http://localhost:8080/tags/index.xml" title="Bing随遇而安" />
+<link rel="alternate" type="application/rss+xml" href="https://fbbyqsyea.github.io/tags/index.xml" title="Bing随遇而安" />
 
   <style>
  
 
-:root {
+html, body {
      
+}
+
+:root {
     --body-background: #000000;
     --body-font-color: #ffffff;
     --color-link: #75beff;
     --color-visited-link: #75beff;
-    
-     
     --color-accent: #6fc3df;
     --color-border: #6fc3df;
     --color-border-active: #ffffff;
-    
-     
     --menu-background: #000000;
     --menu-font-color: #ffffff;
     --menu-border-color: #6fc3df;
-    
-     
     --header-background: #000000;
     --header-font-color: #ffffff;
     --header-border-color: #6fc3df;
-
-     
     --code-background: #000000;
     --code-border: #6fc3df;
 }
@@ -68,48 +63,94 @@ body {
     color: var(--body-font-color) !important;
 }
 
+.book-menu, .book-menu * {
+     
+}
+
+.book-header, .book-header * {
+     
+}
+
+.book-toc, .book-toc * {
+     
+}
+
+.book-content, .markdown, .markdown * {
+     
+}
+
+.book-markdown pre, .book-markdown pre *, .book-markdown code, .markdown p code, .markdown li code, .markdown table code {
+     
+}
+
  
-.book-menu {
-    background: var(--menu-background) !important;
-    border-right: 2px solid var(--menu-border-color) !important;
+.book-menu nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
 }
 
-.book-menu nav a {
-    color: var(--menu-font-color) !important;
+.book-menu nav ul ul {
+    counter-reset: chapter-counter;
 }
 
-.book-menu nav a:hover {
-    color: var(--color-accent) !important;
-    opacity: 1;
+.book-menu nav ul ul li {
+    counter-increment: chapter-counter;
+}
+
+.book-menu nav ul ul li > a::before {
+    content: counter(chapter-counter) ". ";
+    opacity: 0.6;
+    margin-right: 6px;
+    color: var(--menu-font-color);
+    font-family: monospace;
+}
+
+ 
+.book-menu nav > ul > li > a {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-menu nav > ul > li > a::after {
+    content: "▼";
+    font-size: 0.7em;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: transform 0.2s;
+}
+
+.book-menu nav > ul > li.collapsed > a::after {
+    transform: rotate(-90deg);
 }
 
 .book-menu nav a.active {
     color: var(--color-accent) !important;
     font-weight: bold;
     background: rgba(111, 195, 223, 0.1);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 10px;
+    margin-left: -3px;
 }
 
- 
 .book-header {
     background: var(--header-background) !important;
     border-bottom: 2px solid var(--header-border-color) !important;
     color: var(--header-font-color);
+    gap: 0.5rem;
+}
+
+.book-brand img {
+    filter: none !important;
 }
 
 .book-header input {
     background: #111;
     border: 1px solid #333;
     color: #fff;
-}
-
- 
-.book-content {
-    background: #000000;
-}
-
- 
-.markdown {
-    color: #ffffff;
 }
 
 .markdown h1, .markdown h2, .markdown h3, .markdown h4 {
@@ -127,7 +168,6 @@ body {
     border-bottom-color: #ffffff;
 }
 
- 
 .markdown table {
     border-color: #6fc3df;
 }
@@ -138,11 +178,9 @@ body {
     background-color: #111;
 }
 
- 
 .book-markdown pre {
     background: var(--code-background) !important;
     border: 1px solid var(--code-border) !important;
-    box-shadow: none;
     padding: 1rem;
 }
 
@@ -152,63 +190,44 @@ body {
     color: #d4d4d4;
 }
 
- 
 .markdown p code, .markdown li code, .markdown table code {
     background: #111111 !important;
     border: 1px solid #444;
-    color: #9cdcfe;  
+    color: #9cdcfe;
 }
 
- 
 .chroma {
     background-color: #000000 !important;
     color: #ffffff;
     border: none;
 }
-
- 
 .chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
     color: #569cd6 !important;
     font-weight: bold;
 }
-
- 
 .chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
     color: #ce9178 !important;
 }
-
- 
 .chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
     color: #6a9955 !important;
     font-style: italic;
 }
-
- 
 .chroma .nf, .chroma .fm {
     color: #dcdcaa !important;
 }
-
- 
 .chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
     color: #b5cea8 !important;
 }
-
- 
 .chroma .kt, .chroma .nc {
     color: #4ec9b0 !important;
 }
-
- 
 .chroma .nv, .chroma .vc {
     color: #9cdcfe !important;
 }
-
- 
 .chroma .p, .chroma .o {
     color: #ffffff !important;
 }
 
- 
 ::-webkit-scrollbar {
     width: 14px;
     height: 14px;
@@ -218,14 +237,13 @@ body {
     border-left: 1px solid #333;
 }
 ::-webkit-scrollbar-thumb {
-    background: #6fc3df;  
+    background: #6fc3df;
     border: 2px solid #000000;
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #ffffff;
 }
 
- 
 .book-toc nav a {
     color: #888;
 }
@@ -235,14 +253,6 @@ body {
 .book-toc nav a.active {
     color: #6fc3df;
     border-left: 2px solid #6fc3df;
-}
-
- 
-.book-brand img {
-    filter: none !important;
-}
-.book-header {
-    gap: 0.5rem;
 }
 </style>
 
@@ -398,6 +408,25 @@ body {
 
         </li>
       
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/" class="">
+      DeepSeek-TUI</a>
+  
+
+          
+  <ul>
     
   </ul>
 
