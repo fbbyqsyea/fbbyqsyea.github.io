@@ -7,6 +7,8 @@
 &lt;li&gt;&lt;strong&gt;Salesforce Headless Architecture&lt;/strong&gt; 通过 API 暴露整个平台给 AI 代理，支持结果定价&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Cloudflare + Stripe 协议&lt;/strong&gt; AI 代理可自主创建账户、购买域名、部署应用&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Ramp 采购代理&lt;/strong&gt; 运营速度提升 3 倍，供应商成本降低 16%&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Google Cloud Next &amp;lsquo;26&lt;/strong&gt; 发布 &lt;strong&gt;Gemini Enterprise Agent Platform&lt;/strong&gt;（原 Vertex AI），宣布 TPU 8t/8i（计算提升 3 倍）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Oracle AI Database 集成&lt;/strong&gt; Google Cloud 与 Oracle 合作推出 Gemini Enterprise 数据库代理，支持企业数据推理&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="ai最新模型"&gt;AI最新模型&lt;a class="anchor" href="#ai%e6%9c%80%e6%96%b0%e6%a8%a1%e5%9e%8b"&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
@@ -16,6 +18,7 @@
 &lt;li&gt;&lt;strong&gt;K2.6 (Moonshot)&lt;/strong&gt; 12 小时连续工具使用追踪&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;V4 (DeepSeek)&lt;/strong&gt; NIST CAISI：约 8 个月落后美国，但 V4-Pro 声称与 Opus 4.6/GPT-5.4 平齐&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Physical Intelligence π0.7&lt;/strong&gt; 首个机器人基础模型，实现零样本跨实体迁移&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gemma 4 (Google)&lt;/strong&gt; 发布 MTP (Multi-Token Prediction) Drafters，通过推测性解码实现 &lt;strong&gt;3 倍推理加速&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="ai最新算法"&gt;AI最新算法&lt;a class="anchor" href="#ai%e6%9c%80%e6%96%b0%e7%ae%97%e6%b3%95"&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
@@ -24,6 +27,7 @@
 &lt;li&gt;&lt;strong&gt;自动化对齐&lt;/strong&gt; Anthropic 提出递归对齐理论：训练模型自己进行对齐研究&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Agent-World&lt;/strong&gt; 自我演化训练环境（1,978 环境，19,822 工具），8B/14B 模型击败专有基线&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;CUA Verifiers&lt;/strong&gt; 通用验证框架，接近零误报率&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;推测性解码 (Speculative Decoding)&lt;/strong&gt; Google Gemma 4 MTP 架构利用轻量级草稿模型并行验证，解决内存带宽瓶颈，在 Apple Silicon/NVIDIA A100 上加速显著&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="ai-agent最新进展"&gt;AI Agent最新进展&lt;a class="anchor" href="#ai-agent%e6%9c%80%e6%96%b0%e8%bf%9b%e5%b1%95"&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
@@ -33,6 +37,8 @@
 &lt;li&gt;&lt;strong&gt;Snapchat AI 赞助快照&lt;/strong&gt; 交互式品牌 AI 代理在聊天中回答问题并引导购买&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Amazon 对话音频 AI&lt;/strong&gt; 产品页面实时音频问答，综合评论和详情&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;ChatGPT 广告生态&lt;/strong&gt; Adthena 的 AdBridge 将 Google Ads 转换为 ChatGPT 就绪活动&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gemini Enterprise Agent Platform&lt;/strong&gt; 推出 &lt;strong&gt;Agent Sandbox&lt;/strong&gt;（安全沙箱）、&lt;strong&gt;Agent Identity&lt;/strong&gt;（加密身份 ID）和 &lt;strong&gt;Agent Memory Bank&lt;/strong&gt;（长期记忆库）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Google Colab Learn Mode&lt;/strong&gt; 个人编码导师，辅助开发者编写和调试代码&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="其他重要动态"&gt;其他重要动态&lt;a class="anchor" href="#%e5%85%b6%e4%bb%96%e9%87%8d%e8%a6%81%e5%8a%a8%e6%80%81"&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
@@ -43,4 +49,4 @@
 &lt;li&gt;&lt;strong&gt;前沿网络攻击能力&lt;/strong&gt; 每 4 个月翻一番（2025 年底为 7 个月）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;em&gt;数据来源：MarketingProfs, State of AI Newsletter (Nathan Benaich), AISI UK&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;em&gt;数据来源：MarketingProfs, State of AI Newsletter (Nathan Benaich), AISI UK, MarkTechPost, Google Cloud Blog&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
