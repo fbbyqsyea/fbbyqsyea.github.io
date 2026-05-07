@@ -139,9 +139,33 @@ Prefix + :join-pane -t :1    # 从窗口1引入
 
 ## Prefix 键
 
-默认前缀键是 `Ctrl+b`，所有 tmux 快捷键都需先按 Prefix。
+### 什么是 Prefix
 
-常用操作统一模式：**Prefix + 按键**
+Prefix 是 tmux 的**前缀键**，相当于快捷键的"启动器"。它的作用类似 Emacs 的 `C-x` 或 Vim 的 Leader Key：告诉 tmux"接下来输入的按键是发给 tmux 的命令，而不是发给里面的终端程序的"。
+
+### 操作方式
+
+1. **按住** Prefix（默认 `Ctrl + b`）
+2. **松开** 两个键
+3. **按** 快捷键字母
+
+例如 `Prefix + c` 创建新窗口：先按 `Ctrl+b`，松开，再按 `c`。
+
+### 为什么需要 Prefix
+
+因为 tmux 里的终端也需要用快捷键（比如 `Ctrl+c` 终止程序，`Ctrl+l` 清屏）。如果没有 Prefix，tmux 就分不清你是想控制 tmux 还是控制终端程序。
+
+### 修改 Prefix
+
+很多人觉得默认的 `Ctrl+b` 不顺手（距离太远），可以改成 `Ctrl+a`（类似 GNU Screen）：
+
+```bash
+# ~/.tmux.conf
+set -g prefix C-a
+unbind C-b
+bind C-a send-prefix
+```
+修改后生效：`tmux source ~/.tmux.conf`。以后所有快捷键改为先按 `Ctrl+a`，松开，再按其他键。
 
 ## 复制模式（Copy Mode）
 
