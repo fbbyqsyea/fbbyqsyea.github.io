@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8082&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="快速上手# 一键启动# # 安装 npm install -g @anthropic-ai/claude-code # 认证（任选其一） export ANTHROPIC_API_KEY=&#34;sk-ant-xxxxx&#34; # 官方 API export ANTHROPIC_BASE_URL=&#34;https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy&#34; # 第三方 export ANTHROPIC_AUTH_TOKEN=&#34;sk-your-key&#34; # 验证 claude --version claude doctor常用命令速查# # 单发任务（Print 模式） claude -p &#34;修复 auth.py 中的 Bug&#34; --max-turns 5 claude -p &#34;为 API 添加分页&#34; --max-turns 10 # 交互式会话 claude # 进入 REPL claude &#34;重构认证模块&#34; # 带初始提示进入 # PR 审查 git diff main...feature | claude -p &#34;审查此 diff&#34; --max-turns 1 claude -p &#34;审查此 PR&#34; --from-pr 42 --max-turns 10 # 管道输入 cat src/*.py | claude -p &#34;找出所有 TODO&#34; --max-turns 1 # 结构化输出 claude -p &#34;列出所有函数&#34; --output-format json --json-schema &#39;{&#34;type&#34;:&#34;object&#34;,&#34;properties&#34;:{&#34;functions&#34;:{&#34;type&#34;:&#34;array&#34;,&#34;items&#34;:{&#34;type&#34;:&#34;string&#34;}}}}&#39; --max-turns 5 # 指定模型和推理深度 claude -p &#34;复杂架构设计&#34; --model opus --effort high --max-turns 15 # 工作树模式 claude -w feature-x --tmux配置文件模板# // ~/.claude/settings.json { &#34;env&#34;: { &#34;ANTHROPIC_API_KEY&#34;: &#34;sk-ant-xxxxx&#34; }, &#34;permissions&#34;: { &#34;allow&#34;: [&#34;Read&#34;, &#34;Bash(npm run lint:*)&#34;, &#34;WebSearch&#34;], &#34;ask&#34;: [&#34;Write(*.ts)&#34;, &#34;Bash(git push*)&#34;], &#34;deny&#34;: [&#34;Read(.env)&#34;, &#34;Bash(rm -rf *)&#34;] } }项目 CLAUDE.md 模板# # 项目名 ## 架构 - 技术栈说明 - 数据库、缓存等基础设施 ## 关键命令 - 构建、测试、运行命令 ## 代码规范 - 缩进、类型注解、文档风格 - 禁止事项下一步# 阅读各章深入了解特定功能 创建自己的 .claude/agents/ 和 .claude/skills/ 配置 MCP 服务器连接外部服务 尝试 /batch 和并行工作流处理大规模任务 ">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8082/books/claude-code/10-quick-start/">
+  <meta property="og:site_name" content="Bing随遇而安">
+  <meta property="og:title" content="快速上手">
+  <meta property="og:description" content="快速上手# 一键启动# # 安装 npm install -g @anthropic-ai/claude-code # 认证（任选其一） export ANTHROPIC_API_KEY=&#34;sk-ant-xxxxx&#34; # 官方 API export ANTHROPIC_BASE_URL=&#34;https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy&#34; # 第三方 export ANTHROPIC_AUTH_TOKEN=&#34;sk-your-key&#34; # 验证 claude --version claude doctor常用命令速查# # 单发任务（Print 模式） claude -p &#34;修复 auth.py 中的 Bug&#34; --max-turns 5 claude -p &#34;为 API 添加分页&#34; --max-turns 10 # 交互式会话 claude # 进入 REPL claude &#34;重构认证模块&#34; # 带初始提示进入 # PR 审查 git diff main...feature | claude -p &#34;审查此 diff&#34; --max-turns 1 claude -p &#34;审查此 PR&#34; --from-pr 42 --max-turns 10 # 管道输入 cat src/*.py | claude -p &#34;找出所有 TODO&#34; --max-turns 1 # 结构化输出 claude -p &#34;列出所有函数&#34; --output-format json --json-schema &#39;{&#34;type&#34;:&#34;object&#34;,&#34;properties&#34;:{&#34;functions&#34;:{&#34;type&#34;:&#34;array&#34;,&#34;items&#34;:{&#34;type&#34;:&#34;string&#34;}}}}&#39; --max-turns 5 # 指定模型和推理深度 claude -p &#34;复杂架构设计&#34; --model opus --effort high --max-turns 15 # 工作树模式 claude -w feature-x --tmux配置文件模板# // ~/.claude/settings.json { &#34;env&#34;: { &#34;ANTHROPIC_API_KEY&#34;: &#34;sk-ant-xxxxx&#34; }, &#34;permissions&#34;: { &#34;allow&#34;: [&#34;Read&#34;, &#34;Bash(npm run lint:*)&#34;, &#34;WebSearch&#34;], &#34;ask&#34;: [&#34;Write(*.ts)&#34;, &#34;Bash(git push*)&#34;], &#34;deny&#34;: [&#34;Read(.env)&#34;, &#34;Bash(rm -rf *)&#34;] } }项目 CLAUDE.md 模板# # 项目名 ## 架构 - 技术栈说明 - 数据库、缓存等基础设施 ## 关键命令 - 构建、测试、运行命令 ## 代码规范 - 缩进、类型注解、文档风格 - 禁止事项下一步# 阅读各章深入了解特定功能 创建自己的 .claude/agents/ 和 .claude/skills/ 配置 MCP 服务器连接外部服务 尝试 /batch 和并行工作流处理大规模任务">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="books">
+
+
+  <meta itemprop="name" content="快速上手">
+  <meta itemprop="description" content="快速上手# 一键启动# # 安装 npm install -g @anthropic-ai/claude-code # 认证（任选其一） export ANTHROPIC_API_KEY=&#34;sk-ant-xxxxx&#34; # 官方 API export ANTHROPIC_BASE_URL=&#34;https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy&#34; # 第三方 export ANTHROPIC_AUTH_TOKEN=&#34;sk-your-key&#34; # 验证 claude --version claude doctor常用命令速查# # 单发任务（Print 模式） claude -p &#34;修复 auth.py 中的 Bug&#34; --max-turns 5 claude -p &#34;为 API 添加分页&#34; --max-turns 10 # 交互式会话 claude # 进入 REPL claude &#34;重构认证模块&#34; # 带初始提示进入 # PR 审查 git diff main...feature | claude -p &#34;审查此 diff&#34; --max-turns 1 claude -p &#34;审查此 PR&#34; --from-pr 42 --max-turns 10 # 管道输入 cat src/*.py | claude -p &#34;找出所有 TODO&#34; --max-turns 1 # 结构化输出 claude -p &#34;列出所有函数&#34; --output-format json --json-schema &#39;{&#34;type&#34;:&#34;object&#34;,&#34;properties&#34;:{&#34;functions&#34;:{&#34;type&#34;:&#34;array&#34;,&#34;items&#34;:{&#34;type&#34;:&#34;string&#34;}}}}&#39; --max-turns 5 # 指定模型和推理深度 claude -p &#34;复杂架构设计&#34; --model opus --effort high --max-turns 15 # 工作树模式 claude -w feature-x --tmux配置文件模板# // ~/.claude/settings.json { &#34;env&#34;: { &#34;ANTHROPIC_API_KEY&#34;: &#34;sk-ant-xxxxx&#34; }, &#34;permissions&#34;: { &#34;allow&#34;: [&#34;Read&#34;, &#34;Bash(npm run lint:*)&#34;, &#34;WebSearch&#34;], &#34;ask&#34;: [&#34;Write(*.ts)&#34;, &#34;Bash(git push*)&#34;], &#34;deny&#34;: [&#34;Read(.env)&#34;, &#34;Bash(rm -rf *)&#34;] } }项目 CLAUDE.md 模板# # 项目名 ## 架构 - 技术栈说明 - 数据库、缓存等基础设施 ## 关键命令 - 构建、测试、运行命令 ## 代码规范 - 缩进、类型注解、文档风格 - 禁止事项下一步# 阅读各章深入了解特定功能 创建自己的 .claude/agents/ 和 .claude/skills/ 配置 MCP 服务器连接外部服务 尝试 /batch 和并行工作流处理大规模任务">
+  <meta itemprop="wordCount" content="173">
+
+<title>快速上手 | Bing随遇而安</title>
+<link rel="icon" href="/favicon.svg" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:8082/books/claude-code/10-quick-start/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/zh.search.min.de42cece59230b0a4e72885d793b365c386fe10ed189999970476323d264292d.js" integrity="sha256-3kLOzlkjCwpOcohdeTs2XDhv4Q7RiZmZcEdjI9JkKS0=" crossorigin="anonymous"></script>
+
+
+
+  <style>
+ 
+
+html, body {
+     
+}
+
+:root {
+    --body-background: #000000;
+    --body-font-color: #ffffff;
+    --color-link: #75beff;
+    --color-visited-link: #75beff;
+    --color-accent: #6fc3df;
+    --color-border: #6fc3df;
+    --color-border-active: #ffffff;
+    --menu-background: #000000;
+    --menu-font-color: #ffffff;
+    --menu-border-color: #6fc3df;
+    --header-background: #000000;
+    --header-font-color: #ffffff;
+    --header-border-color: #6fc3df;
+    --code-background: #000000;
+    --code-border: #6fc3df;
+}
+
+body {
+    background-color: var(--body-background) !important;
+    color: var(--body-font-color) !important;
+}
+
+.book-menu, .book-menu * {
+     
+}
+
+.book-header, .book-header * {
+     
+}
+
+.book-toc, .book-toc * {
+     
+}
+
+.book-content, .markdown, .markdown * {
+     
+}
+
+.book-markdown pre, .book-markdown pre *, .book-markdown code, .markdown p code, .markdown li code, .markdown table code {
+     
+}
+
+ 
+.book-menu nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.book-menu nav ul ul {
+    counter-reset: chapter-counter;
+}
+
+.book-menu nav ul ul li {
+    counter-increment: chapter-counter;
+}
+
+.book-menu nav ul ul li > a::before {
+    content: counter(chapter-counter) ". ";
+    opacity: 0.6;
+    margin-right: 6px;
+    color: var(--menu-font-color);
+    font-family: monospace;
+}
+
+ 
+.book-menu nav > ul > li > a {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-menu nav > ul > li > a::after {
+    content: "▼";
+    font-size: 0.7em;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: transform 0.2s;
+}
+
+.book-menu nav > ul > li.collapsed > a::after {
+    transform: rotate(-90deg);
+}
+
+.book-menu nav a.active {
+    color: var(--color-accent) !important;
+    font-weight: bold;
+    background: rgba(111, 195, 223, 0.1);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 10px;
+    margin-left: -3px;
+}
+
+.book-header {
+    background: var(--header-background) !important;
+    border-bottom: 2px solid var(--header-border-color) !important;
+    color: var(--header-font-color);
+    gap: 0.5rem;
+}
+
+.book-brand img {
+    filter: none !important;
+}
+
+.book-header input {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+.markdown a {
+    color: var(--color-link);
+    border-bottom: 1px dotted var(--color-link);
+}
+
+.markdown a:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.markdown table {
+    border-color: #6fc3df;
+}
+.markdown table th, .markdown table td {
+    border-color: #6fc3df;
+}
+.markdown table th {
+    background-color: #111;
+}
+
+.book-markdown pre {
+    background: var(--code-background) !important;
+    border: 1px solid var(--code-border) !important;
+    padding: 1rem;
+}
+
+.book-markdown code {
+    background: #111111 !important;
+    border: 1px solid #333;
+    color: #d4d4d4;
+}
+
+.markdown p code, .markdown li code, .markdown table code {
+    background: #111111 !important;
+    border: 1px solid #444;
+    color: #9cdcfe;
+}
+
+.chroma {
+    background-color: #000000 !important;
+    color: #ffffff;
+    border: none;
+}
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+    color: #ce9178 !important;
+}
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+.chroma .nf, .chroma .fm {
+    color: #dcdcaa !important;
+}
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+    color: #b5cea8 !important;
+}
+.chroma .kt, .chroma .nc {
+    color: #4ec9b0 !important;
+}
+.chroma .nv, .chroma .vc {
+    color: #9cdcfe !important;
+}
+.chroma .p, .chroma .o {
+    color: #ffffff !important;
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+    background: #6fc3df;
+    border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+.book-toc nav a {
+    color: #888;
+}
+.book-toc nav a:hover {
+    color: #fff;
+}
+.book-toc nav a.active {
+    color: #6fc3df;
+    border-left: 2px solid #6fc3df;
+}
+</style>
+
+</head>
+<body dir="ltr" class="book-kind-page book-type-books">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.svg" alt="Logo" /><span>Bing随遇而安</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-594d75a63ab662c39c488c6c20b6c066" class="toggle"  />
+    
+    <label for="section-594d75a63ab662c39c488c6c20b6c066" class="flex">
+      <a href="/books/llama-cpp/" class="">
+        llama.cpp 本地推理指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/01-intro/" class="">
+      简介</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/02-install/" class="">
+      编译与安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/03-model/" class="">
+      模型下载与转换</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/04-inference/" class="">
+      推理与服务部署</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/05-quantization/" class="">
+      量化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/06-advanced/" class="">
+      高级用法</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/07-tools/" class="">
+      完整工具参考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-f1b47051b07d13559e01140a95da8e02" class="toggle" checked />
+    
+    <label for="section-f1b47051b07d13559e01140a95da8e02" class="flex">
+      <a href="/books/claude-code/" class="">
+        Claude Code 完全指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/01-install/" class="">
+      安装与配置</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/02-modes/" class="">
+      两种使用模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/03-cli-flags/" class="">
+      CLI 参数完整参考</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/03-tmux/" class="">
+      tmux 编排详解</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/04-slash-commands/" class="">
+      斜杠命令与键盘快捷键</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/05-pr-review/" class="">
+      PR 审查与工作树</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/06-mcp/" class="">
+      MCP 集成</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/07-agents-hooks/" class="">
+      自定义子智能体与钩子</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/08-cost-performance/" class="">
+      成本与性能优化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/09-pitfalls/" class="">
+      常见陷阱与注意事项</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/10-quick-start/" class="active">
+      快速上手</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-256d3d8b571b16c3fbc024b70a10a817" class="toggle"  />
+    
+    <label for="section-256d3d8b571b16c3fbc024b70a10a817" class="flex">
+      <a href="/books/deepseek-tui/" class="">
+        DeepSeek-TUI</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/01-install/" class="">
+      安装与认证</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/02-architecture/" class="">
+      架构设计</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/03-modes/" class="">
+      三种交互模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/04-tools/" class="">
+      工具系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/05-skills/" class="">
+      Skills 系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/06-sessions/" class="">
+      会话管理</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/07-mcp/" class="">
+      MCP 支持</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/08-comparison/" class="">
+      与 Hermes Agent 对比</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+<ul><li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li></ul>
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>快速上手</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#快速上手">快速上手</a>
+      <ul>
+        <li><a href="#一键启动">一键启动</a></li>
+        <li><a href="#常用命令速查">常用命令速查</a></li>
+        <li><a href="#配置文件模板">配置文件模板</a></li>
+        <li><a href="#项目-claudemd-模板">项目 CLAUDE.md 模板</a></li>
+        <li><a href="#下一步">下一步</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="快速上手">快速上手<a class="anchor" href="#%e5%bf%ab%e9%80%9f%e4%b8%8a%e6%89%8b">#</a></h1>
+<h2 id="一键启动">一键启动<a class="anchor" href="#%e4%b8%80%e9%94%ae%e5%90%af%e5%8a%a8">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 安装</span>
+</span></span><span class="line"><span class="cl">npm install -g @anthropic-ai/claude-code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 认证（任选其一）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ANTHROPIC_API_KEY</span><span class="o">=</span><span class="s2">&#34;sk-ant-xxxxx&#34;</span>                     <span class="c1"># 官方 API</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ANTHROPIC_BASE_URL</span><span class="o">=</span><span class="s2">&#34;https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy&#34;</span>  <span class="c1"># 第三方</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ANTHROPIC_AUTH_TOKEN</span><span class="o">=</span><span class="s2">&#34;sk-your-key&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 验证</span>
+</span></span><span class="line"><span class="cl">claude --version
+</span></span><span class="line"><span class="cl">claude doctor</span></span></code></pre></div><h2 id="常用命令速查">常用命令速查<a class="anchor" href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4%e9%80%9f%e6%9f%a5">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 单发任务（Print 模式）</span>
+</span></span><span class="line"><span class="cl">claude -p <span class="s2">&#34;修复 auth.py 中的 Bug&#34;</span> --max-turns <span class="m">5</span>
+</span></span><span class="line"><span class="cl">claude -p <span class="s2">&#34;为 API 添加分页&#34;</span> --max-turns <span class="m">10</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 交互式会话</span>
+</span></span><span class="line"><span class="cl">claude                                    <span class="c1"># 进入 REPL</span>
+</span></span><span class="line"><span class="cl">claude <span class="s2">&#34;重构认证模块&#34;</span>                      <span class="c1"># 带初始提示进入</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># PR 审查</span>
+</span></span><span class="line"><span class="cl">git diff main...feature <span class="p">|</span> claude -p <span class="s2">&#34;审查此 diff&#34;</span> --max-turns <span class="m">1</span>
+</span></span><span class="line"><span class="cl">claude -p <span class="s2">&#34;审查此 PR&#34;</span> --from-pr <span class="m">42</span> --max-turns <span class="m">10</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 管道输入</span>
+</span></span><span class="line"><span class="cl">cat src/*.py <span class="p">|</span> claude -p <span class="s2">&#34;找出所有 TODO&#34;</span> --max-turns <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 结构化输出</span>
+</span></span><span class="line"><span class="cl">claude -p <span class="s2">&#34;列出所有函数&#34;</span> --output-format json --json-schema <span class="s1">&#39;{&#34;type&#34;:&#34;object&#34;,&#34;properties&#34;:{&#34;functions&#34;:{&#34;type&#34;:&#34;array&#34;,&#34;items&#34;:{&#34;type&#34;:&#34;string&#34;}}}}&#39;</span> --max-turns <span class="m">5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 指定模型和推理深度</span>
+</span></span><span class="line"><span class="cl">claude -p <span class="s2">&#34;复杂架构设计&#34;</span> --model opus --effort high --max-turns <span class="m">15</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 工作树模式</span>
+</span></span><span class="line"><span class="cl">claude -w feature-x --tmux</span></span></code></pre></div><h2 id="配置文件模板">配置文件模板<a class="anchor" href="#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e6%a8%a1%e6%9d%bf">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// ~/.claude/settings.json
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;env&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;ANTHROPIC_API_KEY&#34;</span><span class="p">:</span> <span class="s2">&#34;sk-ant-xxxxx&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;permissions&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;allow&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Read&#34;</span><span class="p">,</span> <span class="s2">&#34;Bash(npm run lint:*)&#34;</span><span class="p">,</span> <span class="s2">&#34;WebSearch&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;ask&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Write(*.ts)&#34;</span><span class="p">,</span> <span class="s2">&#34;Bash(git push*)&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;deny&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Read(.env)&#34;</span><span class="p">,</span> <span class="s2">&#34;Bash(rm -rf *)&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div><h2 id="项目-claudemd-模板">项目 CLAUDE.md 模板<a class="anchor" href="#%e9%a1%b9%e7%9b%ae-claudemd-%e6%a8%a1%e6%9d%bf">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gh"># 项目名
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 架构
+</span></span></span><span class="line"><span class="cl"><span class="k">-</span> 技术栈说明
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 数据库、缓存等基础设施
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 关键命令
+</span></span></span><span class="line"><span class="cl"><span class="k">-</span> 构建、测试、运行命令
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 代码规范
+</span></span></span><span class="line"><span class="cl"><span class="k">-</span> 缩进、类型注解、文档风格
+</span></span><span class="line"><span class="cl">- 禁止事项</span></span></code></pre></div><h2 id="下一步">下一步<a class="anchor" href="#%e4%b8%8b%e4%b8%80%e6%ad%a5">#</a></h2>
+<ul>
+<li>阅读各章深入了解特定功能</li>
+<li>创建自己的 <code>.claude/agents/</code> 和 <code>.claude/skills/</code></li>
+<li>配置 MCP 服务器连接外部服务</li>
+<li>尝试 <code>/batch</code> 和并行工作流处理大规模任务</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/books/claude-code/09-pitfalls/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>常见陷阱与注意事项</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/books/deepseek-tui/" class="flex align-center">
+        <span>DeepSeek-TUI</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#快速上手">快速上手</a>
+      <ul>
+        <li><a href="#一键启动">一键启动</a></li>
+        <li><a href="#常用命令速查">常用命令速查</a></li>
+        <li><a href="#配置文件模板">配置文件模板</a></li>
+        <li><a href="#项目-claudemd-模板">项目 CLAUDE.md 模板</a></li>
+        <li><a href="#下一步">下一步</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
