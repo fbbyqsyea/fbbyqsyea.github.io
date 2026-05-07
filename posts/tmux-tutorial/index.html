@@ -1,0 +1,260 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content='Tmux 详细使用教程# 什么是 Tmux# Tmux（Terminal Multiplexer）是一个终端复用器，允许你在一个终端窗口中管理多个会话、窗口和面板。核心优势：
+会话持久化：断开 SSH 连接后任务继续运行，重新连接后可恢复 多面板工作区：单屏幕分割多个终端，并行工作 窗口管理：每个会话可包含多个窗口，类似浏览器的标签页 安装# # Ubuntu/Debian sudo apt install tmux # 查看版本 tmux -V核心概念# Tmux 的层级结构：会话（Session） → 窗口（Window） → 面板（Pane）
+Session：最高层级，一个独立的工作环境 Window：会话中的标签页，全屏显示 Pane：窗口中分割出的矩形区域 基本操作# 会话管理# # 创建新会话（默认命名 0, 1, 2...） tmux # 创建命名会话 tmux new -s work # 列出所有会话 tmux ls # 或 tmux list-sessions # 附加到会话 tmux attach -t work # 简写 tmux a -t work # 附加到最新会话 tmux attach # 切换到会话（在 tmux 内部） Prefix + s # 交互式选择 Prefix + ( # 上一个会话 Prefix + ) # 下一个会话 # 重命名会话 Prefix + $ # 杀死会话 tmux kill-session -t work # 杀死所有会话 tmux kill-server窗口管理# # 创建新窗口 Prefix + c # 关闭当前窗口 Prefix + & # 或 exit # 切换到窗口 Prefix + 数字键 # 直接跳转（0-9） Prefix + w # 交互式选择 Prefix + p # 上一个窗口 Prefix + n # 下一个窗口 Prefix + l # 上一次使用的窗口 # 重命名窗口 Prefix + , # 移动窗口位置 Prefix + . # 修改窗口编号 Prefix + :move-window -t 3 # 移动到编号 3 # 交换窗口 Prefix + :swap-window -t 2 # 与编号 2 交换面板管理# # 分割面板 Prefix + % # 垂直分割（左右） Prefix + " # 水平分割（上下） # 切换面板焦点 Prefix + 方向键 # 上下左右 Prefix + o # 下一个面板 Prefix + ; # 上一个活动面板 # 调整面板大小 Prefix + Ctrl+方向键 # 逐步调整 Prefix + M-方向键 # 快速调整（Alt+方向键） # 面板布局 Prefix + Space # 切换预设布局 Prefix + :select-layout even-horizontal # 水平均分 Prefix + :select-layout even-vertical # 垂直均分 Prefix + :select-layout main-horizontal # 主面板在上 Prefix + :select-layout main-vertical # 主面板在左 Prefix + :select-layout tiled # 平铺 # 关闭面板 Prefix + x # 确认后关闭 # 或直接 exit # 面板操作 Prefix + z # 全屏切换当前面板（zoom） Prefix + ! # 拆分为独立窗口 Prefix + { # 与前一个面板交换位置 Prefix + } # 与后一个面板交换位置 # 从面板创建新窗口 Prefix + :break-pane # 从其他窗口引入面板 Prefix + :join-pane -t :1 # 从窗口1引入Prefix 键# 默认前缀键是 Ctrl+b，所有 tmux 快捷键都需先按 Prefix。
+'><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#2e3440"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://fbbyqsyea.github.io/posts/tmux-tutorial/"><meta property="og:site_name" content="Bing随遇而安"><meta property="og:title" content="Tmux 详细使用教程"><meta property="og:description" content='Tmux 详细使用教程# 什么是 Tmux# Tmux（Terminal Multiplexer）是一个终端复用器，允许你在一个终端窗口中管理多个会话、窗口和面板。核心优势：
+会话持久化：断开 SSH 连接后任务继续运行，重新连接后可恢复 多面板工作区：单屏幕分割多个终端，并行工作 窗口管理：每个会话可包含多个窗口，类似浏览器的标签页 安装# # Ubuntu/Debian sudo apt install tmux # 查看版本 tmux -V核心概念# Tmux 的层级结构：会话（Session） → 窗口（Window） → 面板（Pane）
+Session：最高层级，一个独立的工作环境 Window：会话中的标签页，全屏显示 Pane：窗口中分割出的矩形区域 基本操作# 会话管理# # 创建新会话（默认命名 0, 1, 2...） tmux # 创建命名会话 tmux new -s work # 列出所有会话 tmux ls # 或 tmux list-sessions # 附加到会话 tmux attach -t work # 简写 tmux a -t work # 附加到最新会话 tmux attach # 切换到会话（在 tmux 内部） Prefix + s # 交互式选择 Prefix + ( # 上一个会话 Prefix + ) # 下一个会话 # 重命名会话 Prefix + $ # 杀死会话 tmux kill-session -t work # 杀死所有会话 tmux kill-server窗口管理# # 创建新窗口 Prefix + c # 关闭当前窗口 Prefix + & # 或 exit # 切换到窗口 Prefix + 数字键 # 直接跳转（0-9） Prefix + w # 交互式选择 Prefix + p # 上一个窗口 Prefix + n # 下一个窗口 Prefix + l # 上一次使用的窗口 # 重命名窗口 Prefix + , # 移动窗口位置 Prefix + . # 修改窗口编号 Prefix + :move-window -t 3 # 移动到编号 3 # 交换窗口 Prefix + :swap-window -t 2 # 与编号 2 交换面板管理# # 分割面板 Prefix + % # 垂直分割（左右） Prefix + " # 水平分割（上下） # 切换面板焦点 Prefix + 方向键 # 上下左右 Prefix + o # 下一个面板 Prefix + ; # 上一个活动面板 # 调整面板大小 Prefix + Ctrl+方向键 # 逐步调整 Prefix + M-方向键 # 快速调整（Alt+方向键） # 面板布局 Prefix + Space # 切换预设布局 Prefix + :select-layout even-horizontal # 水平均分 Prefix + :select-layout even-vertical # 垂直均分 Prefix + :select-layout main-horizontal # 主面板在上 Prefix + :select-layout main-vertical # 主面板在左 Prefix + :select-layout tiled # 平铺 # 关闭面板 Prefix + x # 确认后关闭 # 或直接 exit # 面板操作 Prefix + z # 全屏切换当前面板（zoom） Prefix + ! # 拆分为独立窗口 Prefix + { # 与前一个面板交换位置 Prefix + } # 与后一个面板交换位置 # 从面板创建新窗口 Prefix + :break-pane # 从其他窗口引入面板 Prefix + :join-pane -t :1 # 从窗口1引入Prefix 键# 默认前缀键是 Ctrl+b，所有 tmux 快捷键都需先按 Prefix。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-07T15:40:00+08:00"><meta property="article:modified_time" content="2026-05-07T15:40:00+08:00"><meta itemprop=name content="Tmux 详细使用教程"><meta itemprop=description content='Tmux 详细使用教程# 什么是 Tmux# Tmux（Terminal Multiplexer）是一个终端复用器，允许你在一个终端窗口中管理多个会话、窗口和面板。核心优势：
+会话持久化：断开 SSH 连接后任务继续运行，重新连接后可恢复 多面板工作区：单屏幕分割多个终端，并行工作 窗口管理：每个会话可包含多个窗口，类似浏览器的标签页 安装# # Ubuntu/Debian sudo apt install tmux # 查看版本 tmux -V核心概念# Tmux 的层级结构：会话（Session） → 窗口（Window） → 面板（Pane）
+Session：最高层级，一个独立的工作环境 Window：会话中的标签页，全屏显示 Pane：窗口中分割出的矩形区域 基本操作# 会话管理# # 创建新会话（默认命名 0, 1, 2...） tmux # 创建命名会话 tmux new -s work # 列出所有会话 tmux ls # 或 tmux list-sessions # 附加到会话 tmux attach -t work # 简写 tmux a -t work # 附加到最新会话 tmux attach # 切换到会话（在 tmux 内部） Prefix + s # 交互式选择 Prefix + ( # 上一个会话 Prefix + ) # 下一个会话 # 重命名会话 Prefix + $ # 杀死会话 tmux kill-session -t work # 杀死所有会话 tmux kill-server窗口管理# # 创建新窗口 Prefix + c # 关闭当前窗口 Prefix + & # 或 exit # 切换到窗口 Prefix + 数字键 # 直接跳转（0-9） Prefix + w # 交互式选择 Prefix + p # 上一个窗口 Prefix + n # 下一个窗口 Prefix + l # 上一次使用的窗口 # 重命名窗口 Prefix + , # 移动窗口位置 Prefix + . # 修改窗口编号 Prefix + :move-window -t 3 # 移动到编号 3 # 交换窗口 Prefix + :swap-window -t 2 # 与编号 2 交换面板管理# # 分割面板 Prefix + % # 垂直分割（左右） Prefix + " # 水平分割（上下） # 切换面板焦点 Prefix + 方向键 # 上下左右 Prefix + o # 下一个面板 Prefix + ; # 上一个活动面板 # 调整面板大小 Prefix + Ctrl+方向键 # 逐步调整 Prefix + M-方向键 # 快速调整（Alt+方向键） # 面板布局 Prefix + Space # 切换预设布局 Prefix + :select-layout even-horizontal # 水平均分 Prefix + :select-layout even-vertical # 垂直均分 Prefix + :select-layout main-horizontal # 主面板在上 Prefix + :select-layout main-vertical # 主面板在左 Prefix + :select-layout tiled # 平铺 # 关闭面板 Prefix + x # 确认后关闭 # 或直接 exit # 面板操作 Prefix + z # 全屏切换当前面板（zoom） Prefix + ! # 拆分为独立窗口 Prefix + { # 与前一个面板交换位置 Prefix + } # 与后一个面板交换位置 # 从面板创建新窗口 Prefix + :break-pane # 从其他窗口引入面板 Prefix + :join-pane -t :1 # 从窗口1引入Prefix 键# 默认前缀键是 Ctrl+b，所有 tmux 快捷键都需先按 Prefix。'><meta itemprop=datePublished content="2026-05-07T15:40:00+08:00"><meta itemprop=dateModified content="2026-05-07T15:40:00+08:00"><meta itemprop=wordCount content="896"><title>Tmux 详细使用教程 | Bing随遇而安</title><link rel=icon href=/favicon.svg><link rel=manifest href=/manifest.json><link rel=canonical href=https://fbbyqsyea.github.io/posts/tmux-tutorial/><link rel=stylesheet href=/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32+lj3Oak2HtfWWXrdia9E=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/zh.search.min.dcf0d8878e61c6434ed6edc291759b4a491d41724b99ee314ffc10f4c90afe21.js integrity="sha256-3PDYh45hxkNO1u3CkXWbSkkdQXJLme4xT/wQ9MkK/iE=" crossorigin=anonymous></script><style>html,body{}:root{--body-background:#000000;--body-font-color:#ffffff;--color-link:#75beff;--color-visited-link:#75beff;--color-accent:#6fc3df;--color-border:#6fc3df;--color-border-active:#ffffff;--menu-background:#000000;--menu-font-color:#ffffff;--menu-border-color:#6fc3df;--header-background:#000000;--header-font-color:#ffffff;--header-border-color:#6fc3df;--code-background:#000000;--code-border:#6fc3df}body{background-color:var(--body-background)!important;color:var(--body-font-color)!important}.book-menu,.book-menu *{}.book-header,.book-header *{}.book-toc,.book-toc *{}.book-content,.markdown,.markdown *{}.book-markdown pre,.book-markdown pre *,.book-markdown code,.markdown p code,.markdown li code,.markdown table code{}.book-menu nav ul{list-style:none;padding-left:0;margin:0}.book-menu nav ul ul{counter-reset:chapter-counter}.book-menu nav ul ul li{counter-increment:chapter-counter}.book-menu nav ul ul li>a::before{content:counter(chapter-counter)". ";opacity:.6;margin-right:6px;color:var(--menu-font-color);font-family:monospace}.book-menu nav>ul>li>a{cursor:pointer;font-weight:700;display:flex;justify-content:space-between;align-items:center}.book-menu nav>ul>li>a::after{content:"▼";font-size:.7em;margin-left:8px;opacity:.7;transition:transform .2s}.book-menu nav>ul>li.collapsed>a::after{transform:rotate(-90deg)}.book-menu nav a.active{color:var(--color-accent)!important;font-weight:700;background:rgba(111,195,223,.1);border-left:3px solid var(--color-accent);padding-left:10px;margin-left:-3px}.book-header{background:var(--header-background)!important;border-bottom:2px solid var(--header-border-color)!important;color:var(--header-font-color);gap:.5rem}.book-brand img{filter:none!important}.book-header input{background:#111;border:1px solid #333;color:#fff}.markdown h1,.markdown h2,.markdown h3,.markdown h4{color:#fff;border-bottom-color:#333}.markdown a{color:var(--color-link);border-bottom:1px dotted var(--color-link)}.markdown a:hover{color:#fff;border-bottom-color:#fff}.markdown table{border-color:#6fc3df}.markdown table th,.markdown table td{border-color:#6fc3df}.markdown table th{background-color:#111}.book-markdown pre{background:var(--code-background)!important;border:1px solid var(--code-border)!important;padding:1rem}.book-markdown code{background:#111!important;border:1px solid #333;color:#d4d4d4}.markdown p code,.markdown li code,.markdown table code{background:#111!important;border:1px solid #444;color:#9cdcfe}.chroma{background-color:#000!important;color:#fff;border:none}.chroma .k,.chroma .kc,.chroma .kd,.chroma .kp,.chroma .kr,.chroma .kt{color:#569cd6!important;font-weight:700}.chroma .s,.chroma .sa,.chroma .sb,.chroma .sc,.chroma .dl,.chroma .sd,.chroma .s2,.chroma .se,.chroma .sh,.chroma .si,.chroma .s1{color:#ce9178!important}.chroma .c,.chroma .ch,.chroma .cm,.chroma .cp,.chroma .cpf,.chroma .c1,.chroma .cs{color:#6a9955!important;font-style:italic}.chroma .nf,.chroma .fm{color:#dcdcaa!important}.chroma .m,.chroma .mb,.chroma .mf,.chroma .mh,.chroma .mi,.chroma .il,.chroma .mo{color:#b5cea8!important}.chroma .kt,.chroma .nc{color:#4ec9b0!important}.chroma .nv,.chroma .vc{color:#9cdcfe!important}.chroma .p,.chroma .o{color:#fff!important}::-webkit-scrollbar{width:14px;height:14px}::-webkit-scrollbar-track{background:#000;border-left:1px solid #333}::-webkit-scrollbar-thumb{background:#6fc3df;border:2px solid #000}::-webkit-scrollbar-thumb:hover{background:#fff}.book-toc nav a{color:#888}.book-toc nav a:hover{color:#fff}.book-toc nav a.active{color:#6fc3df;border-left:2px solid #6fc3df}</style></head><body dir=ltr class="book-kind-page book-type-posts"><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/logo.svg alt=Logo><span>Bing随遇而安</span></a></h2><div class="book-search hidden"><input id=book-search-input type=text placeholder=搜索 aria-label=搜索 maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><ul><li><a>Posts</a><ul><li><a href=/posts/tmux-tutorial/ class=active>Tmux 详细使用教程</a></li></ul></li><li class=book-section-flat><a href=/ai-daily/>AI 日报</a><ul><li><a href=/ai-daily/2026-05-07/>AI 日报 - 2026年5月7日</a></li></ul></li><li class=book-section-flat><a href=/books/>书库</a><ul><li><input type=checkbox id=section-bf01155bb571ea3ee34b44affb9dd4bd class=toggle>
+<label for=section-bf01155bb571ea3ee34b44affb9dd4bd class=flex><a href=/books/llama-cpp/>llama.cpp 本地推理指南</a>
+<img src=/icons/chevron-right.svg class=book-icon alt=Expand></label><ul><li><a href=/books/llama-cpp/01-intro/>简介</a></li><li><a href=/books/llama-cpp/02-install/>编译与安装</a></li><li><a href=/books/llama-cpp/03-model/>模型下载与转换</a></li><li><a href=/books/llama-cpp/04-inference/>推理与服务部署</a></li><li><a href=/books/llama-cpp/05-quantization/>量化</a></li><li><a href=/books/llama-cpp/06-advanced/>高级用法</a></li><li><a href=/books/llama-cpp/07-tools/>完整工具参考</a></li></ul></li><li><input type=checkbox id=section-66b4ae20b441ccd92b53d12213a2bdf1 class=toggle>
+<label for=section-66b4ae20b441ccd92b53d12213a2bdf1 class=flex><a href=/books/claude-code/>Claude Code 完全指南</a>
+<img src=/icons/chevron-right.svg class=book-icon alt=Expand></label><ul><li><a href=/books/claude-code/01-install/>安装与配置</a></li><li><a href=/books/claude-code/02-modes/>两种使用模式</a></li><li><a href=/books/claude-code/03-tmux/>tmux 编排详解</a></li><li><a href=/books/claude-code/04-cli-flags/>CLI 参数完整参考</a></li><li><a href=/books/claude-code/05-slash-commands/>斜杠命令与键盘快捷键</a></li><li><a href=/books/claude-code/06-pr-review/>PR 审查与工作树</a></li><li><a href=/books/claude-code/07-mcp/>MCP 集成</a></li><li><a href=/books/claude-code/08-agents-hooks/>自定义子智能体与钩子</a></li><li><a href=/books/claude-code/09-cost-performance/>成本与性能优化</a></li><li><a href=/books/claude-code/10-pitfalls/>常见陷阱与注意事项</a></li><li><a href=/books/claude-code/11-quick-start/>快速上手</a></li></ul></li><li><input type=checkbox id=section-5c59af316ddd8c13de7448f55c5b6697 class=toggle>
+<label for=section-5c59af316ddd8c13de7448f55c5b6697 class=flex><a href=/books/deepseek-tui/>DeepSeek-TUI</a>
+<img src=/icons/chevron-right.svg class=book-icon alt=Expand></label><ul><li><a href=/books/deepseek-tui/01-install/>安装与认证</a></li><li><a href=/books/deepseek-tui/02-architecture/>架构设计</a></li><li><a href=/books/deepseek-tui/03-modes/>三种交互模式</a></li><li><a href=/books/deepseek-tui/04-tools/>工具系统</a></li><li><a href=/books/deepseek-tui/05-skills/>Skills 系统</a></li><li><a href=/books/deepseek-tui/06-sessions/>会话管理</a></li><li><a href=/books/deepseek-tui/07-mcp/>MCP 支持</a></li><li><a href=/books/deepseek-tui/08-comparison/>与 Hermes Agent 对比</a></li></ul></li></ul></li></ul><ul><li><a href=https://github.com/ target=_blank rel=noopener>GitHub</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class="book-header hidden"><div class="flex align-center justify-between"><label for=menu-control><img src=/icons/menu.svg class=book-icon alt=Menu></label><h3>Tmux 详细使用教程</h3><label for=toc-control><img src=/icons/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class=hidden><nav id=TableOfContents><ul><li><a href=#tmux-详细使用教程>Tmux 详细使用教程</a><ul><li><a href=#什么是-tmux>什么是 Tmux</a></li><li><a href=#安装>安装</a></li><li><a href=#核心概念>核心概念</a></li><li><a href=#基本操作>基本操作</a><ul><li><a href=#会话管理>会话管理</a></li><li><a href=#窗口管理>窗口管理</a></li><li><a href=#面板管理>面板管理</a></li></ul></li><li><a href=#prefix-键>Prefix 键</a></li><li><a href=#复制模式copy-mode>复制模式（Copy Mode）</a><ul><li><a href=#鼠标支持>鼠标支持</a></li></ul></li><li><a href=#常用命令模式>常用命令模式</a></li><li><a href=#配置文件-tmuxconf>配置文件 ~/.tmux.conf</a><ul><li><a href=#基础配置示例>基础配置示例</a></li><li><a href=#高级配置>高级配置</a></li><li><a href=#安装-tpmtmux-plugin-manager>安装 TPM（Tmux Plugin Manager）</a></li></ul></li><li><a href=#常用工作流>常用工作流</a><ul><li><a href=#日常开发工作区>日常开发工作区</a></li><li><a href=#远程工作>远程工作</a></li><li><a href=#多窗口监控>多窗口监控</a></li></ul></li><li><a href=#快捷键速查表>快捷键速查表</a></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#滚动历史不够>滚动历史不够</a></li><li><a href=#颜色显示异常>颜色显示异常</a></li><li><a href=#复制粘贴不工作>复制粘贴不工作</a></li><li><a href=#重新连接后窗口大小不对>重新连接后窗口大小不对</a></li></ul></li><li><a href=#总结>总结</a></li></ul></li></ul></nav></aside></header><article class="markdown book-post"><h1>Tmux 详细使用教程</h1><div class="flex align-center text-small book-post-date"><img src=/icons/calendar.svg class=book-icon alt=Calendar>
+<span>五月 7, 2026</span></div><div class="book-post-content markdown-inner"><h1 id=tmux-详细使用教程>Tmux 详细使用教程<a class=anchor href=#tmux-%e8%af%a6%e7%bb%86%e4%bd%bf%e7%94%a8%e6%95%99%e7%a8%8b>#</a></h1><h2 id=什么是-tmux>什么是 Tmux<a class=anchor href=#%e4%bb%80%e4%b9%88%e6%98%af-tmux>#</a></h2><p>Tmux（Terminal Multiplexer）是一个终端复用器，允许你在一个终端窗口中管理多个会话、窗口和面板。核心优势：</p><ul><li><strong>会话持久化</strong>：断开 SSH 连接后任务继续运行，重新连接后可恢复</li><li><strong>多面板工作区</strong>：单屏幕分割多个终端，并行工作</li><li><strong>窗口管理</strong>：每个会话可包含多个窗口，类似浏览器的标签页</li></ul><h2 id=安装>安装<a class=anchor href=#%e5%ae%89%e8%a3%85>#</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Ubuntu/Debian</span>
+</span></span><span class=line><span class=cl>sudo apt install tmux
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看版本</span>
+</span></span><span class=line><span class=cl>tmux -V</span></span></code></pre></div><h2 id=核心概念>核心概念<a class=anchor href=#%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5>#</a></h2><p>Tmux 的层级结构：<strong>会话（Session） → 窗口（Window） → 面板（Pane）</strong></p><ul><li><strong>Session</strong>：最高层级，一个独立的工作环境</li><li><strong>Window</strong>：会话中的标签页，全屏显示</li><li><strong>Pane</strong>：窗口中分割出的矩形区域</li></ul><h2 id=基本操作>基本操作<a class=anchor href=#%e5%9f%ba%e6%9c%ac%e6%93%8d%e4%bd%9c>#</a></h2><h3 id=会话管理>会话管理<a class=anchor href=#%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建新会话（默认命名 0, 1, 2...）</span>
+</span></span><span class=line><span class=cl>tmux
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建命名会话</span>
+</span></span><span class=line><span class=cl>tmux new -s work
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 列出所有会话</span>
+</span></span><span class=line><span class=cl>tmux ls
+</span></span><span class=line><span class=cl><span class=c1># 或 tmux list-sessions</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 附加到会话</span>
+</span></span><span class=line><span class=cl>tmux attach -t work
+</span></span><span class=line><span class=cl><span class=c1># 简写</span>
+</span></span><span class=line><span class=cl>tmux a -t work
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 附加到最新会话</span>
+</span></span><span class=line><span class=cl>tmux attach
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 切换到会话（在 tmux 内部）</span>
+</span></span><span class=line><span class=cl>Prefix + s    <span class=c1># 交互式选择</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=o>(</span>    <span class=c1># 上一个会话</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=o>)</span>    <span class=c1># 下一个会话</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重命名会话</span>
+</span></span><span class=line><span class=cl>Prefix + $
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 杀死会话</span>
+</span></span><span class=line><span class=cl>tmux kill-session -t work
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 杀死所有会话</span>
+</span></span><span class=line><span class=cl>tmux kill-server</span></span></code></pre></div><h3 id=窗口管理>窗口管理<a class=anchor href=#%e7%aa%97%e5%8f%a3%e7%ae%a1%e7%90%86>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建新窗口</span>
+</span></span><span class=line><span class=cl>Prefix + c
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 关闭当前窗口</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=p>&amp;</span>    <span class=c1># 或 exit</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 切换到窗口</span>
+</span></span><span class=line><span class=cl>Prefix + 数字键    <span class=c1># 直接跳转（0-9）</span>
+</span></span><span class=line><span class=cl>Prefix + w         <span class=c1># 交互式选择</span>
+</span></span><span class=line><span class=cl>Prefix + p         <span class=c1># 上一个窗口</span>
+</span></span><span class=line><span class=cl>Prefix + n         <span class=c1># 下一个窗口</span>
+</span></span><span class=line><span class=cl>Prefix + l         <span class=c1># 上一次使用的窗口</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重命名窗口</span>
+</span></span><span class=line><span class=cl>Prefix + ,
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 移动窗口位置</span>
+</span></span><span class=line><span class=cl>Prefix + .         <span class=c1># 修改窗口编号</span>
+</span></span><span class=line><span class=cl>Prefix + :move-window -t <span class=m>3</span>    <span class=c1># 移动到编号 3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 交换窗口</span>
+</span></span><span class=line><span class=cl>Prefix + :swap-window -t <span class=m>2</span>    <span class=c1># 与编号 2 交换</span></span></span></code></pre></div><h3 id=面板管理>面板管理<a class=anchor href=#%e9%9d%a2%e6%9d%bf%e7%ae%a1%e7%90%86>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 分割面板</span>
+</span></span><span class=line><span class=cl>Prefix + %         <span class=c1># 垂直分割（左右）</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=s2>&#34;         # 水平分割（上下）
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 切换面板焦点
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + 方向键    # 上下左右
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + o         # 下一个面板
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + ;         # 上一个活动面板
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 调整面板大小
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + Ctrl+方向键    # 逐步调整
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + M-方向键       # 快速调整（Alt+方向键）
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 面板布局
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + Space         # 切换预设布局
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :select-layout even-horizontal    # 水平均分
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :select-layout even-vertical      # 垂直均分
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :select-layout main-horizontal    # 主面板在上
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :select-layout main-vertical      # 主面板在左
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :select-layout tiled              # 平铺
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 关闭面板
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + x         # 确认后关闭
+</span></span></span><span class=line><span class=cl><span class=s2># 或直接 exit
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 面板操作
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + z         # 全屏切换当前面板（zoom）
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + !         # 拆分为独立窗口
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + {         # 与前一个面板交换位置
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + }         # 与后一个面板交换位置
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 从面板创建新窗口
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :break-pane
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 从其他窗口引入面板
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + :join-pane -t :1    # 从窗口1引入</span></span></span></code></pre></div><h2 id=prefix-键>Prefix 键<a class=anchor href=#prefix-%e9%94%ae>#</a></h2><p>默认前缀键是 <code>Ctrl+b</code>，所有 tmux 快捷键都需先按 Prefix。</p><p>常用操作统一模式：<strong>Prefix + 按键</strong></p><h2 id=复制模式copy-mode>复制模式（Copy Mode）<a class=anchor href=#%e5%a4%8d%e5%88%b6%e6%a8%a1%e5%bc%8fcopy-mode>#</a></h2><p>tmux 的复制模式类似 vim，用于浏览历史和复制文本：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 进入复制模式</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=o>[</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 导航（vim 风格）</span>
+</span></span><span class=line><span class=cl>h/j/k/l    <span class=c1># 左下上右</span>
+</span></span><span class=line><span class=cl>Ctrl+b/f   <span class=c1># 上一页/下一页</span>
+</span></span><span class=line><span class=cl>Ctrl+d/u   <span class=c1># 半页下/上</span>
+</span></span><span class=line><span class=cl>g/G        <span class=c1># 行首/行尾</span>
+</span></span><span class=line><span class=cl>0/$        <span class=c1># 行首/行尾</span>
+</span></span><span class=line><span class=cl>w/b        <span class=c1># 下一个/上一个单词</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 搜索</span>
+</span></span><span class=line><span class=cl>/          <span class=c1># 向下搜索</span>
+</span></span><span class=line><span class=cl>?          <span class=c1># 向上搜索</span>
+</span></span><span class=line><span class=cl>n          <span class=c1># 下一个匹配</span>
+</span></span><span class=line><span class=cl>N          <span class=c1># 上一个匹配</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 选择文本</span>
+</span></span><span class=line><span class=cl>Space      <span class=c1># 开始选择</span>
+</span></span><span class=line><span class=cl>Enter      <span class=c1># 复制并退出</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 粘贴</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=o>]</span>    <span class=c1># 粘贴缓冲区内容</span></span></span></code></pre></div><h3 id=鼠标支持>鼠标支持<a class=anchor href=#%e9%bc%a0%e6%a0%87%e6%94%af%e6%8c%81>#</a></h3><p>在配置文件中启用鼠标后，可以直接用鼠标操作：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ~/.tmux.conf</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g mouse on</span></span></code></pre></div><p>启用后可：鼠标点击切换面板、拖拽调整大小、滚轮浏览历史、拖选复制文本。</p><h2 id=常用命令模式>常用命令模式<a class=anchor href=#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f>#</a></h2><p>Prefix + : 进入命令模式，类似 vim 的 <code>:</code>，可执行：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 查看所有命令</span>
+</span></span><span class=line><span class=cl>:list-commands
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 设置选项</span>
+</span></span><span class=line><span class=cl>:set -g mouse on
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看所有选项</span>
+</span></span><span class=line><span class=cl>:show-options -g
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看所有窗口选项</span>
+</span></span><span class=line><span class=cl>:show-window-options -g
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重新加载配置</span>
+</span></span><span class=line><span class=cl>:source-file ~/.tmux.conf
+</span></span><span class=line><span class=cl><span class=c1># 快捷键</span>
+</span></span><span class=line><span class=cl>Prefix + r（需自行绑定）</span></span></code></pre></div><h2 id=配置文件-tmuxconf>配置文件 ~/.tmux.conf<a class=anchor href=#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6-tmuxconf>#</a></h2><h3 id=基础配置示例>基础配置示例<a class=anchor href=#%e5%9f%ba%e7%a1%80%e9%85%8d%e7%bd%ae%e7%a4%ba%e4%be%8b>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 基础设置</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g default-terminal <span class=s2>&#34;screen-256color&#34;</span>    <span class=c1># 终端类型</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g history-limit <span class=m>50000</span>                   <span class=c1># 滚动历史行数</span>
+</span></span><span class=line><span class=cl>setw -g aggressive-resize on                 <span class=c1># 动态调整窗口大小</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 启用鼠标</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g mouse on
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 修改前缀键为 Ctrl+a（可选，更像 screen）</span>
+</span></span><span class=line><span class=cl><span class=c1># set -g prefix C-a</span>
+</span></span><span class=line><span class=cl><span class=c1># unbind C-b</span>
+</span></span><span class=line><span class=cl><span class=c1># bind C-a send-prefix</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口编号从 1 开始</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g base-index <span class=m>1</span>
+</span></span><span class=line><span class=cl>setw -g pane-base-index <span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重新加载配置快捷键</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> r source-file ~/.tmux.conf <span class=se>\;</span> display <span class=s2>&#34;Config reloaded!&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 更快的按键响应</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -sg escape-time <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 分割路径保持当前目录</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> <span class=s1>&#39;&#34;&#39;</span> split-window -v -c <span class=s2>&#34;#{pane_current_path}&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> % split-window -h -c <span class=s2>&#34;#{pane_current_path}&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> c new-window -c <span class=s2>&#34;#{pane_current_path}&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># vim 风格面板切换</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> h <span class=k>select</span>-pane -L
+</span></span><span class=line><span class=cl><span class=nb>bind</span> j <span class=k>select</span>-pane -D
+</span></span><span class=line><span class=cl><span class=nb>bind</span> k <span class=k>select</span>-pane -U
+</span></span><span class=line><span class=cl><span class=nb>bind</span> l <span class=k>select</span>-pane -R</span></span></code></pre></div><h3 id=高级配置>高级配置<a class=anchor href=#%e9%ab%98%e7%ba%a7%e9%85%8d%e7%bd%ae>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 状态栏配置</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-position bottom
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-bg colour235
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-fg colour137
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-interval <span class=m>5</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-left-length <span class=m>40</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-right-length <span class=m>80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 状态栏左侧</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-left <span class=s2>&#34;#[fg=colour137,bold] #S #[fg=colour240]│&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 状态栏右侧</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g status-right <span class=s2>&#34;#[fg=colour240]│ %Y-%m-%d %H:%M &#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口状态颜色</span>
+</span></span><span class=line><span class=cl>setw -g window-status-current-style <span class=s2>&#34;fg=colour166,bold&#34;</span>
+</span></span><span class=line><span class=cl>setw -g window-status-current-format <span class=s2>&#34; #I│#W &#34;</span>
+</span></span><span class=line><span class=cl>setw -g window-status-format <span class=s2>&#34; #I│#W &#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 面板边框</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g pane-border-style <span class=s2>&#34;fg=colour240&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g pane-active-border-style <span class=s2>&#34;fg=colour137&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 活动提醒</span>
+</span></span><span class=line><span class=cl>setw -g monitor-activity on
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g visual-activity on
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 插件管理器 TPM</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @plugin <span class=s1>&#39;tmux-plugins/tpm&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @plugin <span class=s1>&#39;tmux-plugins/tmux-sensible&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @plugin <span class=s1>&#39;tmux-plugins/tmux-resurrect&#39;</span>    <span class=c1># 持久化会话</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @plugin <span class=s1>&#39;tmux-plugins/tmux-continuum&#39;</span>    <span class=c1># 自动保存</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @continuum-save-interval <span class=s1>&#39;15&#39;</span>            <span class=c1># 15分钟自动保存</span></span></span></code></pre></div><h3 id=安装-tpmtmux-plugin-manager>安装 TPM（Tmux Plugin Manager）<a class=anchor href=#%e5%ae%89%e8%a3%85-tpmtmux-plugin-manager>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 克隆 TPM</span>
+</span></span><span class=line><span class=cl>git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在 ~/.tmux.conf 末尾添加（插件列表必须放在末尾）</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @plugin <span class=s1>&#39;tmux-plugins/tpm&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g @plugin <span class=s1>&#39;tmux-plugins/tmux-resurrect&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重新加载配置</span>
+</span></span><span class=line><span class=cl>tmux <span class=nb>source</span> ~/.tmux.conf
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装插件</span>
+</span></span><span class=line><span class=cl>Prefix + I（大写 i）</span></span></code></pre></div><h2 id=常用工作流>常用工作流<a class=anchor href=#%e5%b8%b8%e7%94%a8%e5%b7%a5%e4%bd%9c%e6%b5%81>#</a></h2><h3 id=日常开发工作区>日常开发工作区<a class=anchor href=#%e6%97%a5%e5%b8%b8%e5%bc%80%e5%8f%91%e5%b7%a5%e4%bd%9c%e5%8c%ba>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建项目会话</span>
+</span></span><span class=line><span class=cl>tmux new -s myproject
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 布局：左侧编辑器，右侧终端</span>
+</span></span><span class=line><span class=cl>Prefix + %          <span class=c1># 垂直分割</span>
+</span></span><span class=line><span class=cl>Prefix + :select-layout main-horizontal
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在下方添加第三个面板运行服务</span>
+</span></span><span class=line><span class=cl>Prefix + <span class=s2>&#34;          # 水平分割右侧面板
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2># 保存会话（使用 resurrect 插件）
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + Ctrl+s     # 保存
+</span></span></span><span class=line><span class=cl><span class=s2>Prefix + Ctrl+r     # 恢复</span></span></span></code></pre></div><h3 id=远程工作>远程工作<a class=anchor href=#%e8%bf%9c%e7%a8%8b%e5%b7%a5%e4%bd%9c>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># SSH 到服务器后创建会话</span>
+</span></span><span class=line><span class=cl>tmux new -s remote
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 断开连接（会话继续运行）</span>
+</span></span><span class=line><span class=cl>Prefix + d
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 本地重新连接</span>
+</span></span><span class=line><span class=cl>tmux attach -t remote</span></span></code></pre></div><h3 id=多窗口监控>多窗口监控<a class=anchor href=#%e5%a4%9a%e7%aa%97%e5%8f%a3%e7%9b%91%e6%8e%a7>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建监控会话</span>
+</span></span><span class=line><span class=cl>tmux new -s monitor
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口 0：日志</span>
+</span></span><span class=line><span class=cl>tail -f /var/log/app.log
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口 1：系统资源</span>
+</span></span><span class=line><span class=cl>htop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口 2：网络监控</span>
+</span></span><span class=line><span class=cl>watch -n <span class=m>1</span> <span class=s1>&#39;netstat -an | grep ESTABLISHED | wc -l&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口 3：服务状态</span>
+</span></span><span class=line><span class=cl>watch -n <span class=m>5</span> <span class=s1>&#39;systemctl status myservice&#39;</span></span></span></code></pre></div><h2 id=快捷键速查表>快捷键速查表<a class=anchor href=#%e5%bf%ab%e6%8d%b7%e9%94%ae%e9%80%9f%e6%9f%a5%e8%a1%a8>#</a></h2><table><thead><tr><th>快捷键</th><th>功能</th></tr></thead><tbody><tr><td><code>Prefix + c</code></td><td>新建窗口</td></tr><tr><td><code>Prefix + n</code></td><td>下一个窗口</td></tr><tr><td><code>Prefix + p</code></td><td>上一个窗口</td></tr><tr><td><code>Prefix + w</code></td><td>窗口列表</td></tr><tr><td><code>Prefix + 数字</code></td><td>切换窗口</td></tr><tr><td><code>Prefix + ,</code></td><td>重命名窗口</td></tr><tr><td><code>Prefix + %</code></td><td>垂直分割面板</td></tr><tr><td><code>Prefix + "</code></td><td>水平分割面板</td></tr><tr><td><code>Prefix + 方向键</code></td><td>切换面板</td></tr><tr><td><code>Prefix + z</code></td><td>面板全屏切换</td></tr><tr><td><code>Prefix + x</code></td><td>关闭面板</td></tr><tr><td><code>Prefix + [</code></td><td>进入复制模式</td></tr><tr><td><code>Prefix + ]</code></td><td>粘贴</td></tr><tr><td><code>Prefix + d</code></td><td>分离会话</td></tr><tr><td><code>Prefix + s</code></td><td>会话列表</td></tr><tr><td><code>Prefix + $</code></td><td>重命名会话</td></tr><tr><td><code>Prefix + :</code></td><td>命令模式</td></tr><tr><td><code>Prefix + ?</code></td><td>快捷键列表</td></tr></tbody></table><h2 id=常见问题>常见问题<a class=anchor href=#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98>#</a></h2><h3 id=滚动历史不够>滚动历史不够<a class=anchor href=#%e6%bb%9a%e5%8a%a8%e5%8e%86%e5%8f%b2%e4%b8%8d%e5%a4%9f>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ~/.tmux.conf</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g history-limit <span class=m>50000</span></span></span></code></pre></div><h3 id=颜色显示异常>颜色显示异常<a class=anchor href=#%e9%a2%9c%e8%89%b2%e6%98%be%e7%a4%ba%e5%bc%82%e5%b8%b8>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ~/.tmux.conf</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g default-terminal <span class=s2>&#34;screen-256color&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># 如果终端支持真彩色</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -g terminal-overrides <span class=s2>&#34;,xterm-256color:Tc&#34;</span></span></span></code></pre></div><h3 id=复制粘贴不工作>复制粘贴不工作<a class=anchor href=#%e5%a4%8d%e5%88%b6%e7%b2%98%e8%b4%b4%e4%b8%8d%e5%b7%a5%e4%bd%9c>#</a></h3><p>启用鼠标后使用鼠标选择，或在复制模式下用 vim 风格操作。确保终端和 tmux 的剪贴板集成正确：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># macOS iTerm2</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> -T copy-mode-vi y send-keys -X copy-pipe-and-cancel <span class=s2>&#34;pbcopy&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Linux xclip</span>
+</span></span><span class=line><span class=cl><span class=nb>bind</span> -T copy-mode-vi y send-keys -X copy-pipe-and-cancel <span class=s2>&#34;xclip -selection clipboard&#34;</span></span></span></code></pre></div><h3 id=重新连接后窗口大小不对>重新连接后窗口大小不对<a class=anchor href=#%e9%87%8d%e6%96%b0%e8%bf%9e%e6%8e%a5%e5%90%8e%e7%aa%97%e5%8f%a3%e5%a4%a7%e5%b0%8f%e4%b8%8d%e5%af%b9>#</a></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ~/.tmux.conf</span>
+</span></span><span class=line><span class=cl>setw -g aggressive-resize on</span></span></code></pre></div><h2 id=总结>总结<a class=anchor href=#%e6%80%bb%e7%bb%93>#</a></h2><p>Tmux 是终端工作流的强大工具，掌握基本操作后即可大幅提升效率。建议：</p><ol><li>先熟悉会话/窗口/面板的创建和切换</li><li>配置 <code>~/.tmux.conf</code> 启用鼠标和常用快捷键</li><li>安装 resurrect 插件实现会话持久化</li><li>逐步探索高级功能如脚本化和自定义状态栏</li></ol></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div></div><div></div></div><script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#tmux-详细使用教程>Tmux 详细使用教程</a><ul><li><a href=#什么是-tmux>什么是 Tmux</a></li><li><a href=#安装>安装</a></li><li><a href=#核心概念>核心概念</a></li><li><a href=#基本操作>基本操作</a><ul><li><a href=#会话管理>会话管理</a></li><li><a href=#窗口管理>窗口管理</a></li><li><a href=#面板管理>面板管理</a></li></ul></li><li><a href=#prefix-键>Prefix 键</a></li><li><a href=#复制模式copy-mode>复制模式（Copy Mode）</a><ul><li><a href=#鼠标支持>鼠标支持</a></li></ul></li><li><a href=#常用命令模式>常用命令模式</a></li><li><a href=#配置文件-tmuxconf>配置文件 ~/.tmux.conf</a><ul><li><a href=#基础配置示例>基础配置示例</a></li><li><a href=#高级配置>高级配置</a></li><li><a href=#安装-tpmtmux-plugin-manager>安装 TPM（Tmux Plugin Manager）</a></li></ul></li><li><a href=#常用工作流>常用工作流</a><ul><li><a href=#日常开发工作区>日常开发工作区</a></li><li><a href=#远程工作>远程工作</a></li><li><a href=#多窗口监控>多窗口监控</a></li></ul></li><li><a href=#快捷键速查表>快捷键速查表</a></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#滚动历史不够>滚动历史不够</a></li><li><a href=#颜色显示异常>颜色显示异常</a></li><li><a href=#复制粘贴不工作>复制粘贴不工作</a></li><li><a href=#重新连接后窗口大小不对>重新连接后窗口大小不对</a></li></ul></li><li><a href=#总结>总结</a></li></ul></li></ul></nav></div></aside></main></body></html>
