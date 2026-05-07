@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8082&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="常见陷阱与注意事项# 1. 交互模式需要 tmux# Claude Code 是完整的 TUI 应用。单独使用 pty=true 的终端可以工作，但 tmux 提供 capture-pane 用于监控和 send-keys 用于输入，这对自动化编排至关重要。
+解决方案： 始终使用 tmux 管理交互式会话。
+2. –dangerously-skip-permissions 对话框默认是 “No, exit”# 如果你使用 --dangerously-skip-permissions，权限对话框默认选择是 “No, exit”。必须先发送 Down 再 Enter 才能接受。 Print 模式（-p）完全跳过此对话框。
+解决方案： Print 模式优先使用；交互模式需要正确处理对话框。
+3. –max-budget-usd 最低约 $0.05# 系统提示缓存创建本身就需要这个金额。设置低于此值会立即报错。
+解决方案： 设置至少 $0.05 的预算上限。
+4. –max-turns 仅适用于 Print 模式# 在交互会话中被忽略。
+解决方案： 交互模式中使用 /compact 管理上下文，而不是依赖 --max-turns。
+5. Claude 可能使用 python 而非 python3# 在没有 python 符号链接的系统上，Claude 的 bash 命令首次会失败，但它会自我修正。
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8082/books/claude-code/10-pitfalls/">
+  <meta property="og:site_name" content="Bing随遇而安">
+  <meta property="og:title" content="常见陷阱与注意事项">
+  <meta property="og:description" content="常见陷阱与注意事项# 1. 交互模式需要 tmux# Claude Code 是完整的 TUI 应用。单独使用 pty=true 的终端可以工作，但 tmux 提供 capture-pane 用于监控和 send-keys 用于输入，这对自动化编排至关重要。
+解决方案： 始终使用 tmux 管理交互式会话。
+2. –dangerously-skip-permissions 对话框默认是 “No, exit”# 如果你使用 --dangerously-skip-permissions，权限对话框默认选择是 “No, exit”。必须先发送 Down 再 Enter 才能接受。 Print 模式（-p）完全跳过此对话框。
+解决方案： Print 模式优先使用；交互模式需要正确处理对话框。
+3. –max-budget-usd 最低约 $0.05# 系统提示缓存创建本身就需要这个金额。设置低于此值会立即报错。
+解决方案： 设置至少 $0.05 的预算上限。
+4. –max-turns 仅适用于 Print 模式# 在交互会话中被忽略。
+解决方案： 交互模式中使用 /compact 管理上下文，而不是依赖 --max-turns。
+5. Claude 可能使用 python 而非 python3# 在没有 python 符号链接的系统上，Claude 的 bash 命令首次会失败，但它会自我修正。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="books">
+
+
+  <meta itemprop="name" content="常见陷阱与注意事项">
+  <meta itemprop="description" content="常见陷阱与注意事项# 1. 交互模式需要 tmux# Claude Code 是完整的 TUI 应用。单独使用 pty=true 的终端可以工作，但 tmux 提供 capture-pane 用于监控和 send-keys 用于输入，这对自动化编排至关重要。
+解决方案： 始终使用 tmux 管理交互式会话。
+2. –dangerously-skip-permissions 对话框默认是 “No, exit”# 如果你使用 --dangerously-skip-permissions，权限对话框默认选择是 “No, exit”。必须先发送 Down 再 Enter 才能接受。 Print 模式（-p）完全跳过此对话框。
+解决方案： Print 模式优先使用；交互模式需要正确处理对话框。
+3. –max-budget-usd 最低约 $0.05# 系统提示缓存创建本身就需要这个金额。设置低于此值会立即报错。
+解决方案： 设置至少 $0.05 的预算上限。
+4. –max-turns 仅适用于 Print 模式# 在交互会话中被忽略。
+解决方案： 交互模式中使用 /compact 管理上下文，而不是依赖 --max-turns。
+5. Claude 可能使用 python 而非 python3# 在没有 python 符号链接的系统上，Claude 的 bash 命令首次会失败，但它会自我修正。">
+  <meta itemprop="wordCount" content="195">
+
+<title>常见陷阱与注意事项 | Bing随遇而安</title>
+<link rel="icon" href="/favicon.svg" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:8082/books/claude-code/10-pitfalls/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/zh.search.min.734c991ffba391551a63330d89a90f65a87b4608a0a2fbc77f6d43d52129de21.js" integrity="sha256-c0yZH/ujkVUaYzMNiakPZah7RgigovvHf21D1SEp3iE=" crossorigin="anonymous"></script>
+
+
+
+  <style>
+ 
+
+html, body {
+     
+}
+
+:root {
+    --body-background: #000000;
+    --body-font-color: #ffffff;
+    --color-link: #75beff;
+    --color-visited-link: #75beff;
+    --color-accent: #6fc3df;
+    --color-border: #6fc3df;
+    --color-border-active: #ffffff;
+    --menu-background: #000000;
+    --menu-font-color: #ffffff;
+    --menu-border-color: #6fc3df;
+    --header-background: #000000;
+    --header-font-color: #ffffff;
+    --header-border-color: #6fc3df;
+    --code-background: #000000;
+    --code-border: #6fc3df;
+}
+
+body {
+    background-color: var(--body-background) !important;
+    color: var(--body-font-color) !important;
+}
+
+.book-menu, .book-menu * {
+     
+}
+
+.book-header, .book-header * {
+     
+}
+
+.book-toc, .book-toc * {
+     
+}
+
+.book-content, .markdown, .markdown * {
+     
+}
+
+.book-markdown pre, .book-markdown pre *, .book-markdown code, .markdown p code, .markdown li code, .markdown table code {
+     
+}
+
+ 
+.book-menu nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.book-menu nav ul ul {
+    counter-reset: chapter-counter;
+}
+
+.book-menu nav ul ul li {
+    counter-increment: chapter-counter;
+}
+
+.book-menu nav ul ul li > a::before {
+    content: counter(chapter-counter) ". ";
+    opacity: 0.6;
+    margin-right: 6px;
+    color: var(--menu-font-color);
+    font-family: monospace;
+}
+
+ 
+.book-menu nav > ul > li > a {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-menu nav > ul > li > a::after {
+    content: "▼";
+    font-size: 0.7em;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: transform 0.2s;
+}
+
+.book-menu nav > ul > li.collapsed > a::after {
+    transform: rotate(-90deg);
+}
+
+.book-menu nav a.active {
+    color: var(--color-accent) !important;
+    font-weight: bold;
+    background: rgba(111, 195, 223, 0.1);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 10px;
+    margin-left: -3px;
+}
+
+.book-header {
+    background: var(--header-background) !important;
+    border-bottom: 2px solid var(--header-border-color) !important;
+    color: var(--header-font-color);
+    gap: 0.5rem;
+}
+
+.book-brand img {
+    filter: none !important;
+}
+
+.book-header input {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+.markdown a {
+    color: var(--color-link);
+    border-bottom: 1px dotted var(--color-link);
+}
+
+.markdown a:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.markdown table {
+    border-color: #6fc3df;
+}
+.markdown table th, .markdown table td {
+    border-color: #6fc3df;
+}
+.markdown table th {
+    background-color: #111;
+}
+
+.book-markdown pre {
+    background: var(--code-background) !important;
+    border: 1px solid var(--code-border) !important;
+    padding: 1rem;
+}
+
+.book-markdown code {
+    background: #111111 !important;
+    border: 1px solid #333;
+    color: #d4d4d4;
+}
+
+.markdown p code, .markdown li code, .markdown table code {
+    background: #111111 !important;
+    border: 1px solid #444;
+    color: #9cdcfe;
+}
+
+.chroma {
+    background-color: #000000 !important;
+    color: #ffffff;
+    border: none;
+}
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+    color: #ce9178 !important;
+}
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+.chroma .nf, .chroma .fm {
+    color: #dcdcaa !important;
+}
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+    color: #b5cea8 !important;
+}
+.chroma .kt, .chroma .nc {
+    color: #4ec9b0 !important;
+}
+.chroma .nv, .chroma .vc {
+    color: #9cdcfe !important;
+}
+.chroma .p, .chroma .o {
+    color: #ffffff !important;
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+    background: #6fc3df;
+    border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+.book-toc nav a {
+    color: #888;
+}
+.book-toc nav a:hover {
+    color: #fff;
+}
+.book-toc nav a.active {
+    color: #6fc3df;
+    border-left: 2px solid #6fc3df;
+}
+</style>
+
+</head>
+<body dir="ltr" class="book-kind-page book-type-books">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.svg" alt="Logo" /><span>Bing随遇而安</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-594d75a63ab662c39c488c6c20b6c066" class="toggle"  />
+    
+    <label for="section-594d75a63ab662c39c488c6c20b6c066" class="flex">
+      <a href="/books/llama-cpp/" class="">
+        llama.cpp 本地推理指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/01-intro/" class="">
+      简介</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/02-install/" class="">
+      编译与安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/03-model/" class="">
+      模型下载与转换</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/04-inference/" class="">
+      推理与服务部署</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/05-quantization/" class="">
+      量化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/06-advanced/" class="">
+      高级用法</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/07-tools/" class="">
+      完整工具参考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-f1b47051b07d13559e01140a95da8e02" class="toggle" checked />
+    
+    <label for="section-f1b47051b07d13559e01140a95da8e02" class="flex">
+      <a href="/books/claude-code/" class="">
+        Claude Code 完全指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/01-install/" class="">
+      安装与配置</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/02-modes/" class="">
+      两种使用模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/03-tmux/" class="">
+      tmux 编排详解</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/04-cli-flags/" class="">
+      CLI 参数完整参考</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/05-slash-commands/" class="">
+      斜杠命令与键盘快捷键</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/06-pr-review/" class="">
+      PR 审查与工作树</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/07-mcp/" class="">
+      MCP 集成</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/08-agents-hooks/" class="">
+      自定义子智能体与钩子</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/09-cost-performance/" class="">
+      成本与性能优化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/10-pitfalls/" class="active">
+      常见陷阱与注意事项</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/11-quick-start/" class="">
+      快速上手</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-256d3d8b571b16c3fbc024b70a10a817" class="toggle"  />
+    
+    <label for="section-256d3d8b571b16c3fbc024b70a10a817" class="flex">
+      <a href="/books/deepseek-tui/" class="">
+        DeepSeek-TUI</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/01-install/" class="">
+      安装与认证</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/02-architecture/" class="">
+      架构设计</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/03-modes/" class="">
+      三种交互模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/04-tools/" class="">
+      工具系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/05-skills/" class="">
+      Skills 系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/06-sessions/" class="">
+      会话管理</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/07-mcp/" class="">
+      MCP 支持</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/08-comparison/" class="">
+      与 Hermes Agent 对比</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+<ul><li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li></ul>
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>常见陷阱与注意事项</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见陷阱与注意事项">常见陷阱与注意事项</a>
+      <ul>
+        <li><a href="#1-交互模式需要-tmux">1. 交互模式需要 tmux</a></li>
+        <li><a href="#2-dangerously-skip-permissions-对话框默认是-no-exit">2. &ndash;dangerously-skip-permissions 对话框默认是 &ldquo;No, exit&rdquo;</a></li>
+        <li><a href="#3-max-budget-usd-最低约-005">3. &ndash;max-budget-usd 最低约 $0.05</a></li>
+        <li><a href="#4-max-turns-仅适用于-print-模式">4. &ndash;max-turns 仅适用于 Print 模式</a></li>
+        <li><a href="#5-claude-可能使用-python-而非-python3">5. Claude 可能使用 python 而非 python3</a></li>
+        <li><a href="#6-会话恢复需要相同目录">6. 会话恢复需要相同目录</a></li>
+        <li><a href="#7-json-schema-需要足够的-max-turns">7. &ndash;json-schema 需要足够的 &ndash;max-turns</a></li>
+        <li><a href="#8-信任对话框每个目录只出现一次">8. 信任对话框每个目录只出现一次</a></li>
+        <li><a href="#9-后台-tmux-会话会持续存在">9. 后台 tmux 会话会持续存在</a></li>
+        <li><a href="#10-斜杠命令仅在交互模式有效">10. 斜杠命令仅在交互模式有效</a></li>
+        <li><a href="#11-bare-跳过-oauth">11. &ndash;bare 跳过 OAuth</a></li>
+        <li><a href="#12-上下文退化是真实的">12. 上下文退化是真实的</a></li>
+        <li><a href="#13-权限模式混淆">13. 权限模式混淆</a></li>
+        <li><a href="#14-第三方-api-兼容问题">14. 第三方 API 兼容问题</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="常见陷阱与注意事项">常见陷阱与注意事项<a class="anchor" href="#%e5%b8%b8%e8%a7%81%e9%99%b7%e9%98%b1%e4%b8%8e%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9">#</a></h1>
+<h2 id="1-交互模式需要-tmux">1. 交互模式需要 tmux<a class="anchor" href="#1-%e4%ba%a4%e4%ba%92%e6%a8%a1%e5%bc%8f%e9%9c%80%e8%a6%81-tmux">#</a></h2>
+<p>Claude Code 是完整的 TUI 应用。单独使用 <code>pty=true</code> 的终端可以工作，但 tmux 提供 <code>capture-pane</code> 用于监控和 <code>send-keys</code> 用于输入，这对自动化编排至关重要。</p>
+<p><strong>解决方案：</strong> 始终使用 tmux 管理交互式会话。</p>
+<h2 id="2-dangerously-skip-permissions-对话框默认是-no-exit">2. &ndash;dangerously-skip-permissions 对话框默认是 &ldquo;No, exit&rdquo;<a class="anchor" href="#2-dangerously-skip-permissions-%e5%af%b9%e8%af%9d%e6%a1%86%e9%bb%98%e8%ae%a4%e6%98%af-no-exit">#</a></h2>
+<p>如果你使用 <code>--dangerously-skip-permissions</code>，权限对话框默认选择是 &ldquo;No, exit&rdquo;。<strong>必须先发送 Down 再 Enter 才能接受。</strong> Print 模式（<code>-p</code>）完全跳过此对话框。</p>
+<p><strong>解决方案：</strong> Print 模式优先使用；交互模式需要正确处理对话框。</p>
+<h2 id="3-max-budget-usd-最低约-005">3. &ndash;max-budget-usd 最低约 $0.05<a class="anchor" href="#3-max-budget-usd-%e6%9c%80%e4%bd%8e%e7%ba%a6-005">#</a></h2>
+<p>系统提示缓存创建本身就需要这个金额。设置低于此值会立即报错。</p>
+<p><strong>解决方案：</strong> 设置至少 $0.05 的预算上限。</p>
+<h2 id="4-max-turns-仅适用于-print-模式">4. &ndash;max-turns 仅适用于 Print 模式<a class="anchor" href="#4-max-turns-%e4%bb%85%e9%80%82%e7%94%a8%e4%ba%8e-print-%e6%a8%a1%e5%bc%8f">#</a></h2>
+<p>在交互会话中被忽略。</p>
+<p><strong>解决方案：</strong> 交互模式中使用 <code>/compact</code> 管理上下文，而不是依赖 <code>--max-turns</code>。</p>
+<h2 id="5-claude-可能使用-python-而非-python3">5. Claude 可能使用 python 而非 python3<a class="anchor" href="#5-claude-%e5%8f%af%e8%83%bd%e4%bd%bf%e7%94%a8-python-%e8%80%8c%e9%9d%9e-python3">#</a></h2>
+<p>在没有 <code>python</code> 符号链接的系统上，Claude 的 bash 命令首次会失败，但它会自我修正。</p>
+<p><strong>解决方案：</strong> 创建符号链接：<code>sudo ln -s /usr/bin/python3 /usr/bin/python</code></p>
+<h2 id="6-会话恢复需要相同目录">6. 会话恢复需要相同目录<a class="anchor" href="#6-%e4%bc%9a%e8%af%9d%e6%81%a2%e5%a4%8d%e9%9c%80%e8%a6%81%e7%9b%b8%e5%90%8c%e7%9b%ae%e5%bd%95">#</a></h2>
+<p><code>--continue</code> 查找当前工作目录的最近会话。</p>
+<p><strong>解决方案：</strong> 确保在正确的工作目录中运行恢复命令。</p>
+<h2 id="7-json-schema-需要足够的-max-turns">7. &ndash;json-schema 需要足够的 &ndash;max-turns<a class="anchor" href="#7-json-schema-%e9%9c%80%e8%a6%81%e8%b6%b3%e5%a4%9f%e7%9a%84-max-turns">#</a></h2>
+<p>Claude 必须先读取文件才能生成结构化输出，这需要多轮对话。</p>
+<p><strong>解决方案：</strong> 使用 JSON Schema 时设置 <code>--max-turns 5</code> 或更高。</p>
+<h2 id="8-信任对话框每个目录只出现一次">8. 信任对话框每个目录只出现一次<a class="anchor" href="#8-%e4%bf%a1%e4%bb%bb%e5%af%b9%e8%af%9d%e6%a1%86%e6%af%8f%e4%b8%aa%e7%9b%ae%e5%bd%95%e5%8f%aa%e5%87%ba%e7%8e%b0%e4%b8%80%e6%ac%a1">#</a></h2>
+<p>首次访问目录时出现，之后被缓存。</p>
+<p><strong>解决方案：</strong> 首次使用时正确处理，后续无需担心。</p>
+<h2 id="9-后台-tmux-会话会持续存在">9. 后台 tmux 会话会持续存在<a class="anchor" href="#9-%e5%90%8e%e5%8f%b0-tmux-%e4%bc%9a%e8%af%9d%e4%bc%9a%e6%8c%81%e7%bb%ad%e5%ad%98%e5%9c%a8">#</a></h2>
+<p><strong>解决方案：</strong> 完成后始终用 <code>tmux kill-session -t &lt;name&gt;</code> 清理。</p>
+<h2 id="10-斜杠命令仅在交互模式有效">10. 斜杠命令仅在交互模式有效<a class="anchor" href="#10-%e6%96%9c%e6%9d%a0%e5%91%bd%e4%bb%a4%e4%bb%85%e5%9c%a8%e4%ba%a4%e4%ba%92%e6%a8%a1%e5%bc%8f%e6%9c%89%e6%95%88">#</a></h2>
+<p>在 <code>-p</code> 模式下，用自然语言描述任务。</p>
+<p><strong>解决方案：</strong> Print 模式不使用 <code>/commit</code> 等命令，直接用自然语言指令。</p>
+<h2 id="11-bare-跳过-oauth">11. &ndash;bare 跳过 OAuth<a class="anchor" href="#11-bare-%e8%b7%b3%e8%bf%87-oauth">#</a></h2>
+<p>需要 <code>ANTHROPIC_API_KEY</code> 环境变量或设置中的 <code>apiKeyHelper</code>。</p>
+<p><strong>解决方案：</strong> bare 模式下确保 API Key 已正确配置。</p>
+<h2 id="12-上下文退化是真实的">12. 上下文退化是真实的<a class="anchor" href="#12-%e4%b8%8a%e4%b8%8b%e6%96%87%e9%80%80%e5%8c%96%e6%98%af%e7%9c%9f%e5%ae%9e%e7%9a%84">#</a></h2>
+<p>当上下文窗口使用率超过 70% 时，AI 输出质量可测量地下降。</p>
+<p><strong>解决方案：</strong> 使用 <code>/context</code> 监控，主动使用 <code>/compact</code>。</p>
+<h2 id="13-权限模式混淆">13. 权限模式混淆<a class="anchor" href="#13-%e6%9d%83%e9%99%90%e6%a8%a1%e5%bc%8f%e6%b7%b7%e6%b7%86">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>错误用法</th>
+          <th>后果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--dangerously-skip-permissions</code> 在交互模式</td>
+          <td>需要处理 &ldquo;No, exit&rdquo; 默认对话框</td>
+      </tr>
+      <tr>
+          <td><code>--allowedTools</code> 与 <code>--dangerously-skip-permissions</code> 混用</td>
+          <td>权限绕过优先，allowTools 被忽略</td>
+      </tr>
+      <tr>
+          <td>忘记设置 <code>--max-turns</code></td>
+          <td>Print 模式可能无限循环</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="14-第三方-api-兼容问题">14. 第三方 API 兼容问题<a class="anchor" href="#14-%e7%ac%ac%e4%b8%89%e6%96%b9-api-%e5%85%bc%e5%ae%b9%e9%97%ae%e9%a2%98">#</a></h2>
+<p>Dashscope 等第三方 Anthropic 兼容代理可能不完全支持所有功能：</p>
+<table>
+  <thead>
+      <tr>
+          <th>功能</th>
+          <th>官方 API</th>
+          <th>第三方代理</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>基础对话</td>
+          <td>✓</td>
+          <td>✓</td>
+      </tr>
+      <tr>
+          <td>流式输出</td>
+          <td>✓</td>
+          <td>部分支持</td>
+      </tr>
+      <tr>
+          <td>工具使用</td>
+          <td>✓</td>
+          <td>可能有限</td>
+      </tr>
+      <tr>
+          <td>结构化输出</td>
+          <td>✓</td>
+          <td>可能有限</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>解决方案：</strong> 测试关键功能，遇到问题时切换回官方 API。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/books/claude-code/09-cost-performance/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>成本与性能优化</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/books/claude-code/11-quick-start/" class="flex align-center">
+        <span>快速上手</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见陷阱与注意事项">常见陷阱与注意事项</a>
+      <ul>
+        <li><a href="#1-交互模式需要-tmux">1. 交互模式需要 tmux</a></li>
+        <li><a href="#2-dangerously-skip-permissions-对话框默认是-no-exit">2. &ndash;dangerously-skip-permissions 对话框默认是 &ldquo;No, exit&rdquo;</a></li>
+        <li><a href="#3-max-budget-usd-最低约-005">3. &ndash;max-budget-usd 最低约 $0.05</a></li>
+        <li><a href="#4-max-turns-仅适用于-print-模式">4. &ndash;max-turns 仅适用于 Print 模式</a></li>
+        <li><a href="#5-claude-可能使用-python-而非-python3">5. Claude 可能使用 python 而非 python3</a></li>
+        <li><a href="#6-会话恢复需要相同目录">6. 会话恢复需要相同目录</a></li>
+        <li><a href="#7-json-schema-需要足够的-max-turns">7. &ndash;json-schema 需要足够的 &ndash;max-turns</a></li>
+        <li><a href="#8-信任对话框每个目录只出现一次">8. 信任对话框每个目录只出现一次</a></li>
+        <li><a href="#9-后台-tmux-会话会持续存在">9. 后台 tmux 会话会持续存在</a></li>
+        <li><a href="#10-斜杠命令仅在交互模式有效">10. 斜杠命令仅在交互模式有效</a></li>
+        <li><a href="#11-bare-跳过-oauth">11. &ndash;bare 跳过 OAuth</a></li>
+        <li><a href="#12-上下文退化是真实的">12. 上下文退化是真实的</a></li>
+        <li><a href="#13-权限模式混淆">13. 权限模式混淆</a></li>
+        <li><a href="#14-第三方-api-兼容问题">14. 第三方 API 兼容问题</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8082&amp;path=livereload" data-no-instant defer></script>
   <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -11,7 +11,7 @@ https://github.com/alex-shpak/hugo-book
 <meta name="description" content="完整工具参考# 工具速查表# 工具 用途 常用程度 llama-cli 交互式推理 ★★★★★ llama-server HTTP 服务 / API ★★★★★ llama-bench 性能基准测试 ★★★★ llama-quantize 模型量化 ★★★★ llama-embedding 提取嵌入向量 ★★★ llama-perplexity 困惑度评估 ★★★ llama-gguf GGUF 文件信息 ★★★ llama-imatrix 重要性矩阵 ★★ llama-tokenize 分词测试 ★★ llama-speculative 投机解码 ★★ llama-server API 端点# 端点 方法 说明 / GET Web 聊天 UI /health GET 健康检查 /v1/models GET 列出模型 /v1/chat/completions POST 聊天补全 /v1/completions POST 文本补全 /v1/embeddings POST 嵌入向量 llama-bench 输出指标# 指标 含义 pp Prompt Processing（prompt 处理速度，tok/s） tg Text Generation（文本生成速度，tok/s） avg_ns 平均耗时（纳秒） avg_ts 平均速度（tokens/second） llama-quantize 支持的格式# 格式 说明 Q4_K_M 4-bit K-quant Medium（推荐） Q5_K_M 5-bit K-quant Medium Q6_K 6-bit K-quant Q8_0 8-bit（接近无损） IQ3_S 3-bit Extra Small IQ4_NL 4-bit No Lookup ">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
-<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://fbbyqsyea.github.io/books/llama-cpp/07-tools/">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8082/books/llama-cpp/07-tools/">
   <meta property="og:site_name" content="Bing随遇而安">
   <meta property="og:title" content="完整工具参考">
   <meta property="og:description" content="完整工具参考# 工具速查表# 工具 用途 常用程度 llama-cli 交互式推理 ★★★★★ llama-server HTTP 服务 / API ★★★★★ llama-bench 性能基准测试 ★★★★ llama-quantize 模型量化 ★★★★ llama-embedding 提取嵌入向量 ★★★ llama-perplexity 困惑度评估 ★★★ llama-gguf GGUF 文件信息 ★★★ llama-imatrix 重要性矩阵 ★★ llama-tokenize 分词测试 ★★ llama-speculative 投机解码 ★★ llama-server API 端点# 端点 方法 说明 / GET Web 聊天 UI /health GET 健康检查 /v1/models GET 列出模型 /v1/chat/completions POST 聊天补全 /v1/completions POST 文本补全 /v1/embeddings POST 嵌入向量 llama-bench 输出指标# 指标 含义 pp Prompt Processing（prompt 处理速度，tok/s） tg Text Generation（文本生成速度，tok/s） avg_ns 平均耗时（纳秒） avg_ts 平均速度（tokens/second） llama-quantize 支持的格式# 格式 说明 Q4_K_M 4-bit K-quant Medium（推荐） Q5_K_M 5-bit K-quant Medium Q6_K 6-bit K-quant Q8_0 8-bit（接近无损） IQ3_S 3-bit Extra Small IQ4_NL 4-bit No Lookup">
@@ -31,12 +31,12 @@ https://github.com/alex-shpak/hugo-book
 <title>完整工具参考 | Bing随遇而安</title>
 <link rel="icon" href="/favicon.svg" >
 <link rel="manifest" href="/manifest.json">
-<link rel="canonical" href="https://fbbyqsyea.github.io/books/llama-cpp/07-tools/">
+<link rel="canonical" href="http://localhost:8082/books/llama-cpp/07-tools/">
 <link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
 
 
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/zh.search.min.43cfd04bacf6e09b7231ab6da4b9414a1433c7a838e1d3a6424fca2a653fb214.js" integrity="sha256-Q8/QS6z24JtyMattpLlBShQzx6g44dOmQk/KKmU/shQ=" crossorigin="anonymous"></script>
+  <script defer src="/zh.search.min.734c991ffba391551a63330d89a90f65a87b4608a0a2fbc77f6d43d52129de21.js" integrity="sha256-c0yZH/ujkVUaYzMNiakPZah7RgigovvHf21D1SEp3iE=" crossorigin="anonymous"></script>
 
 
 
@@ -311,8 +311,18 @@ body {
   
 
   
-    <a href="/books/llama-cpp/" class="">
-      llama.cpp 本地推理指南</a>
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-594d75a63ab662c39c488c6c20b6c066" class="toggle" checked />
+    
+    <label for="section-594d75a63ab662c39c488c6c20b6c066" class="flex">
+      <a href="/books/llama-cpp/" class="">
+        llama.cpp 本地推理指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
   
 
           
@@ -428,12 +438,317 @@ body {
   
 
   
-    <a href="/books/deepseek-tui/" class="">
-      DeepSeek-TUI</a>
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-f1b47051b07d13559e01140a95da8e02" class="toggle"  />
+    
+    <label for="section-f1b47051b07d13559e01140a95da8e02" class="flex">
+      <a href="/books/claude-code/" class="">
+        Claude Code 完全指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
   
 
           
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/01-install/" class="">
+      安装与配置</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/02-modes/" class="">
+      两种使用模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/03-tmux/" class="">
+      tmux 编排详解</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/04-cli-flags/" class="">
+      CLI 参数完整参考</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/05-slash-commands/" class="">
+      斜杠命令与键盘快捷键</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/06-pr-review/" class="">
+      PR 审查与工作树</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/07-mcp/" class="">
+      MCP 集成</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/08-agents-hooks/" class="">
+      自定义子智能体与钩子</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/09-cost-performance/" class="">
+      成本与性能优化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/10-pitfalls/" class="">
+      常见陷阱与注意事项</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/11-quick-start/" class="">
+      快速上手</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-256d3d8b571b16c3fbc024b70a10a817" class="toggle"  />
+    
+    <label for="section-256d3d8b571b16c3fbc024b70a10a817" class="flex">
+      <a href="/books/deepseek-tui/" class="">
+        DeepSeek-TUI</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/01-install/" class="">
+      安装与认证</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/02-architecture/" class="">
+      架构设计</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/03-modes/" class="">
+      三种交互模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/04-tools/" class="">
+      工具系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/05-skills/" class="">
+      Skills 系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/06-sessions/" class="">
+      会话管理</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/07-mcp/" class="">
+      MCP 支持</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/08-comparison/" class="">
+      与 Hermes Agent 对比</a>
+  
+
+        </li>
+      
     
   </ul>
 
@@ -441,6 +756,7 @@ body {
       
     
   </ul>
+
 
 
 
@@ -716,8 +1032,8 @@ body {
     </span>
     <span>
     
-      <a href="/books/deepseek-tui/" class="flex align-center">
-        <span>DeepSeek-TUI</span>
+      <a href="/books/claude-code/" class="flex align-center">
+        <span>Claude Code 完全指南</span>
         <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
       </a>
     

@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8082&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="tmux 编排详解# 在使用 Claude Code 的交互式模式时，tmux 是最可靠、最强大的编排工具。本章深入讲解 tmux 的价值、核心用法和高级技巧。
+为什么需要 tmux# Claude Code 是一个完整的 TUI（终端用户界面）应用程序，不是简单的命令行工具。这意味着：
+它有自己的界面刷新逻辑 它需要实时接收键盘输入 它可能弹出确认对话框 它会动态显示工具使用状态 它的输出包含 ANSI 转义序列 如果直接用 terminal(pty=true) 运行，你能看到输出并发送输入，但无法可靠地监控进度和捕获状态。tmux 解决了这两个关键问题。
+tmux 带来的核心能力# 能力 对应命令 作用 启动后台会话 tmux new-session -d 在后台创建独立终端会话 发送键盘输入 tmux send-keys 向会话发送按键（包括 Enter、Tab、方向键） 捕获屏幕输出 tmux capture-pane -p 获取当前屏幕内容，用于监控和决策 查看会话列表 tmux list-sessions 查看所有活跃的 tmux 会话 附加到会话 tmux attach 人工介入查看 Claude 工作状态 清理会话 tmux kill-session 任务完成后释放资源 基础工作流# 1. 创建并启动# # 创建一个名为 claude-work 的后台会话，尺寸 140x40 tmux new-session -d -s claude-work -x 140 -y 40 # 在会话中启动 Claude Code tmux send-keys -t claude-work &#39;cd /path/to/project &amp;&amp; claude&#39; Enter2. 处理确认对话框# Claude Code 首次启动时会弹出对话框：
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8082/books/claude-code/03-tmux/">
+  <meta property="og:site_name" content="Bing随遇而安">
+  <meta property="og:title" content="tmux 编排详解">
+  <meta property="og:description" content="tmux 编排详解# 在使用 Claude Code 的交互式模式时，tmux 是最可靠、最强大的编排工具。本章深入讲解 tmux 的价值、核心用法和高级技巧。
+为什么需要 tmux# Claude Code 是一个完整的 TUI（终端用户界面）应用程序，不是简单的命令行工具。这意味着：
+它有自己的界面刷新逻辑 它需要实时接收键盘输入 它可能弹出确认对话框 它会动态显示工具使用状态 它的输出包含 ANSI 转义序列 如果直接用 terminal(pty=true) 运行，你能看到输出并发送输入，但无法可靠地监控进度和捕获状态。tmux 解决了这两个关键问题。
+tmux 带来的核心能力# 能力 对应命令 作用 启动后台会话 tmux new-session -d 在后台创建独立终端会话 发送键盘输入 tmux send-keys 向会话发送按键（包括 Enter、Tab、方向键） 捕获屏幕输出 tmux capture-pane -p 获取当前屏幕内容，用于监控和决策 查看会话列表 tmux list-sessions 查看所有活跃的 tmux 会话 附加到会话 tmux attach 人工介入查看 Claude 工作状态 清理会话 tmux kill-session 任务完成后释放资源 基础工作流# 1. 创建并启动# # 创建一个名为 claude-work 的后台会话，尺寸 140x40 tmux new-session -d -s claude-work -x 140 -y 40 # 在会话中启动 Claude Code tmux send-keys -t claude-work &#39;cd /path/to/project &amp;&amp; claude&#39; Enter2. 处理确认对话框# Claude Code 首次启动时会弹出对话框：">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="books">
+
+
+  <meta itemprop="name" content="tmux 编排详解">
+  <meta itemprop="description" content="tmux 编排详解# 在使用 Claude Code 的交互式模式时，tmux 是最可靠、最强大的编排工具。本章深入讲解 tmux 的价值、核心用法和高级技巧。
+为什么需要 tmux# Claude Code 是一个完整的 TUI（终端用户界面）应用程序，不是简单的命令行工具。这意味着：
+它有自己的界面刷新逻辑 它需要实时接收键盘输入 它可能弹出确认对话框 它会动态显示工具使用状态 它的输出包含 ANSI 转义序列 如果直接用 terminal(pty=true) 运行，你能看到输出并发送输入，但无法可靠地监控进度和捕获状态。tmux 解决了这两个关键问题。
+tmux 带来的核心能力# 能力 对应命令 作用 启动后台会话 tmux new-session -d 在后台创建独立终端会话 发送键盘输入 tmux send-keys 向会话发送按键（包括 Enter、Tab、方向键） 捕获屏幕输出 tmux capture-pane -p 获取当前屏幕内容，用于监控和决策 查看会话列表 tmux list-sessions 查看所有活跃的 tmux 会话 附加到会话 tmux attach 人工介入查看 Claude 工作状态 清理会话 tmux kill-session 任务完成后释放资源 基础工作流# 1. 创建并启动# # 创建一个名为 claude-work 的后台会话，尺寸 140x40 tmux new-session -d -s claude-work -x 140 -y 40 # 在会话中启动 Claude Code tmux send-keys -t claude-work &#39;cd /path/to/project &amp;&amp; claude&#39; Enter2. 处理确认对话框# Claude Code 首次启动时会弹出对话框：">
+  <meta itemprop="wordCount" content="682">
+
+<title>tmux 编排详解 | Bing随遇而安</title>
+<link rel="icon" href="/favicon.svg" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:8082/books/claude-code/03-tmux/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/zh.search.min.734c991ffba391551a63330d89a90f65a87b4608a0a2fbc77f6d43d52129de21.js" integrity="sha256-c0yZH/ujkVUaYzMNiakPZah7RgigovvHf21D1SEp3iE=" crossorigin="anonymous"></script>
+
+
+
+  <style>
+ 
+
+html, body {
+     
+}
+
+:root {
+    --body-background: #000000;
+    --body-font-color: #ffffff;
+    --color-link: #75beff;
+    --color-visited-link: #75beff;
+    --color-accent: #6fc3df;
+    --color-border: #6fc3df;
+    --color-border-active: #ffffff;
+    --menu-background: #000000;
+    --menu-font-color: #ffffff;
+    --menu-border-color: #6fc3df;
+    --header-background: #000000;
+    --header-font-color: #ffffff;
+    --header-border-color: #6fc3df;
+    --code-background: #000000;
+    --code-border: #6fc3df;
+}
+
+body {
+    background-color: var(--body-background) !important;
+    color: var(--body-font-color) !important;
+}
+
+.book-menu, .book-menu * {
+     
+}
+
+.book-header, .book-header * {
+     
+}
+
+.book-toc, .book-toc * {
+     
+}
+
+.book-content, .markdown, .markdown * {
+     
+}
+
+.book-markdown pre, .book-markdown pre *, .book-markdown code, .markdown p code, .markdown li code, .markdown table code {
+     
+}
+
+ 
+.book-menu nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.book-menu nav ul ul {
+    counter-reset: chapter-counter;
+}
+
+.book-menu nav ul ul li {
+    counter-increment: chapter-counter;
+}
+
+.book-menu nav ul ul li > a::before {
+    content: counter(chapter-counter) ". ";
+    opacity: 0.6;
+    margin-right: 6px;
+    color: var(--menu-font-color);
+    font-family: monospace;
+}
+
+ 
+.book-menu nav > ul > li > a {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-menu nav > ul > li > a::after {
+    content: "▼";
+    font-size: 0.7em;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: transform 0.2s;
+}
+
+.book-menu nav > ul > li.collapsed > a::after {
+    transform: rotate(-90deg);
+}
+
+.book-menu nav a.active {
+    color: var(--color-accent) !important;
+    font-weight: bold;
+    background: rgba(111, 195, 223, 0.1);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 10px;
+    margin-left: -3px;
+}
+
+.book-header {
+    background: var(--header-background) !important;
+    border-bottom: 2px solid var(--header-border-color) !important;
+    color: var(--header-font-color);
+    gap: 0.5rem;
+}
+
+.book-brand img {
+    filter: none !important;
+}
+
+.book-header input {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+.markdown a {
+    color: var(--color-link);
+    border-bottom: 1px dotted var(--color-link);
+}
+
+.markdown a:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.markdown table {
+    border-color: #6fc3df;
+}
+.markdown table th, .markdown table td {
+    border-color: #6fc3df;
+}
+.markdown table th {
+    background-color: #111;
+}
+
+.book-markdown pre {
+    background: var(--code-background) !important;
+    border: 1px solid var(--code-border) !important;
+    padding: 1rem;
+}
+
+.book-markdown code {
+    background: #111111 !important;
+    border: 1px solid #333;
+    color: #d4d4d4;
+}
+
+.markdown p code, .markdown li code, .markdown table code {
+    background: #111111 !important;
+    border: 1px solid #444;
+    color: #9cdcfe;
+}
+
+.chroma {
+    background-color: #000000 !important;
+    color: #ffffff;
+    border: none;
+}
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+    color: #ce9178 !important;
+}
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+.chroma .nf, .chroma .fm {
+    color: #dcdcaa !important;
+}
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+    color: #b5cea8 !important;
+}
+.chroma .kt, .chroma .nc {
+    color: #4ec9b0 !important;
+}
+.chroma .nv, .chroma .vc {
+    color: #9cdcfe !important;
+}
+.chroma .p, .chroma .o {
+    color: #ffffff !important;
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+    background: #6fc3df;
+    border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+.book-toc nav a {
+    color: #888;
+}
+.book-toc nav a:hover {
+    color: #fff;
+}
+.book-toc nav a.active {
+    color: #6fc3df;
+    border-left: 2px solid #6fc3df;
+}
+</style>
+
+</head>
+<body dir="ltr" class="book-kind-page book-type-books">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.svg" alt="Logo" /><span>Bing随遇而安</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-594d75a63ab662c39c488c6c20b6c066" class="toggle"  />
+    
+    <label for="section-594d75a63ab662c39c488c6c20b6c066" class="flex">
+      <a href="/books/llama-cpp/" class="">
+        llama.cpp 本地推理指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/01-intro/" class="">
+      简介</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/02-install/" class="">
+      编译与安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/03-model/" class="">
+      模型下载与转换</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/04-inference/" class="">
+      推理与服务部署</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/05-quantization/" class="">
+      量化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/06-advanced/" class="">
+      高级用法</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/07-tools/" class="">
+      完整工具参考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-f1b47051b07d13559e01140a95da8e02" class="toggle" checked />
+    
+    <label for="section-f1b47051b07d13559e01140a95da8e02" class="flex">
+      <a href="/books/claude-code/" class="">
+        Claude Code 完全指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/01-install/" class="">
+      安装与配置</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/02-modes/" class="">
+      两种使用模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/03-tmux/" class="active">
+      tmux 编排详解</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/04-cli-flags/" class="">
+      CLI 参数完整参考</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/05-slash-commands/" class="">
+      斜杠命令与键盘快捷键</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/06-pr-review/" class="">
+      PR 审查与工作树</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/07-mcp/" class="">
+      MCP 集成</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/08-agents-hooks/" class="">
+      自定义子智能体与钩子</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/09-cost-performance/" class="">
+      成本与性能优化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/10-pitfalls/" class="">
+      常见陷阱与注意事项</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/11-quick-start/" class="">
+      快速上手</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-256d3d8b571b16c3fbc024b70a10a817" class="toggle"  />
+    
+    <label for="section-256d3d8b571b16c3fbc024b70a10a817" class="flex">
+      <a href="/books/deepseek-tui/" class="">
+        DeepSeek-TUI</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/01-install/" class="">
+      安装与认证</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/02-architecture/" class="">
+      架构设计</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/03-modes/" class="">
+      三种交互模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/04-tools/" class="">
+      工具系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/05-skills/" class="">
+      Skills 系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/06-sessions/" class="">
+      会话管理</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/07-mcp/" class="">
+      MCP 支持</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/08-comparison/" class="">
+      与 Hermes Agent 对比</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+<ul><li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li></ul>
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>tmux 编排详解</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tmux-编排详解">tmux 编排详解</a>
+      <ul>
+        <li><a href="#为什么需要-tmux">为什么需要 tmux</a>
+          <ul>
+            <li><a href="#tmux-带来的核心能力">tmux 带来的核心能力</a></li>
+          </ul>
+        </li>
+        <li><a href="#基础工作流">基础工作流</a>
+          <ul>
+            <li><a href="#1-创建并启动">1. 创建并启动</a></li>
+            <li><a href="#2-处理确认对话框">2. 处理确认对话框</a></li>
+            <li><a href="#3-监控进度">3. 监控进度</a></li>
+            <li><a href="#4-发送后续任务">4. 发送后续任务</a></li>
+            <li><a href="#5-人工介入可选">5. 人工介入（可选）</a></li>
+            <li><a href="#6-清理">6. 清理</a></li>
+          </ul>
+        </li>
+        <li><a href="#高级编排模式">高级编排模式</a>
+          <ul>
+            <li><a href="#模式一轮询检查">模式一：轮询检查</a></li>
+            <li><a href="#模式二条件分支">模式二：条件分支</a></li>
+            <li><a href="#模式三多会话并行">模式三：多会话并行</a></li>
+          </ul>
+        </li>
+        <li><a href="#实用命令参考">实用命令参考</a>
+          <ul>
+            <li><a href="#会话管理">会话管理</a></li>
+            <li><a href="#面板操作">面板操作</a></li>
+            <li><a href="#按键发送">按键发送</a></li>
+          </ul>
+        </li>
+        <li><a href="#在-ai-agent-中的典型使用模式">在 AI Agent 中的典型使用模式</a></li>
+        <li><a href="#最佳实践">最佳实践</a></li>
+        <li><a href="#常见陷阱">常见陷阱</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="tmux-编排详解">tmux 编排详解<a class="anchor" href="#tmux-%e7%bc%96%e6%8e%92%e8%af%a6%e8%a7%a3">#</a></h1>
+<p>在使用 Claude Code 的交互式模式时，tmux 是最可靠、最强大的编排工具。本章深入讲解 tmux 的价值、核心用法和高级技巧。</p>
+<h2 id="为什么需要-tmux">为什么需要 tmux<a class="anchor" href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81-tmux">#</a></h2>
+<p>Claude Code 是一个完整的 TUI（终端用户界面）应用程序，不是简单的命令行工具。这意味着：</p>
+<ul>
+<li>它有自己的界面刷新逻辑</li>
+<li>它需要实时接收键盘输入</li>
+<li>它可能弹出确认对话框</li>
+<li>它会动态显示工具使用状态</li>
+<li>它的输出包含 ANSI 转义序列</li>
+</ul>
+<p>如果直接用 <code>terminal(pty=true)</code> 运行，你能看到输出并发送输入，但无法可靠地<strong>监控进度</strong>和<strong>捕获状态</strong>。tmux 解决了这两个关键问题。</p>
+<h3 id="tmux-带来的核心能力">tmux 带来的核心能力<a class="anchor" href="#tmux-%e5%b8%a6%e6%9d%a5%e7%9a%84%e6%a0%b8%e5%bf%83%e8%83%bd%e5%8a%9b">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>能力</th>
+          <th>对应命令</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>启动后台会话</td>
+          <td><code>tmux new-session -d</code></td>
+          <td>在后台创建独立终端会话</td>
+      </tr>
+      <tr>
+          <td>发送键盘输入</td>
+          <td><code>tmux send-keys</code></td>
+          <td>向会话发送按键（包括 Enter、Tab、方向键）</td>
+      </tr>
+      <tr>
+          <td>捕获屏幕输出</td>
+          <td><code>tmux capture-pane -p</code></td>
+          <td>获取当前屏幕内容，用于监控和决策</td>
+      </tr>
+      <tr>
+          <td>查看会话列表</td>
+          <td><code>tmux list-sessions</code></td>
+          <td>查看所有活跃的 tmux 会话</td>
+      </tr>
+      <tr>
+          <td>附加到会话</td>
+          <td><code>tmux attach</code></td>
+          <td>人工介入查看 Claude 工作状态</td>
+      </tr>
+      <tr>
+          <td>清理会话</td>
+          <td><code>tmux kill-session</code></td>
+          <td>任务完成后释放资源</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="基础工作流">基础工作流<a class="anchor" href="#%e5%9f%ba%e7%a1%80%e5%b7%a5%e4%bd%9c%e6%b5%81">#</a></h2>
+<h3 id="1-创建并启动">1. 创建并启动<a class="anchor" href="#1-%e5%88%9b%e5%bb%ba%e5%b9%b6%e5%90%af%e5%8a%a8">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 创建一个名为 claude-work 的后台会话，尺寸 140x40</span>
+</span></span><span class="line"><span class="cl">tmux new-session -d -s claude-work -x <span class="m">140</span> -y <span class="m">40</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在会话中启动 Claude Code</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t claude-work <span class="s1">&#39;cd /path/to/project &amp;&amp; claude&#39;</span> Enter</span></span></code></pre></div><h3 id="2-处理确认对话框">2. 处理确认对话框<a class="anchor" href="#2-%e5%a4%84%e7%90%86%e7%a1%ae%e8%ae%a4%e5%af%b9%e8%af%9d%e6%a1%86">#</a></h3>
+<p>Claude Code 首次启动时会弹出对话框：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 等待欢迎界面出现</span>
+</span></span><span class="line"><span class="cl">sleep <span class="m">5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 发送任务提示</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t claude-work <span class="s2">&#34;重构认证模块&#34;</span> Enter</span></span></code></pre></div><p>如果使用 <code>--dangerously-skip-permissions</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 发送带权限绕过的启动命令</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t claude-work <span class="s1">&#39;claude --dangerously-skip-permissions &#34;你的任务&#34;&#39;</span> Enter
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 处理信任对话框（Enter = 选择默认的 &#34;Yes, I trust this folder&#34;）</span>
+</span></span><span class="line"><span class="cl">sleep <span class="m">4</span> <span class="o">&amp;&amp;</span> tmux send-keys -t claude-work Enter
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 处理权限对话框（需要先按 Down，然后 Enter）</span>
+</span></span><span class="line"><span class="cl">sleep <span class="m">3</span> <span class="o">&amp;&amp;</span> tmux send-keys -t claude-work Down <span class="o">&amp;&amp;</span> sleep 0.3 <span class="o">&amp;&amp;</span> tmux send-keys -t claude-work Enter</span></span></code></pre></div><h3 id="3-监控进度">3. 监控进度<a class="anchor" href="#3-%e7%9b%91%e6%8e%a7%e8%bf%9b%e5%ba%a6">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 捕获最后 50 行内容</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t claude-work -p -S -50</span></span></code></pre></div><p>关键状态指示器：</p>
+<table>
+  <thead>
+      <tr>
+          <th>指示器</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>❯</code> 在底部</td>
+          <td>Claude 已完成，等待输入</td>
+      </tr>
+      <tr>
+          <td><code>●</code> 行</td>
+          <td>Claude 正在积极使用工具</td>
+      </tr>
+      <tr>
+          <td>思考符号</td>
+          <td>Claude 正在推理</td>
+      </tr>
+      <tr>
+          <td>错误信息</td>
+          <td>需要人工介入</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-发送后续任务">4. 发送后续任务<a class="anchor" href="#4-%e5%8f%91%e9%80%81%e5%90%8e%e7%bb%ad%e4%bb%bb%e5%8a%a1">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看状态确认完成</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t claude-work -p -S -20
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 发送下一个任务</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t claude-work <span class="s2">&#34;现在为认证模块添加单元测试&#34;</span> Enter</span></span></code></pre></div><h3 id="5-人工介入可选">5. 人工介入（可选）<a class="anchor" href="#5-%e4%ba%ba%e5%b7%a5%e4%bb%8b%e5%85%a5%e5%8f%af%e9%80%89">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 附加到会话，实时查看和交互</span>
+</span></span><span class="line"><span class="cl">tmux attach -t claude-work
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 退出附加模式（不关闭会话）</span>
+</span></span><span class="line"><span class="cl">Ctrl+B, D</span></span></code></pre></div><h3 id="6-清理">6. 清理<a class="anchor" href="#6-%e6%b8%85%e7%90%86">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 任务完成后关闭会话</span>
+</span></span><span class="line"><span class="cl">tmux kill-session -t claude-work</span></span></code></pre></div><h2 id="高级编排模式">高级编排模式<a class="anchor" href="#%e9%ab%98%e7%ba%a7%e7%bc%96%e6%8e%92%e6%a8%a1%e5%bc%8f">#</a></h2>
+<h3 id="模式一轮询检查">模式一：轮询检查<a class="anchor" href="#%e6%a8%a1%e5%bc%8f%e4%b8%80%e8%bd%ae%e8%af%a2%e6%a3%80%e6%9f%a5">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 启动任务</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t claude-work <span class="s2">&#34;运行测试并修复失败项&#34;</span> Enter
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 循环检查直到完成</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 30<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">output</span><span class="o">=</span><span class="k">$(</span>tmux capture-pane -t claude-work -p -S -5<span class="k">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$output</span><span class="s2">&#34;</span> <span class="p">|</span> grep -q <span class="s2">&#34;❯&#34;</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;任务完成&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">break</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">  sleep <span class="m">10</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 获取最终结果</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t claude-work -p -S -100</span></span></code></pre></div><h3 id="模式二条件分支">模式二：条件分支<a class="anchor" href="#%e6%a8%a1%e5%bc%8f%e4%ba%8c%e6%9d%a1%e4%bb%b6%e5%88%86%e6%94%af">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 发送编译命令</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t claude-work <span class="s2">&#34;编译项目&#34;</span> Enter
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 等待并检查</span>
+</span></span><span class="line"><span class="cl">sleep <span class="m">30</span>
+</span></span><span class="line"><span class="cl"><span class="nv">output</span><span class="o">=</span><span class="k">$(</span>tmux capture-pane -t claude-work -p -S -20<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$output</span><span class="s2">&#34;</span> <span class="p">|</span> grep -q <span class="s2">&#34;error&#34;</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  tmux send-keys -t claude-work <span class="s2">&#34;编译出错，请修复错误&#34;</span> Enter
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  tmux send-keys -t claude-work <span class="s2">&#34;编译成功，运行测试&#34;</span> Enter
+</span></span><span class="line"><span class="cl"><span class="k">fi</span></span></span></code></pre></div><h3 id="模式三多会话并行">模式三：多会话并行<a class="anchor" href="#%e6%a8%a1%e5%bc%8f%e4%b8%89%e5%a4%9a%e4%bc%9a%e8%af%9d%e5%b9%b6%e8%a1%8c">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 创建三个独立任务</span>
+</span></span><span class="line"><span class="cl">tmux new-session -d -s task-backend -x <span class="m">140</span> -y <span class="m">40</span>
+</span></span><span class="line"><span class="cl">tmux new-session -d -s task-frontend -x <span class="m">140</span> -y <span class="m">40</span>
+</span></span><span class="line"><span class="cl">tmux new-session -d -s task-docs -x <span class="m">140</span> -y <span class="m">40</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 发送不同任务</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t task-backend <span class="s1">&#39;cd ~/project &amp;&amp; claude -p &#34;修复 API Bug&#34; --max-turns 5&#39;</span> Enter
+</span></span><span class="line"><span class="cl">tmux send-keys -t task-frontend <span class="s1">&#39;cd ~/project &amp;&amp; claude -p &#34;优化 UI 组件&#34; --max-turns 5&#39;</span> Enter
+</span></span><span class="line"><span class="cl">tmux send-keys -t task-docs <span class="s1">&#39;cd ~/project &amp;&amp; claude -p &#34;更新 API 文档&#34; --max-turns 3&#39;</span> Enter
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 并行监控</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 20<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> s in task-backend task-frontend task-docs<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">status</span><span class="o">=</span><span class="k">$(</span>tmux capture-pane -t <span class="nv">$s</span> -p -S -3 2&gt;/dev/null <span class="p">|</span> tail -1<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$s</span><span class="s2">: </span><span class="nv">$status</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">done</span>
+</span></span><span class="line"><span class="cl">  sleep <span class="m">15</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span></span></span></code></pre></div><h2 id="实用命令参考">实用命令参考<a class="anchor" href="#%e5%ae%9e%e7%94%a8%e5%91%bd%e4%bb%a4%e5%8f%82%e8%80%83">#</a></h2>
+<h3 id="会话管理">会话管理<a class="anchor" href="#%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 列出所有会话</span>
+</span></span><span class="line"><span class="cl">tmux list-sessions
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 列出会话详情</span>
+</span></span><span class="line"><span class="cl">tmux list-sessions -F <span class="s2">&#34;#S: #{session_name}, Windows: #{session_windows}&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建会话</span>
+</span></span><span class="line"><span class="cl">tmux new-session -d -s &lt;name&gt; <span class="o">[</span>-x &lt;width&gt;<span class="o">]</span> <span class="o">[</span>-y &lt;height&gt;<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 附加到会话</span>
+</span></span><span class="line"><span class="cl">tmux attach -t &lt;name&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 分离当前会话</span>
+</span></span><span class="line"><span class="cl">tmux detach
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 重命名会话</span>
+</span></span><span class="line"><span class="cl">tmux rename-session -t &lt;old&gt; &lt;new&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 关闭会话</span>
+</span></span><span class="line"><span class="cl">tmux kill-session -t &lt;name&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 关闭所有会话</span>
+</span></span><span class="line"><span class="cl">tmux kill-server</span></span></code></pre></div><h3 id="面板操作">面板操作<a class="anchor" href="#%e9%9d%a2%e6%9d%bf%e6%93%8d%e4%bd%9c">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 捕获面板内容（纯文本）</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t &lt;session&gt; -p
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 捕获指定行范围</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t &lt;session&gt; -p -S -100 -E -10
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 捕获带 ANSI 转义的内容</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t &lt;session&gt; -p -e
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 复制面板内容到文件</span>
+</span></span><span class="line"><span class="cl">tmux capture-pane -t &lt;session&gt; -p -S - -E - &gt; /tmp/output.txt</span></span></code></pre></div><h3 id="按键发送">按键发送<a class="anchor" href="#%e6%8c%89%e9%94%ae%e5%8f%91%e9%80%81">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 发送普通文本</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; <span class="s2">&#34;some text&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 发送特殊键</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Enter      <span class="c1"># 回车</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Tab        <span class="c1"># 制表符</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Escape     <span class="c1"># 退出键</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Up         <span class="c1"># 上箭头</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Down       <span class="c1"># 下箭头</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Left       <span class="c1"># 左箭头</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; Right      <span class="c1"># 右箭头</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 组合键</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; C-c        <span class="c1"># Ctrl+C</span>
+</span></span><span class="line"><span class="cl">tmux send-keys -t &lt;session&gt; C-d        <span class="c1"># Ctrl+D</span></span></span></code></pre></div><h2 id="在-ai-agent-中的典型使用模式">在 AI Agent 中的典型使用模式<a class="anchor" href="#%e5%9c%a8-ai-agent-%e4%b8%ad%e7%9a%84%e5%85%b8%e5%9e%8b%e4%bd%bf%e7%94%a8%e6%a8%a1%e5%bc%8f">#</a></h2>
+<p>当 AI Agent（如 Hermes Agent）编排 Claude Code 时，通常遵循以下模式：</p>
+<pre tabindex="0"><code>1. 创建 tmux 会话
+   ↓
+2. 启动 Claude Code
+   ↓
+3. 处理确认对话框（如果需要）
+   ↓
+4. 发送任务描述
+   ↓
+5. 等待 + 捕获面板检查状态
+   ↓
+6. 判断是否完成/出错/需要跟进
+   ↓
+7a. 完成 → 捕获结果 → 关闭会话
+7b. 出错 → 发送修复指令 → 回到步骤 5
+7c. 需要人工 → 通知用户介入</code></pre><h2 id="最佳实践">最佳实践<a class="anchor" href="#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">#</a></h2>
+<ol>
+<li><strong>命名规范</strong>：使用描述性名称，如 <code>claude-refactor-auth</code> 而非 <code>s1</code></li>
+<li><strong>合理尺寸</strong>：<code>-x 140 -y 40</code> 适合大多数任务，避免内容换行</li>
+<li><strong>超时保护</strong>：设置最大等待时间，防止 Claude 卡死</li>
+<li><strong>及时清理</strong>：任务完成后立即 <code>kill-session</code></li>
+<li><strong>日志记录</strong>：重要任务将面板输出保存到文件</li>
+<li><strong>错误处理</strong>：检查面板内容中的错误模式</li>
+<li><strong>避免冲突</strong>：每个任务使用独立的会话名称</li>
+</ol>
+<h2 id="常见陷阱">常见陷阱<a class="anchor" href="#%e5%b8%b8%e8%a7%81%e9%99%b7%e9%98%b1">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>陷阱</th>
+          <th>解决方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>会话已存在</td>
+          <td>创建前检查或使用唯一名称</td>
+      </tr>
+      <tr>
+          <td>对话框未处理</td>
+          <td>Claude 可能退出或挂起，需要重新发送</td>
+      </tr>
+      <tr>
+          <td>面板内容截断</td>
+          <td>使用 <code>-S -</code> 和 <code>-E -</code> 捕获全部</td>
+      </tr>
+      <tr>
+          <td>ANSI 转义干扰解析</td>
+          <td>使用 <code>-p</code> 获取纯文本，或后处理清理</td>
+      </tr>
+      <tr>
+          <td>资源泄漏</td>
+          <td>确保所有分支都执行 <code>kill-session</code></td>
+      </tr>
+  </tbody>
+</table>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/books/claude-code/02-modes/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>两种使用模式</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/books/claude-code/04-cli-flags/" class="flex align-center">
+        <span>CLI 参数完整参考</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tmux-编排详解">tmux 编排详解</a>
+      <ul>
+        <li><a href="#为什么需要-tmux">为什么需要 tmux</a>
+          <ul>
+            <li><a href="#tmux-带来的核心能力">tmux 带来的核心能力</a></li>
+          </ul>
+        </li>
+        <li><a href="#基础工作流">基础工作流</a>
+          <ul>
+            <li><a href="#1-创建并启动">1. 创建并启动</a></li>
+            <li><a href="#2-处理确认对话框">2. 处理确认对话框</a></li>
+            <li><a href="#3-监控进度">3. 监控进度</a></li>
+            <li><a href="#4-发送后续任务">4. 发送后续任务</a></li>
+            <li><a href="#5-人工介入可选">5. 人工介入（可选）</a></li>
+            <li><a href="#6-清理">6. 清理</a></li>
+          </ul>
+        </li>
+        <li><a href="#高级编排模式">高级编排模式</a>
+          <ul>
+            <li><a href="#模式一轮询检查">模式一：轮询检查</a></li>
+            <li><a href="#模式二条件分支">模式二：条件分支</a></li>
+            <li><a href="#模式三多会话并行">模式三：多会话并行</a></li>
+          </ul>
+        </li>
+        <li><a href="#实用命令参考">实用命令参考</a>
+          <ul>
+            <li><a href="#会话管理">会话管理</a></li>
+            <li><a href="#面板操作">面板操作</a></li>
+            <li><a href="#按键发送">按键发送</a></li>
+          </ul>
+        </li>
+        <li><a href="#在-ai-agent-中的典型使用模式">在 AI Agent 中的典型使用模式</a></li>
+        <li><a href="#最佳实践">最佳实践</a></li>
+        <li><a href="#常见陷阱">常见陷阱</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 ---
 title: "llama.cpp 本地推理指南"
 weight: 1
+bookCollapseSection: true
 ---
 
 # llama.cpp 本地推理指南

@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8082&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CLI 参数完整参考# 会话与环境# 参数 作用 -p, --print 非交互式单发模式（完成后退出） -c, --continue 恢复当前目录最近的会话 -r, --resume &lt;id&gt; 按 ID 恢复特定会话（无 ID 时弹出交互式选择器） --fork-session 恢复时创建新会话 ID，而非复用原 ID --session-id &lt;uuid&gt; 使用指定 UUID 作为会话标识 --no-session-persistence 不保存会话到磁盘（仅 Print 模式） --add-dir &lt;paths...&gt; 授予 Claude 访问额外工作目录的权限 -w, --worktree [name] 在隔离的 git worktree 中运行（路径：.claude/worktrees/&lt;name&gt;） --tmux 为 worktree 创建 tmux 会话（需配合 --worktree） --ide 启动时自动连接 IDE --chrome / --no-chrome 启用/禁用 Chrome 浏览器集成（网页测试） --from-pr [number] 恢复与特定 GitHub PR 关联的会话 --file &lt;specs...&gt; 启动时下载的文件资源（格式：file_id:relative_path） 模型与性能# 参数 作用 --model &lt;alias&gt; 模型选择：sonnet、opus、haiku，或完整名称如 claude-sonnet-4-6 --effort &lt;level&gt; 推理深度：low、medium、high、xhigh、max、auto --max-turns &lt;n&gt; 限制智能体循环次数（仅 Print 模式，防止失控） --max-budget-usd &lt;n&gt; 限制 API 花费（美元）（仅 Print 模式） --fallback-model &lt;model&gt; 默认模型过载时自动回退（仅 Print 模式） --betas &lt;betas...&gt; 在 API 请求中包含 Beta headers（仅 API Key 用户） 权限与安全# 参数 作用 --dangerously-skip-permissions 自动批准所有工具使用（文件写入、Bash、网络等） --allow-dangerously-skip-permissions 将绕过权限作为一个选项启用，而非默认启用 --permission-mode &lt;mode&gt; default、acceptEdits、plan、auto、dontAsk、bypassPermissions --allowedTools &lt;tools...&gt; 白名单特定工具 --disallowedTools &lt;tools...&gt; 黑名单特定工具 --tools &lt;tools...&gt; 覆盖内置工具集（&#34;&#34; = 无，&#34;default&#34; = 全部，或指定工具名） 输出与输入格式# 参数 作用 --output-format &lt;fmt&gt; text（默认）、json（单个结果对象）、stream-json（换行分隔） --input-format &lt;fmt&gt; text（默认）或 stream-json（实时流式输入） --json-schema &lt;schema&gt; 强制输出符合指定 JSON Schema 的结构化数据 --verbose 输出逐轮详细信息 --include-partial-messages 包含到达时的部分消息片段（stream-json &#43; print） --replay-user-messages 在 stdout 上重新发出用户消息（stream-json 双向） 系统提示与上下文# 参数 作用 --append-system-prompt &lt;text&gt; 追加到默认系统提示（保留内置能力） --append-system-prompt-file &lt;path&gt; 将文件内容追加到默认系统提示 --system-prompt &lt;text&gt; 替换整个系统提示（通常建议使用 –append） --system-prompt-file &lt;path&gt; 用文件内容替换系统提示 --bare 跳过 hooks、插件、MCP 发现、CLAUDE.md、OAuth（最快启动） --agents &#39;&lt;json&gt;&#39; 动态定义自定义子智能体（JSON 格式） --mcp-config &lt;path&gt; 从 JSON 文件加载 MCP 服务器（可重复使用） --strict-mcp-config 仅使用 --mcp-config 中的 MCP 服务器，忽略所有其他 MCP 配置 --settings &lt;file-or-json&gt; 从 JSON 文件或内联 JSON 加载额外设置 --setting-sources &lt;sources&gt; 加载设置的来源（逗号分隔）：user、project、local --plugin-dir &lt;paths...&gt; 从指定目录加载插件（仅本次会话） --disable-slash-commands 禁用所有技能/斜杠命令 调试# 参数 作用 -d, --debug [filter] 启用调试日志，支持分类过滤（如 &#34;api,hooks&#34;、&#34;!1p,!file&#34;） --debug-file &lt;path&gt; 将调试日志写入指定文件（隐式启用调试模式） 智能体团队# 参数 作用 --teammate-mode &lt;mode&gt; 智能体团队显示方式：auto、in-process 或 tmux --brief 启用 SendUserMessage 工具，支持智能体向用户发送消息 模型选择速查# 模型别名 适用场景 相对成本 sonnet 日常编码、代码审查 中等 opus 复杂多步推理、架构设计 高 haiku 简单任务、快速响应 低 权限模式详解# 模式 行为 适用场景 default 每个工具使用前询问 默认安全模式 acceptEdits 自动接受文件编辑 信任 Claude 的修改 auto 自动决定权限 平衡安全与效率 plan 先进入规划模式 复杂任务先规划后执行 dontAsk 不询问，但不自动执行 只读场景 bypassPermissions 完全绕过权限检查 沙箱环境、CI/CD ">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:8082/books/claude-code/04-cli-flags/">
+  <meta property="og:site_name" content="Bing随遇而安">
+  <meta property="og:title" content="CLI 参数完整参考">
+  <meta property="og:description" content="CLI 参数完整参考# 会话与环境# 参数 作用 -p, --print 非交互式单发模式（完成后退出） -c, --continue 恢复当前目录最近的会话 -r, --resume &lt;id&gt; 按 ID 恢复特定会话（无 ID 时弹出交互式选择器） --fork-session 恢复时创建新会话 ID，而非复用原 ID --session-id &lt;uuid&gt; 使用指定 UUID 作为会话标识 --no-session-persistence 不保存会话到磁盘（仅 Print 模式） --add-dir &lt;paths...&gt; 授予 Claude 访问额外工作目录的权限 -w, --worktree [name] 在隔离的 git worktree 中运行（路径：.claude/worktrees/&lt;name&gt;） --tmux 为 worktree 创建 tmux 会话（需配合 --worktree） --ide 启动时自动连接 IDE --chrome / --no-chrome 启用/禁用 Chrome 浏览器集成（网页测试） --from-pr [number] 恢复与特定 GitHub PR 关联的会话 --file &lt;specs...&gt; 启动时下载的文件资源（格式：file_id:relative_path） 模型与性能# 参数 作用 --model &lt;alias&gt; 模型选择：sonnet、opus、haiku，或完整名称如 claude-sonnet-4-6 --effort &lt;level&gt; 推理深度：low、medium、high、xhigh、max、auto --max-turns &lt;n&gt; 限制智能体循环次数（仅 Print 模式，防止失控） --max-budget-usd &lt;n&gt; 限制 API 花费（美元）（仅 Print 模式） --fallback-model &lt;model&gt; 默认模型过载时自动回退（仅 Print 模式） --betas &lt;betas...&gt; 在 API 请求中包含 Beta headers（仅 API Key 用户） 权限与安全# 参数 作用 --dangerously-skip-permissions 自动批准所有工具使用（文件写入、Bash、网络等） --allow-dangerously-skip-permissions 将绕过权限作为一个选项启用，而非默认启用 --permission-mode &lt;mode&gt; default、acceptEdits、plan、auto、dontAsk、bypassPermissions --allowedTools &lt;tools...&gt; 白名单特定工具 --disallowedTools &lt;tools...&gt; 黑名单特定工具 --tools &lt;tools...&gt; 覆盖内置工具集（&#34;&#34; = 无，&#34;default&#34; = 全部，或指定工具名） 输出与输入格式# 参数 作用 --output-format &lt;fmt&gt; text（默认）、json（单个结果对象）、stream-json（换行分隔） --input-format &lt;fmt&gt; text（默认）或 stream-json（实时流式输入） --json-schema &lt;schema&gt; 强制输出符合指定 JSON Schema 的结构化数据 --verbose 输出逐轮详细信息 --include-partial-messages 包含到达时的部分消息片段（stream-json &#43; print） --replay-user-messages 在 stdout 上重新发出用户消息（stream-json 双向） 系统提示与上下文# 参数 作用 --append-system-prompt &lt;text&gt; 追加到默认系统提示（保留内置能力） --append-system-prompt-file &lt;path&gt; 将文件内容追加到默认系统提示 --system-prompt &lt;text&gt; 替换整个系统提示（通常建议使用 –append） --system-prompt-file &lt;path&gt; 用文件内容替换系统提示 --bare 跳过 hooks、插件、MCP 发现、CLAUDE.md、OAuth（最快启动） --agents &#39;&lt;json&gt;&#39; 动态定义自定义子智能体（JSON 格式） --mcp-config &lt;path&gt; 从 JSON 文件加载 MCP 服务器（可重复使用） --strict-mcp-config 仅使用 --mcp-config 中的 MCP 服务器，忽略所有其他 MCP 配置 --settings &lt;file-or-json&gt; 从 JSON 文件或内联 JSON 加载额外设置 --setting-sources &lt;sources&gt; 加载设置的来源（逗号分隔）：user、project、local --plugin-dir &lt;paths...&gt; 从指定目录加载插件（仅本次会话） --disable-slash-commands 禁用所有技能/斜杠命令 调试# 参数 作用 -d, --debug [filter] 启用调试日志，支持分类过滤（如 &#34;api,hooks&#34;、&#34;!1p,!file&#34;） --debug-file &lt;path&gt; 将调试日志写入指定文件（隐式启用调试模式） 智能体团队# 参数 作用 --teammate-mode &lt;mode&gt; 智能体团队显示方式：auto、in-process 或 tmux --brief 启用 SendUserMessage 工具，支持智能体向用户发送消息 模型选择速查# 模型别名 适用场景 相对成本 sonnet 日常编码、代码审查 中等 opus 复杂多步推理、架构设计 高 haiku 简单任务、快速响应 低 权限模式详解# 模式 行为 适用场景 default 每个工具使用前询问 默认安全模式 acceptEdits 自动接受文件编辑 信任 Claude 的修改 auto 自动决定权限 平衡安全与效率 plan 先进入规划模式 复杂任务先规划后执行 dontAsk 不询问，但不自动执行 只读场景 bypassPermissions 完全绕过权限检查 沙箱环境、CI/CD">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="books">
+
+
+  <meta itemprop="name" content="CLI 参数完整参考">
+  <meta itemprop="description" content="CLI 参数完整参考# 会话与环境# 参数 作用 -p, --print 非交互式单发模式（完成后退出） -c, --continue 恢复当前目录最近的会话 -r, --resume &lt;id&gt; 按 ID 恢复特定会话（无 ID 时弹出交互式选择器） --fork-session 恢复时创建新会话 ID，而非复用原 ID --session-id &lt;uuid&gt; 使用指定 UUID 作为会话标识 --no-session-persistence 不保存会话到磁盘（仅 Print 模式） --add-dir &lt;paths...&gt; 授予 Claude 访问额外工作目录的权限 -w, --worktree [name] 在隔离的 git worktree 中运行（路径：.claude/worktrees/&lt;name&gt;） --tmux 为 worktree 创建 tmux 会话（需配合 --worktree） --ide 启动时自动连接 IDE --chrome / --no-chrome 启用/禁用 Chrome 浏览器集成（网页测试） --from-pr [number] 恢复与特定 GitHub PR 关联的会话 --file &lt;specs...&gt; 启动时下载的文件资源（格式：file_id:relative_path） 模型与性能# 参数 作用 --model &lt;alias&gt; 模型选择：sonnet、opus、haiku，或完整名称如 claude-sonnet-4-6 --effort &lt;level&gt; 推理深度：low、medium、high、xhigh、max、auto --max-turns &lt;n&gt; 限制智能体循环次数（仅 Print 模式，防止失控） --max-budget-usd &lt;n&gt; 限制 API 花费（美元）（仅 Print 模式） --fallback-model &lt;model&gt; 默认模型过载时自动回退（仅 Print 模式） --betas &lt;betas...&gt; 在 API 请求中包含 Beta headers（仅 API Key 用户） 权限与安全# 参数 作用 --dangerously-skip-permissions 自动批准所有工具使用（文件写入、Bash、网络等） --allow-dangerously-skip-permissions 将绕过权限作为一个选项启用，而非默认启用 --permission-mode &lt;mode&gt; default、acceptEdits、plan、auto、dontAsk、bypassPermissions --allowedTools &lt;tools...&gt; 白名单特定工具 --disallowedTools &lt;tools...&gt; 黑名单特定工具 --tools &lt;tools...&gt; 覆盖内置工具集（&#34;&#34; = 无，&#34;default&#34; = 全部，或指定工具名） 输出与输入格式# 参数 作用 --output-format &lt;fmt&gt; text（默认）、json（单个结果对象）、stream-json（换行分隔） --input-format &lt;fmt&gt; text（默认）或 stream-json（实时流式输入） --json-schema &lt;schema&gt; 强制输出符合指定 JSON Schema 的结构化数据 --verbose 输出逐轮详细信息 --include-partial-messages 包含到达时的部分消息片段（stream-json &#43; print） --replay-user-messages 在 stdout 上重新发出用户消息（stream-json 双向） 系统提示与上下文# 参数 作用 --append-system-prompt &lt;text&gt; 追加到默认系统提示（保留内置能力） --append-system-prompt-file &lt;path&gt; 将文件内容追加到默认系统提示 --system-prompt &lt;text&gt; 替换整个系统提示（通常建议使用 –append） --system-prompt-file &lt;path&gt; 用文件内容替换系统提示 --bare 跳过 hooks、插件、MCP 发现、CLAUDE.md、OAuth（最快启动） --agents &#39;&lt;json&gt;&#39; 动态定义自定义子智能体（JSON 格式） --mcp-config &lt;path&gt; 从 JSON 文件加载 MCP 服务器（可重复使用） --strict-mcp-config 仅使用 --mcp-config 中的 MCP 服务器，忽略所有其他 MCP 配置 --settings &lt;file-or-json&gt; 从 JSON 文件或内联 JSON 加载额外设置 --setting-sources &lt;sources&gt; 加载设置的来源（逗号分隔）：user、project、local --plugin-dir &lt;paths...&gt; 从指定目录加载插件（仅本次会话） --disable-slash-commands 禁用所有技能/斜杠命令 调试# 参数 作用 -d, --debug [filter] 启用调试日志，支持分类过滤（如 &#34;api,hooks&#34;、&#34;!1p,!file&#34;） --debug-file &lt;path&gt; 将调试日志写入指定文件（隐式启用调试模式） 智能体团队# 参数 作用 --teammate-mode &lt;mode&gt; 智能体团队显示方式：auto、in-process 或 tmux --brief 启用 SendUserMessage 工具，支持智能体向用户发送消息 模型选择速查# 模型别名 适用场景 相对成本 sonnet 日常编码、代码审查 中等 opus 复杂多步推理、架构设计 高 haiku 简单任务、快速响应 低 权限模式详解# 模式 行为 适用场景 default 每个工具使用前询问 默认安全模式 acceptEdits 自动接受文件编辑 信任 Claude 的修改 auto 自动决定权限 平衡安全与效率 plan 先进入规划模式 复杂任务先规划后执行 dontAsk 不询问，但不自动执行 只读场景 bypassPermissions 完全绕过权限检查 沙箱环境、CI/CD">
+  <meta itemprop="wordCount" content="270">
+
+<title>CLI 参数完整参考 | Bing随遇而安</title>
+<link rel="icon" href="/favicon.svg" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:8082/books/claude-code/04-cli-flags/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/zh.search.min.734c991ffba391551a63330d89a90f65a87b4608a0a2fbc77f6d43d52129de21.js" integrity="sha256-c0yZH/ujkVUaYzMNiakPZah7RgigovvHf21D1SEp3iE=" crossorigin="anonymous"></script>
+
+
+
+  <style>
+ 
+
+html, body {
+     
+}
+
+:root {
+    --body-background: #000000;
+    --body-font-color: #ffffff;
+    --color-link: #75beff;
+    --color-visited-link: #75beff;
+    --color-accent: #6fc3df;
+    --color-border: #6fc3df;
+    --color-border-active: #ffffff;
+    --menu-background: #000000;
+    --menu-font-color: #ffffff;
+    --menu-border-color: #6fc3df;
+    --header-background: #000000;
+    --header-font-color: #ffffff;
+    --header-border-color: #6fc3df;
+    --code-background: #000000;
+    --code-border: #6fc3df;
+}
+
+body {
+    background-color: var(--body-background) !important;
+    color: var(--body-font-color) !important;
+}
+
+.book-menu, .book-menu * {
+     
+}
+
+.book-header, .book-header * {
+     
+}
+
+.book-toc, .book-toc * {
+     
+}
+
+.book-content, .markdown, .markdown * {
+     
+}
+
+.book-markdown pre, .book-markdown pre *, .book-markdown code, .markdown p code, .markdown li code, .markdown table code {
+     
+}
+
+ 
+.book-menu nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.book-menu nav ul ul {
+    counter-reset: chapter-counter;
+}
+
+.book-menu nav ul ul li {
+    counter-increment: chapter-counter;
+}
+
+.book-menu nav ul ul li > a::before {
+    content: counter(chapter-counter) ". ";
+    opacity: 0.6;
+    margin-right: 6px;
+    color: var(--menu-font-color);
+    font-family: monospace;
+}
+
+ 
+.book-menu nav > ul > li > a {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-menu nav > ul > li > a::after {
+    content: "▼";
+    font-size: 0.7em;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: transform 0.2s;
+}
+
+.book-menu nav > ul > li.collapsed > a::after {
+    transform: rotate(-90deg);
+}
+
+.book-menu nav a.active {
+    color: var(--color-accent) !important;
+    font-weight: bold;
+    background: rgba(111, 195, 223, 0.1);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 10px;
+    margin-left: -3px;
+}
+
+.book-header {
+    background: var(--header-background) !important;
+    border-bottom: 2px solid var(--header-border-color) !important;
+    color: var(--header-font-color);
+    gap: 0.5rem;
+}
+
+.book-brand img {
+    filter: none !important;
+}
+
+.book-header input {
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+.markdown a {
+    color: var(--color-link);
+    border-bottom: 1px dotted var(--color-link);
+}
+
+.markdown a:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.markdown table {
+    border-color: #6fc3df;
+}
+.markdown table th, .markdown table td {
+    border-color: #6fc3df;
+}
+.markdown table th {
+    background-color: #111;
+}
+
+.book-markdown pre {
+    background: var(--code-background) !important;
+    border: 1px solid var(--code-border) !important;
+    padding: 1rem;
+}
+
+.book-markdown code {
+    background: #111111 !important;
+    border: 1px solid #333;
+    color: #d4d4d4;
+}
+
+.markdown p code, .markdown li code, .markdown table code {
+    background: #111111 !important;
+    border: 1px solid #444;
+    color: #9cdcfe;
+}
+
+.chroma {
+    background-color: #000000 !important;
+    color: #ffffff;
+    border: none;
+}
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt {
+    color: #569cd6 !important;
+    font-weight: bold;
+}
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2, .chroma .se, .chroma .sh, .chroma .si, .chroma .s1 {
+    color: #ce9178 !important;
+}
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf, .chroma .c1, .chroma .cs {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+.chroma .nf, .chroma .fm {
+    color: #dcdcaa !important;
+}
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo {
+    color: #b5cea8 !important;
+}
+.chroma .kt, .chroma .nc {
+    color: #4ec9b0 !important;
+}
+.chroma .nv, .chroma .vc {
+    color: #9cdcfe !important;
+}
+.chroma .p, .chroma .o {
+    color: #ffffff !important;
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+    background: #6fc3df;
+    border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+.book-toc nav a {
+    color: #888;
+}
+.book-toc nav a:hover {
+    color: #fff;
+}
+.book-toc nav a.active {
+    color: #6fc3df;
+    border-left: 2px solid #6fc3df;
+}
+</style>
+
+</head>
+<body dir="ltr" class="book-kind-page book-type-books">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.svg" alt="Logo" /><span>Bing随遇而安</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-594d75a63ab662c39c488c6c20b6c066" class="toggle"  />
+    
+    <label for="section-594d75a63ab662c39c488c6c20b6c066" class="flex">
+      <a href="/books/llama-cpp/" class="">
+        llama.cpp 本地推理指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/01-intro/" class="">
+      简介</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/02-install/" class="">
+      编译与安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/03-model/" class="">
+      模型下载与转换</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/04-inference/" class="">
+      推理与服务部署</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/05-quantization/" class="">
+      量化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/06-advanced/" class="">
+      高级用法</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/llama-cpp/07-tools/" class="">
+      完整工具参考</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-f1b47051b07d13559e01140a95da8e02" class="toggle" checked />
+    
+    <label for="section-f1b47051b07d13559e01140a95da8e02" class="flex">
+      <a href="/books/claude-code/" class="">
+        Claude Code 完全指南</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/01-install/" class="">
+      安装与配置</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/02-modes/" class="">
+      两种使用模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/03-tmux/" class="">
+      tmux 编排详解</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/04-cli-flags/" class="active">
+      CLI 参数完整参考</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/05-slash-commands/" class="">
+      斜杠命令与键盘快捷键</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/06-pr-review/" class="">
+      PR 审查与工作树</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/07-mcp/" class="">
+      MCP 集成</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/08-agents-hooks/" class="">
+      自定义子智能体与钩子</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/09-cost-performance/" class="">
+      成本与性能优化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/10-pitfalls/" class="">
+      常见陷阱与注意事项</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/claude-code/11-quick-start/" class="">
+      快速上手</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    
+    
+      
+      
+      
+      <input type="checkbox" id="section-256d3d8b571b16c3fbc024b70a10a817" class="toggle"  />
+    
+    <label for="section-256d3d8b571b16c3fbc024b70a10a817" class="flex">
+      <a href="/books/deepseek-tui/" class="">
+        DeepSeek-TUI</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/01-install/" class="">
+      安装与认证</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/02-architecture/" class="">
+      架构设计</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/03-modes/" class="">
+      三种交互模式</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/04-tools/" class="">
+      工具系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/05-skills/" class="">
+      Skills 系统</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/06-sessions/" class="">
+      会话管理</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/07-mcp/" class="">
+      MCP 支持</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/books/deepseek-tui/08-comparison/" class="">
+      与 Hermes Agent 对比</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+<ul><li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li></ul>
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>CLI 参数完整参考</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cli-参数完整参考">CLI 参数完整参考</a>
+      <ul>
+        <li><a href="#会话与环境">会话与环境</a></li>
+        <li><a href="#模型与性能">模型与性能</a></li>
+        <li><a href="#权限与安全">权限与安全</a></li>
+        <li><a href="#输出与输入格式">输出与输入格式</a></li>
+        <li><a href="#系统提示与上下文">系统提示与上下文</a></li>
+        <li><a href="#调试">调试</a></li>
+        <li><a href="#智能体团队">智能体团队</a></li>
+        <li><a href="#模型选择速查">模型选择速查</a></li>
+        <li><a href="#权限模式详解">权限模式详解</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="cli-参数完整参考">CLI 参数完整参考<a class="anchor" href="#cli-%e5%8f%82%e6%95%b0%e5%ae%8c%e6%95%b4%e5%8f%82%e8%80%83">#</a></h1>
+<h2 id="会话与环境">会话与环境<a class="anchor" href="#%e4%bc%9a%e8%af%9d%e4%b8%8e%e7%8e%af%e5%a2%83">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-p, --print</code></td>
+          <td>非交互式单发模式（完成后退出）</td>
+      </tr>
+      <tr>
+          <td><code>-c, --continue</code></td>
+          <td>恢复当前目录最近的会话</td>
+      </tr>
+      <tr>
+          <td><code>-r, --resume &lt;id&gt;</code></td>
+          <td>按 ID 恢复特定会话（无 ID 时弹出交互式选择器）</td>
+      </tr>
+      <tr>
+          <td><code>--fork-session</code></td>
+          <td>恢复时创建新会话 ID，而非复用原 ID</td>
+      </tr>
+      <tr>
+          <td><code>--session-id &lt;uuid&gt;</code></td>
+          <td>使用指定 UUID 作为会话标识</td>
+      </tr>
+      <tr>
+          <td><code>--no-session-persistence</code></td>
+          <td>不保存会话到磁盘（仅 Print 模式）</td>
+      </tr>
+      <tr>
+          <td><code>--add-dir &lt;paths...&gt;</code></td>
+          <td>授予 Claude 访问额外工作目录的权限</td>
+      </tr>
+      <tr>
+          <td><code>-w, --worktree [name]</code></td>
+          <td>在隔离的 git worktree 中运行（路径：<code>.claude/worktrees/&lt;name&gt;</code>）</td>
+      </tr>
+      <tr>
+          <td><code>--tmux</code></td>
+          <td>为 worktree 创建 tmux 会话（需配合 <code>--worktree</code>）</td>
+      </tr>
+      <tr>
+          <td><code>--ide</code></td>
+          <td>启动时自动连接 IDE</td>
+      </tr>
+      <tr>
+          <td><code>--chrome</code> / <code>--no-chrome</code></td>
+          <td>启用/禁用 Chrome 浏览器集成（网页测试）</td>
+      </tr>
+      <tr>
+          <td><code>--from-pr [number]</code></td>
+          <td>恢复与特定 GitHub PR 关联的会话</td>
+      </tr>
+      <tr>
+          <td><code>--file &lt;specs...&gt;</code></td>
+          <td>启动时下载的文件资源（格式：<code>file_id:relative_path</code>）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="模型与性能">模型与性能<a class="anchor" href="#%e6%a8%a1%e5%9e%8b%e4%b8%8e%e6%80%a7%e8%83%bd">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--model &lt;alias&gt;</code></td>
+          <td>模型选择：<code>sonnet</code>、<code>opus</code>、<code>haiku</code>，或完整名称如 <code>claude-sonnet-4-6</code></td>
+      </tr>
+      <tr>
+          <td><code>--effort &lt;level&gt;</code></td>
+          <td>推理深度：<code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code>、<code>max</code>、<code>auto</code></td>
+      </tr>
+      <tr>
+          <td><code>--max-turns &lt;n&gt;</code></td>
+          <td>限制智能体循环次数（仅 Print 模式，防止失控）</td>
+      </tr>
+      <tr>
+          <td><code>--max-budget-usd &lt;n&gt;</code></td>
+          <td>限制 API 花费（美元）（仅 Print 模式）</td>
+      </tr>
+      <tr>
+          <td><code>--fallback-model &lt;model&gt;</code></td>
+          <td>默认模型过载时自动回退（仅 Print 模式）</td>
+      </tr>
+      <tr>
+          <td><code>--betas &lt;betas...&gt;</code></td>
+          <td>在 API 请求中包含 Beta headers（仅 API Key 用户）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="权限与安全">权限与安全<a class="anchor" href="#%e6%9d%83%e9%99%90%e4%b8%8e%e5%ae%89%e5%85%a8">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--dangerously-skip-permissions</code></td>
+          <td>自动批准所有工具使用（文件写入、Bash、网络等）</td>
+      </tr>
+      <tr>
+          <td><code>--allow-dangerously-skip-permissions</code></td>
+          <td>将绕过权限作为一个<em>选项</em>启用，而非默认启用</td>
+      </tr>
+      <tr>
+          <td><code>--permission-mode &lt;mode&gt;</code></td>
+          <td><code>default</code>、<code>acceptEdits</code>、<code>plan</code>、<code>auto</code>、<code>dontAsk</code>、<code>bypassPermissions</code></td>
+      </tr>
+      <tr>
+          <td><code>--allowedTools &lt;tools...&gt;</code></td>
+          <td>白名单特定工具</td>
+      </tr>
+      <tr>
+          <td><code>--disallowedTools &lt;tools...&gt;</code></td>
+          <td>黑名单特定工具</td>
+      </tr>
+      <tr>
+          <td><code>--tools &lt;tools...&gt;</code></td>
+          <td>覆盖内置工具集（<code>&quot;&quot;</code> = 无，<code>&quot;default&quot;</code> = 全部，或指定工具名）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="输出与输入格式">输出与输入格式<a class="anchor" href="#%e8%be%93%e5%87%ba%e4%b8%8e%e8%be%93%e5%85%a5%e6%a0%bc%e5%bc%8f">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--output-format &lt;fmt&gt;</code></td>
+          <td><code>text</code>（默认）、<code>json</code>（单个结果对象）、<code>stream-json</code>（换行分隔）</td>
+      </tr>
+      <tr>
+          <td><code>--input-format &lt;fmt&gt;</code></td>
+          <td><code>text</code>（默认）或 <code>stream-json</code>（实时流式输入）</td>
+      </tr>
+      <tr>
+          <td><code>--json-schema &lt;schema&gt;</code></td>
+          <td>强制输出符合指定 JSON Schema 的结构化数据</td>
+      </tr>
+      <tr>
+          <td><code>--verbose</code></td>
+          <td>输出逐轮详细信息</td>
+      </tr>
+      <tr>
+          <td><code>--include-partial-messages</code></td>
+          <td>包含到达时的部分消息片段（stream-json + print）</td>
+      </tr>
+      <tr>
+          <td><code>--replay-user-messages</code></td>
+          <td>在 stdout 上重新发出用户消息（stream-json 双向）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="系统提示与上下文">系统提示与上下文<a class="anchor" href="#%e7%b3%bb%e7%bb%9f%e6%8f%90%e7%a4%ba%e4%b8%8e%e4%b8%8a%e4%b8%8b%e6%96%87">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--append-system-prompt &lt;text&gt;</code></td>
+          <td><strong>追加</strong>到默认系统提示（保留内置能力）</td>
+      </tr>
+      <tr>
+          <td><code>--append-system-prompt-file &lt;path&gt;</code></td>
+          <td>将文件内容<strong>追加</strong>到默认系统提示</td>
+      </tr>
+      <tr>
+          <td><code>--system-prompt &lt;text&gt;</code></td>
+          <td><strong>替换</strong>整个系统提示（通常建议使用 &ndash;append）</td>
+      </tr>
+      <tr>
+          <td><code>--system-prompt-file &lt;path&gt;</code></td>
+          <td>用文件内容<strong>替换</strong>系统提示</td>
+      </tr>
+      <tr>
+          <td><code>--bare</code></td>
+          <td>跳过 hooks、插件、MCP 发现、CLAUDE.md、OAuth（最快启动）</td>
+      </tr>
+      <tr>
+          <td><code>--agents '&lt;json&gt;'</code></td>
+          <td>动态定义自定义子智能体（JSON 格式）</td>
+      </tr>
+      <tr>
+          <td><code>--mcp-config &lt;path&gt;</code></td>
+          <td>从 JSON 文件加载 MCP 服务器（可重复使用）</td>
+      </tr>
+      <tr>
+          <td><code>--strict-mcp-config</code></td>
+          <td>仅使用 <code>--mcp-config</code> 中的 MCP 服务器，忽略所有其他 MCP 配置</td>
+      </tr>
+      <tr>
+          <td><code>--settings &lt;file-or-json&gt;</code></td>
+          <td>从 JSON 文件或内联 JSON 加载额外设置</td>
+      </tr>
+      <tr>
+          <td><code>--setting-sources &lt;sources&gt;</code></td>
+          <td>加载设置的来源（逗号分隔）：<code>user</code>、<code>project</code>、<code>local</code></td>
+      </tr>
+      <tr>
+          <td><code>--plugin-dir &lt;paths...&gt;</code></td>
+          <td>从指定目录加载插件（仅本次会话）</td>
+      </tr>
+      <tr>
+          <td><code>--disable-slash-commands</code></td>
+          <td>禁用所有技能/斜杠命令</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="调试">调试<a class="anchor" href="#%e8%b0%83%e8%af%95">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-d, --debug [filter]</code></td>
+          <td>启用调试日志，支持分类过滤（如 <code>&quot;api,hooks&quot;</code>、<code>&quot;!1p,!file&quot;</code>）</td>
+      </tr>
+      <tr>
+          <td><code>--debug-file &lt;path&gt;</code></td>
+          <td>将调试日志写入指定文件（隐式启用调试模式）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="智能体团队">智能体团队<a class="anchor" href="#%e6%99%ba%e8%83%bd%e4%bd%93%e5%9b%a2%e9%98%9f">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--teammate-mode &lt;mode&gt;</code></td>
+          <td>智能体团队显示方式：<code>auto</code>、<code>in-process</code> 或 <code>tmux</code></td>
+      </tr>
+      <tr>
+          <td><code>--brief</code></td>
+          <td>启用 <code>SendUserMessage</code> 工具，支持智能体向用户发送消息</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="模型选择速查">模型选择速查<a class="anchor" href="#%e6%a8%a1%e5%9e%8b%e9%80%89%e6%8b%a9%e9%80%9f%e6%9f%a5">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>模型别名</th>
+          <th>适用场景</th>
+          <th>相对成本</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>sonnet</code></td>
+          <td>日常编码、代码审查</td>
+          <td>中等</td>
+      </tr>
+      <tr>
+          <td><code>opus</code></td>
+          <td>复杂多步推理、架构设计</td>
+          <td>高</td>
+      </tr>
+      <tr>
+          <td><code>haiku</code></td>
+          <td>简单任务、快速响应</td>
+          <td>低</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="权限模式详解">权限模式详解<a class="anchor" href="#%e6%9d%83%e9%99%90%e6%a8%a1%e5%bc%8f%e8%af%a6%e8%a7%a3">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>模式</th>
+          <th>行为</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>default</code></td>
+          <td>每个工具使用前询问</td>
+          <td>默认安全模式</td>
+      </tr>
+      <tr>
+          <td><code>acceptEdits</code></td>
+          <td>自动接受文件编辑</td>
+          <td>信任 Claude 的修改</td>
+      </tr>
+      <tr>
+          <td><code>auto</code></td>
+          <td>自动决定权限</td>
+          <td>平衡安全与效率</td>
+      </tr>
+      <tr>
+          <td><code>plan</code></td>
+          <td>先进入规划模式</td>
+          <td>复杂任务先规划后执行</td>
+      </tr>
+      <tr>
+          <td><code>dontAsk</code></td>
+          <td>不询问，但不自动执行</td>
+          <td>只读场景</td>
+      </tr>
+      <tr>
+          <td><code>bypassPermissions</code></td>
+          <td>完全绕过权限检查</td>
+          <td>沙箱环境、CI/CD</td>
+      </tr>
+  </tbody>
+</table>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/books/claude-code/03-tmux/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>tmux 编排详解</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/books/claude-code/05-slash-commands/" class="flex align-center">
+        <span>斜杠命令与键盘快捷键</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cli-参数完整参考">CLI 参数完整参考</a>
+      <ul>
+        <li><a href="#会话与环境">会话与环境</a></li>
+        <li><a href="#模型与性能">模型与性能</a></li>
+        <li><a href="#权限与安全">权限与安全</a></li>
+        <li><a href="#输出与输入格式">输出与输入格式</a></li>
+        <li><a href="#系统提示与上下文">系统提示与上下文</a></li>
+        <li><a href="#调试">调试</a></li>
+        <li><a href="#智能体团队">智能体团队</a></li>
+        <li><a href="#模型选择速查">模型选择速查</a></li>
+        <li><a href="#权限模式详解">权限模式详解</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
