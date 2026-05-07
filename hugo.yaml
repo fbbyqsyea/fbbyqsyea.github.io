@@ -34,7 +34,7 @@ params:
   BookTheme: dark
   BookFavicon: "favicon.svg"
   BookLogo: "logo.svg"
-  BookSection: books
+  BookSection: "*"
   BookSearch: true
   BookComments: false
   BookToC: true
