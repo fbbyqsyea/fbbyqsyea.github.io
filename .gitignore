@@ -1,0 +1,7 @@
+# Hugo 构建输出（由 GitHub Actions 构建）
+public/
+.hugo_build.lock
+
+# 临时文件
+*.swp
+*~
